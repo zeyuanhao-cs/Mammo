@@ -181,3 +181,6 @@ wandb/
 swanlog/
 generated_predictions.jsonl
 predictions_score.json
+
+# VinDr inference outputs (generated results/logs)
+vindr_infer/outputs/

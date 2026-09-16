@@ -1,0 +1,33 @@
+# Prompt 配置: ICL (in-context learning, 含 2 个 few-shot 示例: 1 正常 + 1 Mass)
+# 占位符 (由 build_mllm.py 替换):
+#   [Image 1] / [Image 2] -> <image>  (示例图像, 对应 images 列表前两项)
+#   [JSON 1]  / [JSON 2]  -> 示例的 ground-truth JSON 文本
+#   [Image]               -> <image>  (推理目标图像, 对应 images 列表最后一项)
+# ICL 示例图像路径 + GT 已内联到 build_mllm.py (ICL_EXAMPLES 常量)
+name: icl
+mode: icl
+prompt: |
+  You are an expert mammography assistant.
+  Here are two examples of mammography images and their expected structured outputs.
+
+  Example 1:
+  [Image 1]
+  [JSON 1]
+
+  Example 2:
+  [Image 2]
+  [JSON 2]
+
+  Now analyze the new mammography image.
+  [Image]
+  Predict:
+  1. Breast BI-RADS.
+  2. Breast density.
+  3. All visible findings, including finding category,
+     finding BI-RADS, and bounding box.
+
+  Bounding box:
+  [x_min, y_min, x_max, y_max]
+  Coordinates are normalized to [0, 1], (0, 0) is the top-left corner.
+
+  Return ONLY valid JSON using the same format as the examples.

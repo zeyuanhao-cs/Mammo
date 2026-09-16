@@ -1,0 +1,29 @@
+# Prompt 配置: CoT (chain-of-thought, 分 5 步推理后输出 JSON)
+# <image> 占位符由 LLaMA-Factory 多模态数据加载替换为实际图像 token
+name: cot
+mode: cot
+prompt: |
+  <image>You are an expert mammography assistant.
+  Analyze the mammography image step by step:
+  1. Assess breast BI-RADS and breast density.
+  2. Identify all visible findings.
+  3. Classify each finding.
+  4. Assign a BI-RADS category to each finding.
+  5. Localize each finding with a bounding box.
+
+  Bounding box:
+  [x_min, y_min, x_max, y_max]
+  Coordinates are normalized to [0, 1], with (0, 0) at the top-left.
+
+  Finally, return ONLY valid JSON:
+  {
+    "breast_birads": <integer>,
+    "breast_density": "<A/B/C/D>",
+    "findings": [
+      {
+        "finding_category": "<category>",
+        "finding_birads": <integer>,
+        "bbox": [<x_min>, <y_min>, <x_max>, <y_max>]
+      }
+    ]
+  }
