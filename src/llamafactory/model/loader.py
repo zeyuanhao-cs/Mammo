@@ -204,12 +204,18 @@ def load_model(
             and all(getattr(module, "_kt_conv3d_compatible", False) for module in conv3d_modules)
         )
         if conv3d_modules and not kt_conv3d_ready:
-            raise ValueError(
-                "Unsupported torch version detected: torch 2.9.x with Conv3D. "
-                "This combination is known to cause severe performance regression. "
-                "Please downgrade torch to <2.9 or remove Conv3D. "
-                "See https://github.com/pytorch/pytorch/issues/166122"
-            )
+            if is_trainable:
+                raise ValueError(
+                    "Unsupported torch version detected: torch 2.9.x with Conv3D. "
+                    "This combination is known to cause severe performance regression. "
+                    "Please downgrade torch to <2.9 or remove Conv3D. "
+                    "See https://github.com/pytorch/pytorch/issues/166122"
+                )
+            else:  # inference only: performance regression acceptable, continue
+                logger.warning_rank0(
+                    "torch 2.9.x with Conv3D detected during inference; "
+                    "continuing despite potential performance regression."
+                )
         elif kt_conv3d_ready:
             logger.info_rank0("Using KTransformers instance-scoped Conv3D fallback for torch 2.9.x VLM training.")
 

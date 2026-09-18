@@ -745,19 +745,5 @@
       "prompt": "content"
     },
     "folder": "python"
-  },
-  "vindr_infer": {
-    "file_name": "/Users/haozeyuan/Desktop/phd/vlm/9_9/LlamaFactory/vindr_infer/mllm_infer.json",
-    "formatting": "sharegpt",
-    "columns": {
-      "messages": "messages",
-      "images": "images"
-    },
-    "tags": {
-      "role_tag": "role",
-      "content_tag": "content",
-      "user_tag": "user",
-      "assistant_tag": "assistant"
-    }
   }
 }
