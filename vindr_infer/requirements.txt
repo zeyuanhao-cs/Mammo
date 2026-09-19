@@ -1,0 +1,49 @@
+# =============================================================================
+# VinDr-Mammo VLM 推理环境依赖 (vindr_infer/)
+# =============================================================================
+#
+# 本仓库根目录 /hy-tmp/9_9/Mammo 即 LLaMA-Factory 源码 (含 pyproject.toml,
+# src/llamafactory/), vindr_infer/ 作为子目录位于其中。
+# infer.py 的 `from llamafactory.chat import ChatModel` 依赖 LLaMA-Factory 包,
+# 必须先把根目录作为可编辑包安装。
+#
+# 安装顺序 (在 Mammo 根目录执行):
+#
+#   1) 安装 LLaMA-Factory + 其全部核心依赖 (torch / torchvision / accelerate /
+#      peft / trl / datasets / safetensors / sentencepiece / tiktoken / modelscope
+#      / einops / pydantic / fastapi / gradio ... 见根目录 pyproject.toml):
+#
+#       pip install -e .
+#
+#   2) 修正 transformers 版本 + 安装 flash-attn:
+#
+#       pip install -r vindr_infer/requirements.txt
+#
+#      说明:
+#      - 步骤 1 会按 pyproject.toml 上限解析到 transformers==5.8.0, 但 5.8.0
+#        使用 torch.library.custom_op, 与 torch 2.4.0 不兼容 (import 报错)。
+#        本文件把 transformers 钉到 5.5.0: 既支持 Qwen3.5-VL
+#        (Qwen3_5ForConditionalGeneration), 又兼容 torch 2.4.0+cu121。
+#      - flash-attn: infer.py 默认 flash_attn="fa2" 必需。国内直装 pip install
+#        flash-attn 会从源码编译 (慢且易失败), 推荐用预编译 wheel:
+#
+#          # 经国内 GitHub 代理下载预编译 wheel (torch2.4/cu12/cxx11abiFALSE/py311)
+#          curl -L -o /tmp/fa.whl "https://gh-proxy.com/https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1+cu12torch2.4cxx11abiFALSE-cp311-cp311-linux_x86_64.whl"
+#          pip install /tmp/fa.whl --no-deps
+#
+#        若下载/安装失败或无 GPU, 可加 --no-flash-attn 跳过:
+#          python vindr_infer/infer.py --prompt direct --split test --limit 5 \
+#              --max-new-tokens 256 --no-flash-attn
+#
+# 环境基线 (已验证可跑通):
+#   Python 3.11.10 / torch 2.4.0+cu121 / CUDA 12.1 / Qwen3.5-4B (bfloat16)
+#   transformers 5.5.0 / llamafactory 0.9.6.dev0 / flash-attn 2.7.4.post1
+# =============================================================================
+
+# transformers: 钉 5.5.0 (兼容 torch 2.4.0 + 支持 Qwen3.5-VL)
+# pyproject.toml 上限 5.8.0 会触发 custom_op schema 报错, 故在此降级
+transformers==5.5.0
+
+# flash-attn: infer.py 默认 flash_attn="fa2" 必需; 国内推荐用预编译 wheel
+# (见上方注释的 curl 命令)。此处仅作版本下限声明; --no-flash-attn 可跳过。
+flash-attn>=2.5.0

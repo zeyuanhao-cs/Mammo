@@ -1,0 +1,20 @@
+{
+  "model": "/hy-tmp/9_9/Qwen/Qwen3.5-4B",
+  "template": "qwen3_5",
+  "prompts": [
+    "icl"
+  ],
+  "limit_per_prompt": 500,
+  "max_new_tokens": 256,
+  "image_max_pixels": 2359296,
+  "image_min_pixels": 262144,
+  "enable_thinking": false,
+  "do_sample": false,
+  "infer_dtype": "bfloat16",
+  "flash_attn": "fa2",
+  "files": {
+    "direct": "/hy-tmp/9_9/Mammo/vindr_infer/infer_data.direct.test.json",
+    "icl": "/hy-tmp/9_9/Mammo/vindr_infer/infer_data.icl.test.json",
+    "cot": "/hy-tmp/9_9/Mammo/vindr_infer/infer_data.cot.test.json"
+  }
+}

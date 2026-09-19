@@ -3,17 +3,19 @@
 VinDr-Mammo VLM 推理 (5cls version, LLaMA-Factory, GPU/BF16)
 
 职责:
-  - 读取 build_data.py 生成的 infer_data.<prompt>.5cls.<split>.json
+  - 读取 build_data.py 生成的 infer_data.<prompt>.<split>.json
+  - 支持 direct / icl / cot
   - 通过 LLaMA-Factory ChatModel 逐条推理
-  - 使用 LLaMA-Factory 参数 infer_dtype=bfloat16 / flash_attn=fa2
+  - 使用 infer_dtype=bfloat16 / flash_attn=fa2
   - 逐条保存 JSONL，支持中断续跑
 
 用法:
-    python infer.py --prompt direct --split test --limit 5 --max-new-tokens 256
-    python infer.py --prompt icl    --split test --limit 5 --max-new-tokens 256
+    python3 infer.py --prompt direct --split test --limit 50 --max-new-tokens 256
+    python3 infer.py --prompt icl    --split test --limit 50 --max-new-tokens 256
+    python3 infer.py --prompt cot    --split test --limit 50 --max-new-tokens 256
 
 如果 flash_attn 报错:
-    python infer.py --prompt direct --split test --limit 5 --max-new-tokens 256 --no-flash-attn
+    python3 infer.py --prompt cot --split test --limit 50 --max-new-tokens 256 --no-flash-attn
 """
 
 import argparse
@@ -35,17 +37,18 @@ TEMPLATE = "qwen3_5"
 
 THIS_DIR = Path(__file__).resolve().parent
 
-# 读取 5cls 新文件
-DATA_FILE = THIS_DIR / "infer_data.{prompt}.5cls.{split}.json"
+# build_data.py 输出文件
+DATA_FILE = THIS_DIR / "infer_data.{prompt}.{split}.json"
 
 OUTPUT_ROOT = THIS_DIR / "outputs"
 
-# JSON 输出很短，256 通常够用；不够再改回 512
+# JSON 输出较短，256 通常够用；如果 CoT 用 reasoning + final_json，可改 512
 MAX_NEW_TOKENS = 256
 
-# 先保持 1536，确认 GPU 跑通后再决定是否降到 1024
-IMAGE_MAX_PIXELS = 1024 * 1024
+# 当前实验固定 1536
+IMAGE_MAX_PIXELS = 1536 * 1536
 IMAGE_MIN_PIXELS = 512 * 512
+IMAGE_TAG = "1536"
 
 INFER_DTYPE = "bfloat16"
 # ====================================================================
@@ -106,6 +109,20 @@ def parse_prediction(raw: str):
         return None
 
 
+def get_eval_json(pred_json):
+    """
+    兼容两种输出：
+    1. direct / icl / hidden-cot:
+       {"breast_birads": ..., "breast_density": ..., "findings": [...]}
+
+    2. visible-cot:
+       {"reasoning": ..., "final_json": {"breast_birads": ..., ...}}
+    """
+    if isinstance(pred_json, dict) and isinstance(pred_json.get("final_json"), dict):
+        return pred_json["final_json"]
+    return pred_json
+
+
 def validate_record(rec: dict):
     """检查 build_data 生成的数据是否符合 ChatModel 输入。"""
     assert "messages" in rec and isinstance(rec["messages"], list), "record 缺少 messages"
@@ -124,8 +141,7 @@ def validate_record(rec: dict):
 def main():
     parser = argparse.ArgumentParser(description="VinDr-Mammo VLM 推理 5cls GPU/BF16 版本")
 
-    # 暂时只跑 direct / icl，cot prompt 还没同步 5cls
-    parser.add_argument("--prompt", required=True, choices=["direct", "icl"])
+    parser.add_argument("--prompt", required=True, choices=["direct", "icl", "cot"])
     parser.add_argument("--split", default="test")
     parser.add_argument("--model", default=MODEL_PATH)
     parser.add_argument("--max-new-tokens", type=int, default=MAX_NEW_TOKENS)
@@ -133,6 +149,12 @@ def main():
 
     # 默认使用 LLaMA-Factory 的 flash_attn=fa2；报错时加 --no-flash-attn
     parser.add_argument("--no-flash-attn", action="store_true", help="禁用 flash_attn")
+
+    # 默认不逐条打印 GPU，避免拖慢和刷屏
+    parser.add_argument("--debug-gpu", action="store_true", help="逐条打印 GPU 显存状态")
+
+    # 不每条 fsync，默认每 10 条同步一次；最后会强制同步
+    parser.add_argument("--fsync-every", type=int, default=10, help="每 N 条 fsync 一次；0 表示只在最后 fsync")
 
     args = parser.parse_args()
 
@@ -150,7 +172,7 @@ def main():
 
     gpu_mem("before data load")
 
-    # ---------------------- 读取 5cls 数据 ----------------------
+    # ---------------------- 读取数据 ----------------------
     data_file = Path(str(DATA_FILE).format(prompt=args.prompt, split=args.split))
     assert data_file.exists(), f"数据文件不存在: {data_file}，请先运行 build_data.py"
 
@@ -170,7 +192,7 @@ def main():
 
     # ---------------------- 输出目录 ----------------------
     attn_tag = "noflash" if args.no_flash_attn else "fa2"
-    run_name = f"{args.prompt}_5cls_qwen35_4b_1536_gpu_{attn_tag}_v2"
+    run_name = f"{args.prompt}_v6_{IMAGE_TAG}_{attn_tag}"
 
     out_dir = OUTPUT_ROOT / run_name
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -230,12 +252,15 @@ def main():
         "max_new_tokens": args.max_new_tokens,
         "image_max_pixels": IMAGE_MAX_PIXELS,
         "image_min_pixels": IMAGE_MIN_PIXELS,
+        "image_tag": IMAGE_TAG,
         "enable_thinking": False,
         "do_sample": False,
         "infer_backend": "huggingface",
         "finetuning_type": "full",
         "infer_dtype": INFER_DTYPE,
         "flash_attn": model_args.get("flash_attn"),
+        "debug_gpu": args.debug_gpu,
+        "fsync_every": args.fsync_every,
     }
 
     with open(config_file, "w", encoding="utf-8") as f:
@@ -266,36 +291,75 @@ def main():
     n_parse_fail = 0
     t_start = time.time()
 
-    for rec in records:
-        idx = rec["index"]
+    try:
+        for rec in records:
+            idx = rec["index"]
 
-        if idx in done:
-            continue
+            if idx in done:
+                continue
 
-        validate_record(rec)
+            validate_record(rec)
 
-        t1 = time.time()
+            t1 = time.time()
 
-        try:
-            torch.cuda.synchronize()
-            gpu_mem(f"before index={idx}")
+            try:
+                if args.debug_gpu:
+                    torch.cuda.synchronize()
+                    gpu_mem(f"before index={idx}")
 
-            responses = chat_model.chat(
-                messages=rec["messages"],
-                images=rec["images"],
-                do_sample=False,
-                max_new_tokens=args.max_new_tokens,
-            )
+                responses = chat_model.chat(
+                    messages=rec["messages"],
+                    images=rec["images"],
+                    do_sample=False,
+                    max_new_tokens=args.max_new_tokens,
+                )
 
-            torch.cuda.synchronize()
-            gpu_mem(f"after index={idx}")
+                if args.debug_gpu:
+                    torch.cuda.synchronize()
+                    gpu_mem(f"after index={idx}")
 
-            pred_raw = responses[0].response_text.strip()
+                pred_raw = responses[0].response_text.strip()
 
-        except Exception as e:
-            pred_raw = ""
-            pred_json = None
+            except Exception as e:
+                pred_raw = ""
+                pred_json = None
+                eval_json = None
+                sec = time.time() - t1
+
+                record = {
+                    "index": idx,
+                    "image_id": rec.get("image_id"),
+                    "image_path": rec.get("image_path"),
+                    "prompt": args.prompt,
+                    "prediction_raw": pred_raw,
+                    "prediction_json": pred_json,
+                    "eval_json": eval_json,
+                    "ground_truth": rec["ground_truth"],
+                    "seconds": round(sec, 1),
+                    "error": repr(e),
+                }
+
+                fout.write(json.dumps(record, ensure_ascii=False) + "\n")
+                fout.flush()
+
+                if args.fsync_every == 1:
+                    os.fsync(fout.fileno())
+
+                n_run += 1
+                n_parse_fail += 1
+
+                print(
+                    f"[{idx + 1}/{len(records)}] ERROR {sec:.1f}s {repr(e)}",
+                    flush=True,
+                )
+                continue
+
             sec = time.time() - t1
+            pred_json = parse_prediction(pred_raw)
+            eval_json = get_eval_json(pred_json)
+
+            if eval_json is None:
+                n_parse_fail += 1
 
             record = {
                 "index": idx,
@@ -304,71 +368,46 @@ def main():
                 "prompt": args.prompt,
                 "prediction_raw": pred_raw,
                 "prediction_json": pred_json,
+                "eval_json": eval_json,
                 "ground_truth": rec["ground_truth"],
                 "seconds": round(sec, 1),
-                "error": repr(e),
             }
 
             fout.write(json.dumps(record, ensure_ascii=False) + "\n")
             fout.flush()
-            os.fsync(fout.fileno())
 
             n_run += 1
-            n_parse_fail += 1
+
+            if args.fsync_every > 0 and n_run % args.fsync_every == 0:
+                os.fsync(fout.fileno())
+
+            avg = (time.time() - t_start) / max(n_run, 1)
+            status = "OK" if eval_json is not None else "PARSE_FAIL"
+
+            pred_birads = eval_json.get("breast_birads") if isinstance(eval_json, dict) else "?"
+            gt_birads = rec["ground_truth"].get("breast_birads")
+
+            n_findings = None
+            if isinstance(eval_json, dict) and isinstance(eval_json.get("findings"), list):
+                n_findings = len(eval_json["findings"])
 
             print(
-                f"[{idx + 1}/{len(records)}] ERROR {sec:.1f}s {repr(e)}",
+                f"[{idx + 1}/{len(records)}] "
+                f"{sec:.1f}s avg={avg:.1f}s json={status} "
+                f"pred_birads={pred_birads} gt_birads={gt_birads} "
+                f"pred_findings={n_findings}",
                 flush=True,
             )
-            continue
 
-        sec = time.time() - t1
-        pred_json = parse_prediction(pred_raw)
-
-        if pred_json is None:
-            n_parse_fail += 1
-
-        record = {
-            "index": idx,
-            "image_id": rec.get("image_id"),
-            "image_path": rec.get("image_path"),
-            "prompt": args.prompt,
-            "prediction_raw": pred_raw,
-            "prediction_json": pred_json,
-            "ground_truth": rec["ground_truth"],
-            "seconds": round(sec, 1),
-        }
-
-        fout.write(json.dumps(record, ensure_ascii=False) + "\n")
+    finally:
         fout.flush()
         os.fsync(fout.fileno())
-
-        n_run += 1
-
-        avg = (time.time() - t_start) / max(n_run, 1)
-        status = "OK" if pred_json is not None else "PARSE_FAIL"
-
-        pred_birads = pred_json.get("breast_birads") if isinstance(pred_json, dict) else "?"
-        gt_birads = rec["ground_truth"].get("breast_birads")
-
-        n_findings = None
-        if isinstance(pred_json, dict) and isinstance(pred_json.get("findings"), list):
-            n_findings = len(pred_json["findings"])
-
-        print(
-            f"[{idx + 1}/{len(records)}] "
-            f"{sec:.1f}s avg={avg:.1f}s json={status} "
-            f"pred_birads={pred_birads} gt_birads={gt_birads} "
-            f"pred_findings={n_findings}",
-            flush=True,
-        )
-
-    fout.close()
+        fout.close()
 
     print()
     print(f"[done] 新推理 {n_run} 条")
     print(f"[done] parse_fail {n_parse_fail} 条")
-    print(f"[done] results: {out_file}")
+    print(f"[done] results v2: {out_file}")
 
 
 if __name__ == "__main__":
