@@ -1,0 +1,64 @@
+# =============================================================================
+# VinDr-Mammo × Qwen3.5-4B LoRA SFT (direct prompt)
+#
+# 运行:
+#   cd /hy-tmp/9_9/Mammo
+#   llamafactory-cli train vindr_finetune/qwen3_5_4b_lora_direct.yaml
+#
+# 数据:
+#   train: vindr_finetune/data/direct_train.json
+#   val:   vindr_finetune/data/direct_val_500.json
+#
+# 说明:
+#   - 单卡 RTX 3090 24GB
+#   - direct prompt: 单图输入, cutoff_len=4096 一般够用
+#   - image_max_pixels=1386240 对应 912×1520, 尽量不降采样
+#   - 如果 OOM, 优先降低 image_max_pixels 到 1048576 或 786432
+# =============================================================================
+
+### model
+model_name_or_path: /hy-tmp/9_9/Qwen/Qwen3.5-4B
+trust_remote_code: true
+image_max_pixels: 1386240
+flash_attn: sdpa
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target: all
+
+### dataset
+dataset: vindr_direct_train
+eval_dataset: vindr_direct_val_500
+template: qwen3_5_nothink
+cutoff_len: 4096
+preprocessing_num_workers: 8
+dataloader_num_workers: 2
+
+### output
+output_dir: /hy-tmp/9_9/Qwen/qwen-4b/lora/
+logging_steps: 10
+save_steps: 500
+save_total_limit: 2
+plot_loss: true
+overwrite_output_dir: true
+report_to: none
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16
+learning_rate: 1.0e-4
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+gradient_checkpointing: true
+
+### eval
+per_device_eval_batch_size: 1
+eval_strategy: steps
+eval_steps: 500

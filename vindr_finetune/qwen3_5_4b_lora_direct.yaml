@@ -1,0 +1,56 @@
+# =============================================================================
+# VinDr-Mammo × Qwen3.5-4B LoRA SFT 快速试跑版
+# 1000 samples, higher GPU utilization
+#
+# 运行:
+#   cd /hy-tmp/9_9/Mammo
+#   llamafactory-cli train vindr_finetune/qwen3_5_4b_lora_direct.yaml
+#
+# 输出:
+#   /hy-tmp/9_9/Qwen/Qwen_lora_1000
+# =============================================================================
+
+### model
+model_name_or_path: /hy-tmp/9_9/Qwen/Qwen3.5-4B
+trust_remote_code: true
+image_max_pixels: 524288
+flash_attn: sdpa
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target: all
+
+### dataset
+dataset: vindr_direct_train
+template: qwen3_5_nothink
+cutoff_len: 2048
+max_samples: 1000
+preprocessing_num_workers: 8
+dataloader_num_workers: 4
+
+### output
+output_dir: /hy-tmp/9_9/Qwen/Qwen_lora_1000
+logging_steps: 5
+save_steps: 100
+save_total_limit: 2
+plot_loss: true
+overwrite_output_dir: true
+report_to: none
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 4
+learning_rate: 1.0e-4
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+gradient_checkpointing: false
+
+### eval
+eval_strategy: "no"
