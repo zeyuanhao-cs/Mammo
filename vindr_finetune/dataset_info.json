@@ -1,0 +1,18 @@
+{
+  "vindr_direct_train": {
+    "file_name": "data/direct_train.json",
+    "columns": {
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images"
+    }
+  },
+  "vindr_direct_test": {
+    "file_name": "data/direct_test.json",
+    "columns": {
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images"
+    }
+  }
+}

@@ -2,28 +2,63 @@
 """
 VinDr-Mammo 训练数据构造 (复用 vindr_infer/build_data.py 的 prompt 与类别归一化)
 
-职责: vlm_dataset/{split}.json -> LLaMA-Factory sharegpt (messages) 训练格式
-      - user: direct/icl/cot prompt (含 <image> 占位符)
-      - assistant: 归一化后的 GT JSON (10 类 -> 4 主类 + Associated Feature,
-        No Finding -> findings=[])
-      - images: 绝对路径列表, 数量与 <image> 占位符一致
+职责: vlm_dataset/{split}.json -> LLaMA-Factory alpaca (instruction/output/images) 训练格式
+      - instruction: user prompt (含 <image> 占位符)
+      - output:      归一化后的 GT JSON (10 类 -> 4 主类 + Associated Feature,
+                     No Finding -> findings=[])
+      - images:      相对路径列表 (相对于 THIS_DIR=vindr_finetune/, 即 "images_png/study/img.png")
+                     LLaMA-Factory 解析时相对于 dataset_dir, 配 dataset_dir: vindr_finetune 即可
+
+说明:
+- 不再设 input 字段 (LLaMA-Factory alpaca 格式 input 是 optional, 删了更简洁;
+  训练时 prompt = instruction, 等价于原来 instruction + "\\n" + "")
+- 划分: train + test 两档 (无 val, 与 Mammo-CLIP 官方一致)
+- images 默认用相对路径 (相对于 THIS_DIR), 加 --absolute 可退回绝对路径
 
 输出: vindr_finetune/data/<prompt>_<split>.json
 
 用法:
-    python3 build_data.py --prompt direct            # train + val 全量
+    # 本地生成 (默认相对路径, 图片已在 vindr_finetune/images_png/ 下)
+    python3 build_data.py --prompt direct
+
+    # 远程生成 (同样相对路径, 只要布局一致即可跨机器复用)
+    python3 build_data.py --prompt direct
+
+    # 退回绝对路径 (需指定 --data-root, 远程路径校验会缺图属正常)
+    python3 build_data.py --prompt direct --absolute \\
+        --data-root /hy-tmp/9_9/vindr-mammo
+
+    # 限量
     python3 build_data.py --prompt direct --limit 50
     python3 build_data.py --prompt icl --splits train
+
+配套 dataset_info.json (放在 vindr_finetune/dataset_info.json):
+    {
+      "vindr_direct_train": {
+        "file_name": "data/direct_train.json",
+        "columns": {"prompt": "instruction", "response": "output", "images": "images"}
+      },
+      "vindr_direct_test": {
+        "file_name": "data/direct_test.json",
+        "columns": {"prompt": "instruction", "response": "output", "images": "images"}
+      }
+    }
+
+配套 trial.yaml 加一行:
+    dataset_dir: vindr_finetune
 """
 import argparse
 import json
 from pathlib import Path
 
 # ============================== CONFIG ==============================
-DATA_ROOT = Path("/hy-tmp/9_9/vindr-mammo")
-THIS_DIR = Path(__file__).resolve().parent
+# 图片目录 = THIS_DIR/images_png (用户已把 images_png 拉到 vindr_finetune/ 下)
+# vlm_dataset JSON 仍从外部 data_root 读 (默认本地 vindr-mammo, 可用 --data-root 覆盖)
+THIS_DIR = Path(__file__).resolve().parent          # = Mammo/vindr_finetune/
+IMG_DIR = THIS_DIR / "images_png"                    # 图片所在 (相对路径基准)
 OUT_DIR = THIS_DIR / "data"
-DEFAULT_SPLITS = ["train", "val"]
+DEFAULT_DATA_ROOT = Path("/Users/haozeyuan/Desktop/phd/vlm/9_9/vindr-mammo")  # vlm_dataset JSON 所在
+DEFAULT_SPLITS = ["train", "test"]  # 已切到 train+test 无 val (与 Mammo-CLIP 一致)
 # ====================================================================
 
 # ------------------------------ Prompts ------------------------------
@@ -294,8 +329,11 @@ def convert_gt(gt):
     return g
 
 
-def build_user_content(mode, target_img_abs):
-    """组装 (user_text, images): 文本含 <image> 占位符, images 为绝对路径列表.
+def build_user_content(mode, target_img_path, absolute=False):
+    """组装 (user_text, images):
+    - target_img_path: 目标图的相对路径 (相对于 THIS_DIR, 如 "images_png/study/img.png")
+    - absolute=False: images 返回相对路径 (相对于 THIS_DIR), LLaMA-Factory 配 dataset_dir: vindr_finetune
+    - absolute=True:  images 返回绝对路径 (向后兼容, 远程训练用)
     与 vindr_infer/build_data.py 逻辑一致"""
     if mode == "icl":
         ex1, ex2, ex3, ex4 = ICL_EXAMPLES
@@ -311,17 +349,25 @@ def build_user_content(mode, target_img_abs):
                 .replace("[Image 4]", "<image>")
 
                 .replace("[Image]", "<image>"))
-        images = [
-            str(DATA_ROOT / ex1["image_path"]),
-            str(DATA_ROOT / ex2["image_path"]),
-            str(DATA_ROOT / ex3["image_path"]),
-            str(DATA_ROOT / ex4["image_path"]),
-
-            target_img_abs,
-        ]
+        if absolute:
+            images = [
+                str(THIS_DIR / ex1["image_path"]),
+                str(THIS_DIR / ex2["image_path"]),
+                str(THIS_DIR / ex3["image_path"]),
+                str(THIS_DIR / ex4["image_path"]),
+                str(THIS_DIR / target_img_path),
+            ]
+        else:
+            images = [
+                ex1["image_path"],
+                ex2["image_path"],
+                ex3["image_path"],
+                ex4["image_path"],
+                target_img_path,
+            ]
     else:
         text = PROMPTS[mode]
-        images = [target_img_abs]
+        images = [str(THIS_DIR / target_img_path) if absolute else target_img_path]
 
     assert text.count("<image>") == len(images), \
         f"[{mode}] <image> 占位符数({text.count('<image>')}) != images 数({len(images)})"
@@ -332,33 +378,47 @@ def main():
     ap = argparse.ArgumentParser(description="构造 VinDr LLaMA-Factory SFT 训练数据")
     ap.add_argument("--prompt", required=True, choices=["direct", "icl", "cot"])
     ap.add_argument("--splits", nargs="+", default=DEFAULT_SPLITS,
-                    choices=["train", "val", "test"])
+                    choices=["train", "test"])
     ap.add_argument("--limit", type=int, default=0, help="每个 split 只取前 N 条 (0 = 全量)")
+    ap.add_argument("--data-root", type=str, default=str(DEFAULT_DATA_ROOT),
+                    help=f"vlm_dataset JSON 所在目录 (默认 {DEFAULT_DATA_ROOT})")
+    ap.add_argument("--absolute", action="store_true",
+                    help="images 用绝对路径 (默认相对路径, 相对于 THIS_DIR)")
     args = ap.parse_args()
 
+    data_root = Path(args.data_root)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
+    # 图片校验基准目录: 相对模式校验 THIS_DIR/images_png, 绝对模式校验 data_root/images_png
+    img_check_root = (THIS_DIR if not args.absolute else data_root)
+    print(f"[模式] images={'绝对路径' if args.absolute else '相对路径(相对于 vindr_finetune/)'}")
+    print(f"[校验] 图片目录: {img_check_root / 'images_png'}")
+
     for split in args.splits:
-        data = json.load(open(DATA_ROOT / "vlm_dataset" / f"{split}.json"))
+        data = json.load(open(data_root / "vlm_dataset" / f"{split}.json"))
         n = len(data) if args.limit <= 0 else min(args.limit, len(data))
 
         records = []
+        n_img_missing = 0
         for idx in range(n):
             rec = data[idx]
-            img_abs = str(DATA_ROOT / rec["image_path"])
-            assert Path(img_abs).exists(), f"图像不存在: {img_abs}"
+            # rec["image_path"] 形如 "images_png/study/img.png"
+            # 相对模式: 直接写入; 绝对模式: 拼 data_root 前缀
+            target_img_path = rec["image_path"] if not args.absolute else str(data_root / rec["image_path"])
 
-            text, images = build_user_content(args.prompt, img_abs)
+            # 校验图片存在 (仅本地校验, 缺失只警告不中断)
+            check_path = img_check_root / rec["image_path"]
+            if not check_path.exists():
+                n_img_missing += 1
+                if n_img_missing <= 3:
+                    print(f"  [warn] 图像不存在: {check_path}")
+
+            text, images = build_user_content(args.prompt, rec["image_path"], absolute=args.absolute)
             gt = convert_gt(rec)
 
-            # alpaca 格式 (LLaMA-Factory 多模态 SFT):
-            #   instruction = user prompt (含 <image> 占位符)
-            #   input        = "" (本任务无额外输入)
-            #   output       = GT JSON 字符串 (模型学习目标)
-            #   images       = 绝对路径列表, 数量与 <image> 占位符一致
+            # LLaMA-Factory alpaca 多模态 SFT 格式 (无 input 字段, prompt 全在 instruction)
             records.append({
                 "instruction": text,
-                "input": "",
                 "output": json.dumps(gt, ensure_ascii=False),
                 "images": images,
             })
@@ -369,9 +429,9 @@ def main():
 
         n_empty = sum(1 for r in records
                       if json.loads(r["output"])["findings"] == [])
-        print(f"[{args.prompt}/{split}] {n} 条 (阴性 findings=[] 共 {n_empty}) -> {out}")
+        print(f"[{args.prompt}/{split}] {n} 条 (阴性 findings=[] 共 {n_empty}, 图缺失 {n_img_missing}) -> {out}")
 
-    print("\n下一步: 在 data/ 目录生成后, 注册到 LLaMA-Factory data/dataset_info.json")
+    print("\n下一步: 确认 vindr_finetune/dataset_info.json 已注册, trial.yaml 含 'dataset_dir: vindr_finetune'")
 
 
 if __name__ == "__main__":

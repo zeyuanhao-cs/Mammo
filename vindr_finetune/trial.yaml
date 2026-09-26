@@ -1,20 +1,15 @@
 # =============================================================================
 # VinDr-Mammo × Qwen3.5-4B LoRA SFT (direct prompt)
+# 训练集 16,000 / 测试集 4,000, 无独立 val (与 Mammo-CLIP 官方一致)
+# val_size: 0.1 是 LLaMA-Factory 训练时从 train 动态划 10% 做 eval loss 监控
 #
 # 运行:
 #   cd /hy-tmp/9_9/Mammo
-#   llamafactory-cli train vindr_finetune/qwen3_5_4b_lora_direct.yaml
-#
-# 数据:
-#   train: vindr_finetune/data/direct_train.json
-#   val:   vindr_finetune/data/direct_val_500.json
-#
-# 说明:
-#   - 单卡 RTX 3090 24GB
-#   - direct prompt: 单图输入, cutoff_len=4096 一般够用
-#   - image_max_pixels=1386240 对应 912×1520, 尽量不降采样
-#   - 如果 OOM, 优先降低 image_max_pixels 到 1048576 或 786432
+#   llamafactory-cli train vindr_finetune/trial.yaml
 # =============================================================================
+
+### dataset_dir (images 相对路径相对于此解析, dataset_info.json 在此目录下)
+dataset_dir: vindr_finetune
 
 ### model
 model_name_or_path: /hy-tmp/9_9/Qwen/Qwen3.5-4B
@@ -33,9 +28,9 @@ lora_target: all
 
 ### dataset
 dataset: vindr_direct_train
-eval_dataset: vindr_direct_val_500
 template: qwen3_5_nothink
 cutoff_len: 4096
+val_size: 0.1
 preprocessing_num_workers: 8
 dataloader_num_workers: 2
 

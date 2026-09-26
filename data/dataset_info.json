@@ -1,31 +1,4 @@
 {
-  "vindr_direct_train": {
-    "file_name": "/hy-tmp/9_9/Mammo/vindr_finetune/data/direct_train.json",
-    "columns": {
-      "prompt": "instruction",
-      "query": "input",
-      "response": "output",
-      "images": "images"
-    }
-  },
-  "vindr_direct_val": {
-    "file_name": "/hy-tmp/9_9/Mammo/vindr_finetune/data/direct_val.json",
-    "columns": {
-      "prompt": "instruction",
-      "query": "input",
-      "response": "output",
-      "images": "images"
-    }
-  },
-  "vindr_direct_val_500": {
-    "file_name": "/hy-tmp/9_9/Mammo/vindr_finetune/data/direct_val_500.json",
-    "columns": {
-      "prompt": "instruction",
-      "query": "input",
-      "response": "output",
-      "images": "images"
-    }
-  },
   "identity": {
     "file_name": "identity.json"
   },

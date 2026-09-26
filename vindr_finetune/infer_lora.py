@@ -3,18 +3,24 @@
 VinDr-Mammo VLM 推理 - LoRA 微调后模型版本 (LLaMA-Factory, GPU/BF16)
 
 与 vindr_infer/infer_3prompts_500.py 对齐:
-  - 默认推理每个 prompt 的前 500 条 (与基线 500 条实验相同的数据子集)
+  - 默认全量推理 test 集 (4,000 条, 可用 --limit 限量)
   - tqdm 进度条 + postfix (耗时/BI-RADS/findings/失败数)
   - 加载基座模型 + LoRA adapter (finetuning_type=lora), 只加载一次
   - 测试数据复用 vindr_infer/build_data.py 生成的 infer_data.<prompt>.<split>.json
     (与基线推理完全相同的输入, 保证公平对比)
   - flash_attn 默认 sdpa (本环境未安装 flash-attn)
 
+图片路径处理:
+  - vindr_infer 数据里 images 是绝对路径 /hy-tmp/9_9/vindr-mammo/images_png/...
+  - --image-root 指定图片根目录, 自动替换前缀 (默认 vindr_finetune/, 图片已 cp 到 images_png/)
+  - 远程跑传 --image-root /hy-tmp/9_9/vindr-mammo; 本地跑用默认即可
+
 用法:
-    python3 infer_lora.py --prompt direct --split test            # 前 500 条
-    python3 infer_lora.py --prompt direct --split test --limit 0  # 全量
+    python3 infer_lora.py --prompt direct --split test                   # 全量 4000 条, 本地图片
+    python3 infer_lora.py --prompt direct --split test --limit 500       # 限量 500 条
     python3 infer_lora.py --prompt icl --split test --limit 50
     python3 infer_lora.py --prompt direct --split test --adapter /path/to/other_lora
+    python3 infer_lora.py --prompt direct --split test --image-root /hy-tmp/9_9/vindr-mammo  # 远程图片
 """
 
 import argparse
@@ -32,12 +38,17 @@ from llamafactory.chat import ChatModel
 # ============================== CONFIG ==============================
 BASE_MODEL_PATH = "/hy-tmp/9_9/Qwen/Qwen3.5-4B"
 DEFAULT_ADAPTER = "/hy-tmp/9_9/Qwen/Qwen_lora_1000"
-DEFAULT_LIMIT = 500  # 与 infer_3prompts_500.py 相同: 每个取前 500 条
+DEFAULT_LIMIT = 0  # 0 = 全量 (默认全量推理 test 集 4,000 条)
 
 # 与基线 infer.py 保持一致: qwen3_5 模板 + enable_thinking=False
 TEMPLATE = "qwen3_5"
 
-THIS_DIR = Path(__file__).resolve().parent
+THIS_DIR = Path(__file__).resolve().parent  # = Mammo/vindr_finetune/
+
+# 图片根目录 (默认本地 vindr_finetune/, 图片已 cp 到 images_png/)
+# vindr_infer 数据里 images 是绝对路径, 用 REMOTE_PREFIX 做前缀替换
+REMOTE_PREFIX = "/hy-tmp/9_9/vindr-mammo"
+DEFAULT_IMAGE_ROOT = str(THIS_DIR)  # 本地: vindr_finetune/ -> vindr_finetune/images_png/...
 
 # 复用 vindr_infer 的推理数据 (与基线相同的输入)
 INFER_DIR = THIS_DIR.parent / "vindr_infer"
@@ -54,6 +65,23 @@ IMAGE_TAG = "1536"
 
 INFER_DTYPE = "bfloat16"
 # ====================================================================
+
+
+def remap_images(images, image_root):
+    """把 images 里的 REMOTE_PREFIX 前缀替换成 image_root。
+    image_root 默认 THIS_DIR (本地 vindr_finetune/), 图片已 cp 到 images_png/"""
+    if not image_root:
+        return images
+    root = str(Path(image_root).resolve())
+    new = []
+    for img in images:
+        if isinstance(img, str) and img.startswith(REMOTE_PREFIX):
+            # /hy-tmp/9_9/vindr-mammo/images_png/xxx.png -> {image_root}/images_png/xxx.png
+            suffix = img[len(REMOTE_PREFIX):].lstrip("/")
+            new.append(str(Path(root) / suffix))
+        else:
+            new.append(img)
+    return new
 
 
 THINK_RE = re.compile(r"<think>.*?</think>", flags=re.DOTALL)
@@ -155,6 +183,9 @@ def main():
 
     parser.add_argument("--debug-gpu", action="store_true", help="逐条打印 GPU 显存状态")
     parser.add_argument("--fsync-every", type=int, default=10, help="每 N 条 fsync 一次；0 表示只在最后 fsync")
+    parser.add_argument("--image-root", default=DEFAULT_IMAGE_ROOT,
+                        help=f"图片根目录, 自动替换 images 里的 {REMOTE_PREFIX} 前缀 "
+                             f"(默认 {DEFAULT_IMAGE_ROOT} 本地图片; 远程传 /hy-tmp/9_9/vindr-mammo)")
 
     args = parser.parse_args()
 
@@ -180,12 +211,38 @@ def main():
 
     assert len(records) > 0, "records 为空"
 
-    for rec in records[:5]:
-        validate_record(rec)
+    # 路径替换: 把 images 里的 REMOTE_PREFIX 替换成 --image-root (默认本地 vindr_finetune/)
+    n_remapped = 0
+    n_img_missing = 0
+    for rec in records:
+        orig = rec["images"]
+        rec["images"] = remap_images(orig, args.image_root)
+        if rec["images"] != orig:
+            n_remapped += 1
+        # 校验图片存在 (仅警告不中断)
+        for img in rec["images"]:
+            if not Path(img).exists():
+                n_img_missing += 1
+                break
 
     print(f"[data] file={data_file}")
     print(f"[data] records={len(records)}")
     print(f"[data] first_index={records[0]['index']} last_index={records[-1]['index']}")
+    print(f"[data] image_root={args.image_root}, 路径替换 {n_remapped}/{len(records)} 条, 缺图 {n_img_missing} 条")
+    if n_img_missing > 0:
+        print(f"[warn] {n_img_missing} 条记录图片缺失, 将在推理时报错跳过")
+        # 打印一条样本路径
+        for rec in records:
+            for img in rec["images"]:
+                if not Path(img).exists():
+                    print(f"[warn] 缺失样本: {img}")
+                    break
+            else:
+                continue
+            break
+
+    for rec in records[:5]:
+        validate_record(rec)
 
     # ---------------------- 输出目录 ----------------------
     adapter_tag = Path(args.adapter).name  # e.g. Qwen_lora_1000
@@ -243,6 +300,9 @@ def main():
         "prompt": args.prompt,
         "split": args.split,
         "data_file": str(data_file),
+        "image_root": args.image_root,
+        "n_remapped": n_remapped,
+        "n_img_missing": n_img_missing,
         "output_file": str(out_file),
         "n_records_this_run": len(records),
         "max_new_tokens": args.max_new_tokens,
