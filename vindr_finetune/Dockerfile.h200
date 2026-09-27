@@ -11,4 +11,9 @@ RUN python3 -m pip install --no-cache-dir . \
     && python3 -c "from transformers import Qwen3_5ForConditionalGeneration; import llamafactory" \
     && command -v llamafactory-cli
 
+# Slurm runs yu.w jobs as UID/GID 3002. PyTorch calls getpwuid() at import time.
+RUN getent group 3002 >/dev/null || printf 'yu.w:x:3002:\n' >> /etc/group
+RUN getent passwd 3002 >/dev/null || printf 'yu.w:x:3002:3002::/data/me:/bin/bash\n' >> /etc/passwd
+ENV USER=yu.w LOGNAME=yu.w
+
 WORKDIR /work
