@@ -1,0 +1,14 @@
+FROM docker.m.daocloud.io/vllm/vllm-openai:v0.20.2
+
+WORKDIR /opt/llamafactory
+
+# Build from the exact Mammo Git commit checked out as the Docker context.
+# Training data and model weights stay on the h200 host mounts.
+COPY pyproject.toml README.md LICENSE ./
+COPY src ./src
+
+RUN python3 -m pip install --no-cache-dir . \
+    && python3 -c "from transformers import Qwen3_5ForConditionalGeneration; import llamafactory" \
+    && command -v llamafactory-cli
+
+WORKDIR /work
