@@ -47,7 +47,7 @@ THIS_DIR = Path(__file__).resolve().parent  # = Mammo/vindr_finetune/
 
 # 图片根目录；旧 vindr_infer 绝对路径用 REMOTE_PREFIX 做前缀替换
 REMOTE_PREFIX = "/hy-tmp/9_9/vindr-mammo"
-DEFAULT_IMAGE_ROOT = "/mammo"  # Slurm ro 挂载: /mammo/images_png/...
+DEFAULT_IMAGE_ROOT = "/mammo"  # Slurm 挂载: /mammo/images_png/...
 
 # icl/cot 仍复用 vindr_infer 的推理数据
 INFER_DIR = THIS_DIR.parent / "vindr_infer"

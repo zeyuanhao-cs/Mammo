@@ -8,8 +8,9 @@
 | 训练 | `/mammo/vindr_finetune/data/direct_train.json` | 16,000 |
 | 测试 | `/mammo/vindr_finetune/data/direct_test.json` | 4,000 |
 
-Slurm 挂载 `/mammo` 为只读。训练 adapter 和推理结果写入 `yu.w` 可写的
-`/data/me/mammo`；基座模型从已有的 `/data/models/Qwen3.5-4B` 读取。
+当前 Slurm 规则将 `/mammo` 挂为 `rw`，但 `yu.w` 在容器内对主机目录没有写权限。
+训练 adapter 和推理结果因此写入 `yu.w` 可写的 `/data/me/mammo`；
+基座模型从已有的 `/data/models/Qwen3.5-4B` 读取。
 
 在包含 LLaMA-Factory、PyTorch 和所需依赖的 GPU 容器中运行：
 
