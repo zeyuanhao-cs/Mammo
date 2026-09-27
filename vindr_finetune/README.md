@@ -1,44 +1,27 @@
-# VinDr-Mammo LoRA 微调
+# VinDr-Mammo LoRA 微调（h200 Slurm）
 
-## 数据
+此目录在容器中为 `/mammo/vindr_finetune`。图片位于 `/mammo/images_png`；
+训练配置用 `media_dir: /mammo` 解析 JSON 中的相对图片路径，无需修改 20,000 条标注。
 
-| split | 文件 | 条数 |
-|---|---|---|
-| 训练集 | `data/direct_train.json` | 16,000 |
-| 测试集 | `data/direct_test.json` | 4,000 |
+| 数据 | 路径 | 条数 |
+|---|---|---:|
+| 训练 | `/mammo/vindr_finetune/data/direct_train.json` | 16,000 |
+| 测试 | `/mammo/vindr_finetune/data/direct_test.json` | 4,000 |
 
-- 图片: `images_png/` (5,000 study, 20,000 PNG, 相对路径)
-- 格式: alpaca `{instruction, output, images}`
-- 划分: train 16,000 / test 4,000
+Slurm 挂载 `/mammo` 为只读。训练 adapter 和推理结果写入 `yu.w` 可写的
+`/data/me/mammo`；基座模型从已有的 `/data/models/Qwen3.5-4B` 读取。
 
-## 一条龙流程 (服务器)
+在包含 LLaMA-Factory、PyTorch 和所需依赖的 GPU 容器中运行：
 
 ```bash
-cd Mammo
+llamafactory-cli train /mammo/vindr_finetune/trial.yaml
 
-# 1. 训练 (LoRA SFT)
-llamafactory-cli train vindr_finetune/trial.yaml
-#   → LoRA adapter 输出到 Qwen/qwen-4b/lora/
+python3 /mammo/vindr_finetune/infer_lora.py \
+  --prompt direct --split test \
+  --adapter /data/me/mammo/qwen3.5-4b-lora
+```
 
-# 2. 推理 (全量 4,000 条 test)
-python3 vindr_finetune/infer_lora.py \
-    --prompt direct --split test \
-    --adapter /hy-tmp/9_9/Qwen/qwen-4b/lora/
-#   → 结果输出到 vindr_finetune/outputs/direct_<adapter>_1536_sdpa/predictions.jsonl
-
-
-## 输出
-
-- 训练 adapter: `/Qwen/qwen-4b/lora/`
-- 推理结果: `vindr_finetune/outputs/{prompt}_{adapter_name}_1536_sdpa/predictions.jsonl`
-  - 每行一条 JSON: `{index, image_id, prediction_json, eval_json, ground_truth, seconds}`
-  - 支持断点续推 (已完成的 index 自动跳过)
-
-## 关键配置
-
-- 基座: `/Qwen3.5-4B`
-- 模板: `qwen3_5_nothink` (训练) / `qwen3_5` (推理, enable_thinking=False)
-- 图像: 1520×912 全分辨率, bf16, flash_attn=sdpa
-- LoRA: rank=8, alpha=16, target=all, lr=1e-4
-- `dataset_dir: vindr_finetune` (images 相对路径基准)
-
+`direct` 推理直接读取本目录的测试 JSON；`icl` 和 `cot` 仍需要同级
+`/mammo/vindr_infer/infer_data.<prompt>.test.json`。默认推理输出位于
+`/data/me/mammo/outputs/`。`build_data.py` 仅在需要重新生成数据时使用，
+其 `--data-root` 必须指向含 `vlm_dataset/{train,test}.json` 的源目录。

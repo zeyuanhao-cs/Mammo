@@ -6,21 +6,21 @@ VinDr-Mammo VLM 推理 - LoRA 微调后模型版本 (LLaMA-Factory, GPU/BF16)
   - 默认全量推理 test 集 (4,000 条, 可用 --limit 限量)
   - tqdm 进度条 + postfix (耗时/BI-RADS/findings/失败数)
   - 加载基座模型 + LoRA adapter (finetuning_type=lora), 只加载一次
-  - 测试数据复用 vindr_infer/build_data.py 生成的 infer_data.<prompt>.<split>.json
-    (与基线推理完全相同的输入, 保证公平对比)
+  - direct 测试数据使用本目录 data/direct_test.json
+  - icl/cot 仍使用相邻 vindr_infer/infer_data.<prompt>.<split>.json
   - flash_attn 默认 sdpa (本环境未安装 flash-attn)
 
 图片路径处理:
-  - vindr_infer 数据里 images 是绝对路径 /hy-tmp/9_9/vindr-mammo/images_png/...
-  - --image-root 指定图片根目录, 自动替换前缀 (默认 vindr_finetune/, 图片已 cp 到 images_png/)
-  - 远程跑传 --image-root /hy-tmp/9_9/vindr-mammo; 本地跑用默认即可
+  - direct 数据里的 images 是 images_png/... 相对路径
+  - --image-root 指定图片根目录，Slurm 默认 /mammo
+  - 旧 vindr_infer 数据里的 /hy-tmp/9_9/vindr-mammo 前缀仍可映射
 
 用法:
-    python3 infer_lora.py --prompt direct --split test                   # 全量 4000 条, 本地图片
+    python3 infer_lora.py --prompt direct --split test                   # 全量 4000 条, /mammo 图片
     python3 infer_lora.py --prompt direct --split test --limit 500       # 限量 500 条
     python3 infer_lora.py --prompt icl --split test --limit 50
     python3 infer_lora.py --prompt direct --split test --adapter /path/to/other_lora
-    python3 infer_lora.py --prompt direct --split test --image-root /hy-tmp/9_9/vindr-mammo  # 远程图片
+    python3 infer_lora.py --prompt direct --split test --image-root /mammo
 """
 
 import argparse
@@ -36,8 +36,8 @@ from llamafactory.chat import ChatModel
 
 
 # ============================== CONFIG ==============================
-BASE_MODEL_PATH = "/hy-tmp/9_9/Qwen/Qwen3.5-4B"
-DEFAULT_ADAPTER = "/hy-tmp/9_9/Qwen/Qwen_lora_1000"
+BASE_MODEL_PATH = "/data/models/Qwen3.5-4B"
+DEFAULT_ADAPTER = "/data/me/mammo/qwen3.5-4b-lora"
 DEFAULT_LIMIT = 0  # 0 = 全量 (默认全量推理 test 集 4,000 条)
 
 # 与基线 infer.py 保持一致: qwen3_5 模板 + enable_thinking=False
@@ -45,16 +45,15 @@ TEMPLATE = "qwen3_5"
 
 THIS_DIR = Path(__file__).resolve().parent  # = Mammo/vindr_finetune/
 
-# 图片根目录 (默认本地 vindr_finetune/, 图片已 cp 到 images_png/)
-# vindr_infer 数据里 images 是绝对路径, 用 REMOTE_PREFIX 做前缀替换
+# 图片根目录；旧 vindr_infer 绝对路径用 REMOTE_PREFIX 做前缀替换
 REMOTE_PREFIX = "/hy-tmp/9_9/vindr-mammo"
-DEFAULT_IMAGE_ROOT = str(THIS_DIR)  # 本地: vindr_finetune/ -> vindr_finetune/images_png/...
+DEFAULT_IMAGE_ROOT = "/mammo"  # Slurm ro 挂载: /mammo/images_png/...
 
-# 复用 vindr_infer 的推理数据 (与基线相同的输入)
+# icl/cot 仍复用 vindr_infer 的推理数据
 INFER_DIR = THIS_DIR.parent / "vindr_infer"
 DATA_FILE = INFER_DIR / "infer_data.{prompt}.{split}.json"
 
-OUTPUT_ROOT = THIS_DIR / "outputs"
+OUTPUT_ROOT = Path("/data/me/mammo/outputs")
 
 MAX_NEW_TOKENS = 256
 
@@ -68,8 +67,7 @@ INFER_DTYPE = "bfloat16"
 
 
 def remap_images(images, image_root):
-    """把 images 里的 REMOTE_PREFIX 前缀替换成 image_root。
-    image_root 默认 THIS_DIR (本地 vindr_finetune/), 图片已 cp 到 images_png/"""
+    """将相对图片路径和旧服务器前缀映射到 image_root。"""
     if not image_root:
         return images
     root = str(Path(image_root).resolve())
@@ -79,9 +77,33 @@ def remap_images(images, image_root):
             # /hy-tmp/9_9/vindr-mammo/images_png/xxx.png -> {image_root}/images_png/xxx.png
             suffix = img[len(REMOTE_PREFIX):].lstrip("/")
             new.append(str(Path(root) / suffix))
+        elif isinstance(img, str) and not Path(img).is_absolute():
+            new.append(str(Path(root) / img))
         else:
             new.append(img)
     return new
+
+
+def load_records(prompt, split):
+    """direct 使用本目录自带的 Alpaca 数据；其他 prompt 保留原推理数据格式。"""
+    if prompt == "direct":
+        data_file = THIS_DIR / "data" / f"direct_{split}.json"
+        rows = json.loads(data_file.read_text(encoding="utf-8"))
+        records = [
+            {
+                "index": index,
+                "image_id": Path(row["images"][0]).stem,
+                "image_path": row["images"][0],
+                "messages": [{"role": "user", "content": row["instruction"]}],
+                "images": row["images"],
+                "ground_truth": json.loads(row["output"]),
+            }
+            for index, row in enumerate(rows)
+        ]
+    else:
+        data_file = Path(str(DATA_FILE).format(prompt=prompt, split=split))
+        records = json.loads(data_file.read_text(encoding="utf-8"))
+    return data_file, records
 
 
 THINK_RE = re.compile(r"<think>.*?</think>", flags=re.DOTALL)
@@ -185,7 +207,7 @@ def main():
     parser.add_argument("--fsync-every", type=int, default=10, help="每 N 条 fsync 一次；0 表示只在最后 fsync")
     parser.add_argument("--image-root", default=DEFAULT_IMAGE_ROOT,
                         help=f"图片根目录, 自动替换 images 里的 {REMOTE_PREFIX} 前缀 "
-                             f"(默认 {DEFAULT_IMAGE_ROOT} 本地图片; 远程传 /hy-tmp/9_9/vindr-mammo)")
+                             f"(Slurm 默认 {DEFAULT_IMAGE_ROOT})")
 
     args = parser.parse_args()
 
@@ -201,17 +223,14 @@ def main():
     gpu_mem("before data load")
 
     # ---------------------- 读取数据 ----------------------
-    data_file = Path(str(DATA_FILE).format(prompt=args.prompt, split=args.split))
-    assert data_file.exists(), f"数据文件不存在: {data_file}，请先在 vindr_infer 下运行 build_data.py"
-
-    records = json.load(open(data_file, "r", encoding="utf-8"))
+    data_file, records = load_records(args.prompt, args.split)
 
     if args.limit > 0:
         records = records[:args.limit]
 
     assert len(records) > 0, "records 为空"
 
-    # 路径替换: 把 images 里的 REMOTE_PREFIX 替换成 --image-root (默认本地 vindr_finetune/)
+    # 路径替换: direct 的相对路径及旧 vindr_infer 的服务器前缀均映射到 --image-root
     n_remapped = 0
     n_img_missing = 0
     for rec in records:
