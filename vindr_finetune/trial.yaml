@@ -35,7 +35,7 @@ preprocessing_num_workers: 8
 dataloader_num_workers: 2
 
 ### output
-output_dir: /data/me/mammo/qwen3.5-4b-lora
+output_dir: /data/me/mammo/qwen3.5-4b-lora-1epoch
 logging_steps: 10
 save_steps: 500
 save_total_limit: 2
@@ -47,7 +47,7 @@ report_to: none
 per_device_train_batch_size: 1
 gradient_accumulation_steps: 16
 learning_rate: 1.0e-4
-num_train_epochs: 3.0
+num_train_epochs: 1.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 bf16: true
