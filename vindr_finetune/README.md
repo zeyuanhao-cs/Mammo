@@ -9,18 +9,20 @@
 | 测试 | `/mammo/vindr_finetune/data/direct_test.json` | 4,000 |
 
 当前 Slurm 规则将 `/mammo` 挂为 `rw`，但 `yu.w` 在容器内对主机目录没有写权限。
-单轮训练的 adapter 和推理结果因此写入 `yu.w` 可写的 `/data/me/mammo`；
+训练 adapter 和推理结果因此写入 `yu.w` 可写的 `/data/me/mammo`；
 基座模型从已有的 `/data/models/Qwen3.5-4B` 读取。
 
-在包含 LLaMA-Factory、PyTorch 和所需依赖的 GPU 容器中运行：
+当前推理使用已有的 `checkpoint-1000`（约 1.11 epoch）。在包含
+LLaMA-Factory、PyTorch 和所需依赖的 GPU 容器中运行：
 
 ```bash
-llamafactory-cli train /mammo/vindr_finetune/trial.yaml
-
 python3 /mammo/vindr_finetune/infer_lora.py \
   --prompt direct --split test \
-  --adapter /data/me/mammo/qwen3.5-4b-lora-1epoch
+  --adapter /data/me/mammo/qwen3.5-4b-lora/checkpoint-1000
 ```
+
+`trial.yaml` 保留 1 epoch 的独立训练配置；仅在需要重新训练时运行
+`llamafactory-cli train /mammo/vindr_finetune/trial.yaml`。
 
 `direct` 推理直接读取本目录的测试 JSON；`icl` 和 `cot` 仍需要同级
 `/mammo/vindr_infer/infer_data.<prompt>.test.json`。默认推理输出位于

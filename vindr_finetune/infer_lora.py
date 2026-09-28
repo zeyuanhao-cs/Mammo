@@ -37,7 +37,7 @@ from llamafactory.chat import ChatModel
 
 # ============================== CONFIG ==============================
 BASE_MODEL_PATH = "/data/models/Qwen3.5-4B"
-DEFAULT_ADAPTER = "/data/me/mammo/qwen3.5-4b-lora-1epoch"
+DEFAULT_ADAPTER = "/data/me/mammo/qwen3.5-4b-lora/checkpoint-1000"
 DEFAULT_LIMIT = 0  # 0 = 全量 (默认全量推理 test 集 4,000 条)
 
 # 与基线 infer.py 保持一致: qwen3_5 模板 + enable_thinking=False
