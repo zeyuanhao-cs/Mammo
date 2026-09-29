@@ -198,6 +198,8 @@ def main():
     parser.add_argument("--model", default=BASE_MODEL_PATH, help="基座模型路径")
     parser.add_argument("--adapter", default=DEFAULT_ADAPTER, help="LoRA adapter 路径")
     parser.add_argument("--max-new-tokens", type=int, default=MAX_NEW_TOKENS)
+    parser.add_argument("--image-max-pixels", type=int, default=IMAGE_MAX_PIXELS)
+    parser.add_argument("--image-min-pixels", type=int, default=IMAGE_MIN_PIXELS)
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="只推理前 N 条；0 表示全量")
 
     # 本环境未安装 flash-attn, 默认 sdpa; 装好后可加 --flash-attn fa2 提速
@@ -210,6 +212,8 @@ def main():
                              f"(Slurm 默认 {DEFAULT_IMAGE_ROOT})")
 
     args = parser.parse_args()
+    if not 0 < args.image_min_pixels <= args.image_max_pixels:
+        parser.error("image pixel bounds must satisfy 0 < min <= max")
 
     # ---------------------- CUDA 检查 ----------------------
     assert torch.cuda.is_available(), "CUDA 不可用：当前环境没有检测到 GPU"
@@ -266,7 +270,8 @@ def main():
     # ---------------------- 输出目录 ----------------------
     adapter_tag = Path(args.adapter).name  # e.g. Qwen_lora_1000
     attn_tag = args.flash_attn
-    run_name = f"{args.prompt}_{adapter_tag}_{IMAGE_TAG}_{attn_tag}"
+    image_tag = IMAGE_TAG if args.image_max_pixels == IMAGE_MAX_PIXELS else f"pixels{args.image_max_pixels}"
+    run_name = f"{args.prompt}_{adapter_tag}_{image_tag}_{attn_tag}"
 
     out_dir = OUTPUT_ROOT / run_name
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -301,8 +306,8 @@ def main():
         infer_dtype=INFER_DTYPE,
 
         # 图像设置 (与基线 infer.py 一致)
-        image_max_pixels=IMAGE_MAX_PIXELS,
-        image_min_pixels=IMAGE_MIN_PIXELS,
+        image_max_pixels=args.image_max_pixels,
+        image_min_pixels=args.image_min_pixels,
 
         # 关闭 thinking
         enable_thinking=False,
@@ -325,8 +330,8 @@ def main():
         "output_file": str(out_file),
         "n_records_this_run": len(records),
         "max_new_tokens": args.max_new_tokens,
-        "image_max_pixels": IMAGE_MAX_PIXELS,
-        "image_min_pixels": IMAGE_MIN_PIXELS,
+        "image_max_pixels": args.image_max_pixels,
+        "image_min_pixels": args.image_min_pixels,
         "enable_thinking": False,
         "do_sample": False,
         "infer_backend": "huggingface",
