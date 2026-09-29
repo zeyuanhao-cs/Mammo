@@ -7,6 +7,14 @@
       "images": "images"
     }
   },
+  "vindr_balanced_train": {
+    "file_name": "data/train_balanced_2to1.json",
+    "columns": {
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images"
+    }
+  },
   "vindr_direct_test": {
     "file_name": "data/direct_test.json",
     "columns": {
