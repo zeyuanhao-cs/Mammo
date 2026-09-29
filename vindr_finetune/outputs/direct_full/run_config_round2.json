@@ -1,0 +1,13 @@
+{
+  "model": "/hy-tmp/9_9/Qwen/Qwen3.5-4B",
+  "adapter": "/hy-tmp/9_9/Qwen/qwen-4b/lora_lesion_1to3",
+  "template": "qwen3_5",
+  "samples": 4000,
+  "max_new_tokens": 256,
+  "image_max_pixels": 786432,
+  "image_min_pixels": 262144,
+  "enable_thinking": false,
+  "do_sample": false,
+  "infer_dtype": "bfloat16",
+  "flash_attn": "fa2"
+}

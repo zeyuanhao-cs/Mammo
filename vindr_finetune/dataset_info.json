@@ -7,6 +7,30 @@
       "images": "images"
     }
   },
+  "vindr_lesion_train": {
+    "file_name": "data/train_lesion_only_1to3.json",
+    "columns": {
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images"
+    }
+  },
+  "vindr_11_train": {
+    "file_name": "data/11.json",
+    "columns": {
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images"
+    }
+  },
+  "vindr_balanced_train": {
+    "file_name": "data/train_balanced_2to1.json",
+    "columns": {
+      "prompt": "instruction",
+      "response": "output",
+      "images": "images"
+    }
+  },
   "vindr_direct_test": {
     "file_name": "data/direct_test.json",
     "columns": {

@@ -1,20 +1,20 @@
 # =============================================================================
 # VinDr-Mammo × Qwen3.5-4B LoRA SFT (direct prompt)
-# 训练集 16,000 / 测试集 4,000, 无独立 val (与 Mammo-CLIP 官方一致)
-# val_size: 0.1 是 LLaMA-Factory 训练时从 train 动态划 10% 做 eval loss 监控
+# 训练集：4657 条 (2:1 lesion:normal + 四类平衡 oversample, train_balanced_2to1.json)
+# 目标：提高 lesion recall，缓解 empty findings 保守输出
 #
 # 运行:
 #   cd /hy-tmp/9_9/Mammo
 #   llamafactory-cli train vindr_finetune/trial.yaml
 # =============================================================================
 
-### dataset_dir (images 相对路径相对于此解析, dataset_info.json 在此目录下)
+### dataset_dir
 dataset_dir: vindr_finetune
 
 ### model
 model_name_or_path: /hy-tmp/9_9/Qwen/Qwen3.5-4B
 trust_remote_code: true
-image_max_pixels: 1386240
+image_max_pixels: 786432
 flash_attn: sdpa
 
 ### method
@@ -27,33 +27,31 @@ lora_dropout: 0.05
 lora_target: all
 
 ### dataset
-dataset: vindr_direct_train
+dataset: vindr_balanced_train
 template: qwen3_5_nothink
 cutoff_len: 4096
-val_size: 0.1
+val_size: 0
 preprocessing_num_workers: 8
-dataloader_num_workers: 2
+dataloader_num_workers: 4
 
 ### output
 output_dir: /hy-tmp/9_9/Qwen/qwen-4b/lora/
 logging_steps: 10
-save_steps: 500
-save_total_limit: 2
+save_steps: 100
+save_total_limit: 3
 plot_loss: true
 overwrite_output_dir: true
 report_to: none
 
 ### train
-per_device_train_batch_size: 1
-gradient_accumulation_steps: 16
-learning_rate: 1.0e-4
-num_train_epochs: 3.0
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 5.0e-5
+num_train_epochs: 2.0
 lr_scheduler_type: cosine
-warmup_ratio: 0.1
+warmup_ratio: 0.05
 bf16: true
 gradient_checkpointing: true
 
 ### eval
-per_device_eval_batch_size: 1
-eval_strategy: steps
-eval_steps: 500
+eval_strategy: "no"
