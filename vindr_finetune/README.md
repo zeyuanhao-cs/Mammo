@@ -37,7 +37,8 @@ batch size 2 × 累积 8、786432 图像像素上限、SDPA、关闭思考。
 训练集包含重复采样，实际有 2948 张不同图片，与 4000 张测试图无重叠。
 测试 JSON 使用该提交更新后的提示词；图像和真值与旧版本一致。
 
-通过 Slurm 在 H200 GPU 3 的 Mammo 镜像内运行 `bash vindr_finetune/run_exp1_9b.sh`。
+通过 Slurm 在已预约的 H200 GPU 上运行 `bash vindr_finetune/run_exp1_9b.sh`，
+并设置 `MAMMO_GPU_PHYSICAL` 为提交时固定的物理卡号。
 脚本校验数据哈希、全部图片可读性和模型文件，生成独立的每作业配置，
 训练成功后自动在测试集推理（786432 像素上限、256 新 token、关闭思考）。
 数据从当前 Git checkout 读取，图片通过 `/mammo/images_png` 读取。

@@ -64,7 +64,7 @@ for shard in set(index['weight_map'].values()):
 print('phase=preflight_complete train_rows=4657 test_rows=4000 missing_images=0 overlap=0', flush=True)
 PY
 
-echo "phase=train_start job_id=${JOB_ID} gpu_physical=3"
+echo "phase=train_start job_id=${JOB_ID} gpu_physical=${MAMMO_GPU_PHYSICAL:?}"
 llamafactory-cli train "$RUN_DIR/train.yaml" > "$RUN_DIR/train.log" 2>&1
 test -s "$ADAPTER_DIR/adapter_config.json"
 test -s "$ADAPTER_DIR/adapter_model.safetensors"
