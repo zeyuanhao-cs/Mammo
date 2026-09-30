@@ -1,0 +1,200 @@
+{
+  "job_id": 12080,
+  "source": {
+    "predictions_sha256": "3f327ddab60e8e0427c393edec29e9c20ddd8fc1183f9300bda2243a84dcc417",
+    "baseline_commit": "20e980b591a666d95aa098bdb4709c51a4c3864a",
+    "baseline_blob_sha1": "c0ebb1017f883159866b0ee222242036958439e5",
+    "baseline_path": "vindr_finetune/outputs/direct_full/predictions.jsonl",
+    "evaluator_sha256": "33da2aec1418465e1c5322025129629b18ac236c09f4d91b28a58ea23e4e0539"
+  },
+  "validation": {
+    "ground_truth_mismatches": 0,
+    "image_mapping_mismatches": 0,
+    "table_metrics_reproduced": 10,
+    "table_metrics_total": 10
+  },
+  "methods": {
+    "iou_threshold": 0.3,
+    "matching": "same category; descending-IoU greedy; ascending-index ties",
+    "joint": "same localization matches with equal finding BI-RADS",
+    "category_macro_labels": [
+      "Mass",
+      "Calcification",
+      "Asymmetry",
+      "Architectural Distortion"
+    ],
+    "breast_and_finding_birads_macro_labels": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "density_macro_labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "invalid_predictions": "counted incorrect; no findings"
+  },
+  "4b_2to1_paired500": {
+    "metrics": {
+      "json_valid_rate": 0.994,
+      "breast_birads_accuracy": 0.362,
+      "breast_birads_macro_f1": 0.2449606944958044,
+      "breast_density_accuracy": 0.788,
+      "breast_density_macro_f1": 0.4936785525020819,
+      "category_macro_f1": 0.1897952406319546,
+      "localized_f1_iou_0_3": 0.25327510917030566,
+      "finding_birads_accuracy": 0.42528735632183906,
+      "finding_birads_macro_f1": 0.18382352941176472,
+      "joint_finding_f1_iou_0_3": 0.10771470160116449
+    },
+    "counts": {
+      "rows": 500,
+      "valid_json": 497,
+      "runtime_errors": 0,
+      "gt_findings": 488,
+      "predicted_findings": 199,
+      "localized_tp": 87,
+      "joint_tp": 37,
+      "finding_birads_matched_support": 87,
+      "positive_images": 357,
+      "predicted_positive_images": 185,
+      "false_positive_images": 13
+    },
+    "per_category": {
+      "Mass": {
+        "gt": 237,
+        "predicted": 82,
+        "tp": 52,
+        "f1": 0.32601880877742945
+      },
+      "Calcification": {
+        "gt": 115,
+        "predicted": 74,
+        "tp": 32,
+        "f1": 0.3386243386243386
+      },
+      "Asymmetry": {
+        "gt": 79,
+        "predicted": 33,
+        "tp": 2,
+        "f1": 0.03571428571428571
+      },
+      "Architectural Distortion": {
+        "gt": 24,
+        "predicted": 10,
+        "tp": 1,
+        "f1": 0.058823529411764705
+      }
+    }
+  },
+  "9b_paired500": {
+    "metrics": {
+      "json_valid_rate": 0.994,
+      "breast_birads_accuracy": 0.436,
+      "breast_birads_macro_f1": 0.3151527180621897,
+      "breast_density_accuracy": 0.832,
+      "breast_density_macro_f1": 0.5156918713648073,
+      "category_macro_f1": 0.22189952904238622,
+      "localized_f1_iou_0_3": 0.30140485312899107,
+      "finding_birads_accuracy": 0.5254237288135594,
+      "finding_birads_macro_f1": 0.27762194171731336,
+      "joint_finding_f1_iou_0_3": 0.1583652618135377
+    },
+    "counts": {
+      "rows": 500,
+      "valid_json": 497,
+      "runtime_errors": 0,
+      "gt_findings": 488,
+      "predicted_findings": 295,
+      "localized_tp": 118,
+      "joint_tp": 62,
+      "finding_birads_matched_support": 118,
+      "positive_images": 357,
+      "predicted_positive_images": 277,
+      "false_positive_images": 27
+    },
+    "per_category": {
+      "Mass": {
+        "gt": 237,
+        "predicted": 133,
+        "tp": 74,
+        "f1": 0.4
+      },
+      "Calcification": {
+        "gt": 115,
+        "predicted": 81,
+        "tp": 41,
+        "f1": 0.41836734693877553
+      },
+      "Asymmetry": {
+        "gt": 79,
+        "predicted": 25,
+        "tp": 1,
+        "f1": 0.019230769230769232
+      },
+      "Architectural Distortion": {
+        "gt": 24,
+        "predicted": 56,
+        "tp": 2,
+        "f1": 0.05
+      }
+    }
+  },
+  "9b_full4000": {
+    "metrics": {
+      "json_valid_rate": 0.999,
+      "breast_birads_accuracy": 0.603,
+      "breast_birads_macro_f1": 0.27616660669502224,
+      "breast_density_accuracy": 0.823,
+      "breast_density_macro_f1": 0.542794851148308,
+      "category_macro_f1": 0.13225680012311986,
+      "localized_f1_iou_0_3": 0.155467720685112,
+      "finding_birads_accuracy": 0.5254237288135594,
+      "finding_birads_macro_f1": 0.27762194171731336,
+      "joint_finding_f1_iou_0_3": 0.08168642951251646
+    },
+    "counts": {
+      "rows": 4000,
+      "valid_json": 3996,
+      "runtime_errors": 0,
+      "gt_findings": 488,
+      "predicted_findings": 1030,
+      "localized_tp": 118,
+      "joint_tp": 62,
+      "finding_birads_matched_support": 118,
+      "positive_images": 357,
+      "predicted_positive_images": 1004,
+      "false_positive_images": 754
+    },
+    "per_category": {
+      "Mass": {
+        "gt": 237,
+        "predicted": 347,
+        "tp": 74,
+        "f1": 0.2534246575342466
+      },
+      "Calcification": {
+        "gt": 115,
+        "predicted": 206,
+        "tp": 41,
+        "f1": 0.2554517133956386
+      },
+      "Asymmetry": {
+        "gt": 79,
+        "predicted": 176,
+        "tp": 1,
+        "f1": 0.00784313725490196
+      },
+      "Architectural Distortion": {
+        "gt": 24,
+        "predicted": 301,
+        "tp": 2,
+        "f1": 0.012307692307692308
+      }
+    }
+  }
+}
