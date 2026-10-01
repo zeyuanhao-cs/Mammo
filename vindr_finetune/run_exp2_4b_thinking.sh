@@ -12,7 +12,7 @@ export RUN_DIR="/data/me/mammo/runs/exp2-4b-thinking-${JOB_ID}"
 export ADAPTER_DIR="/data/me/mammo/qwen3.5-4b-thinking-balanced-2to1-job-${JOB_ID}"
 export PRED_DIR="/data/me/mammo/outputs/direct_qwen3.5-4b-thinking-balanced-2to1-job-${JOB_ID}_pixels786432_sdpa_thinking"
 export NINE_PRED=/data/me/mammo/outputs/direct_qwen3.5-9b-balanced-2to1-job-12080_pixels786432_sdpa/predictions.jsonl
-export BASELINE_REPO=/mammo/checkouts/exp1-9b-43787dc
+export BASELINE_PRED=/mammo/.cache/mammo-benchmarks/4b-2to1-20e980b-predictions.jsonl
 if test -e "$RUN_DIR" || test -e "$ADAPTER_DIR" || test -e "$PRED_DIR"; then
     echo 'phase=refused reason=output_already_exists'
     exit 73
@@ -21,7 +21,7 @@ mkdir -p "$RUN_DIR" "$HF_HOME" "$XDG_CACHE_HOME" "$TMPDIR"
 trap 'rc=$?; echo "phase=failed exit_code=$rc"; exit "$rc"' ERR
 
 python3 - <<'PY'
-import hashlib,json,os,subprocess
+import hashlib,json,os
 from pathlib import Path
 import yaml
 from transformers import AutoTokenizer
@@ -66,9 +66,7 @@ for row in pairs.values():
 # Conservative vision-token allowance exceeds the 786432-pixel setting's grid.
 assert max_text+2048<=config['cutoff_len'], 'thinking sequence may be truncated'
 assert hashlib.sha256(Path(os.environ['NINE_PRED']).read_bytes()).hexdigest()=='3f327ddab60e8e0427c393edec29e9c20ddd8fc1183f9300bda2243a84dcc417'
-repo=os.environ['BASELINE_REPO']
-baseline=subprocess.check_output(['git','-c','safe.directory='+repo,'-C',repo,'show',
-    '20e980b591a666d95aa098bdb4709c51a4c3864a:vindr_finetune/outputs/direct_full/predictions.jsonl'])
+baseline=Path(os.environ['BASELINE_PRED']).read_bytes()
 assert hashlib.sha1(b'blob '+str(len(baseline)).encode()+b'\0'+baseline).hexdigest()=='c0ebb1017f883159866b0ee222242036958439e5'
 old=[json.loads(line) for line in baseline.splitlines() if line.strip()]
 assert len(old)==500 and {r['index'] for r in old}==set(range(500))
@@ -98,7 +96,7 @@ infer() {
 }
 compare() {
     python3 "$SCRIPT_DIR/compare_thinking.py" --predictions "$PRED_DIR/predictions.jsonl" \
-        --predictions-9b "$NINE_PRED" --baseline-git-repo "$BASELINE_REPO" \
+        --predictions-9b "$NINE_PRED" --baseline-predictions "$BASELINE_PRED" \
         --test-data "$SCRIPT_DIR/data/direct_test.json" --output-dir "$RUN_DIR/$1" --job-id "$JOB_ID"
 }
 echo "phase=infer_paired500_start job_id=${JOB_ID}"

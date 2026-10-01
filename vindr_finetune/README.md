@@ -90,6 +90,9 @@ LoRA r=8/alpha=16、学习率 5e-5、batch 2 × 累积 8 与 786432 像素上限
 `compare_thinking.py` 校验原始 4B 的固定 Git 预测与 9B 作业 12080 的结果版本、
 测试图映射和真值，复用相同评测函数。思考内容不参与最终 JSON 评分；未结束的
 思考若仅提及候选 JSON，不作为有效答案。表格同时说明生成预算的差异。
+训练镜像不包含 Git；启动前由主机从固定提交导出原始 4B 的预测快照至
+`/mammo/.cache/mammo-benchmarks/4b-2to1-20e980b-predictions.jsonl`，容器内按
+固定 Git blob SHA-1 校验版本，不依赖 Git 或网络。
 
 训练、推理、对比产物均在 `/data/me/mammo` 下按作业 ID 隔离；对比表位于
 `runs/exp2-4b-thinking-<JOB_ID>/{comparison_500,comparison_full4000}/comparison.md`。

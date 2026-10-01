@@ -26,16 +26,21 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--predictions', required=True, type=Path)
     parser.add_argument('--predictions-9b', required=True, type=Path)
-    parser.add_argument('--baseline-git-repo', required=True)
+    baseline_input = parser.add_mutually_exclusive_group(required=True)
+    baseline_input.add_argument('--baseline-git-repo')
+    baseline_input.add_argument('--baseline-predictions', type=Path)
     parser.add_argument('--baseline-ref', default='20e980b591a666d95aa098bdb4709c51a4c3864a')
     parser.add_argument('--test-data', required=True, type=Path)
     parser.add_argument('--output-dir', required=True, type=Path)
     parser.add_argument('--job-id', required=True)
     args = parser.parse_args()
     baseline_path = 'vindr_finetune/outputs/direct_full/predictions.jsonl'
-    baseline_blob = subprocess.check_output(['git', '-c', 'safe.directory=' + args.baseline_git_repo,
-                                            '-C', args.baseline_git_repo, 'show',
-                                            args.baseline_ref + ':' + baseline_path])
+    if args.baseline_predictions:
+        baseline_blob = args.baseline_predictions.read_bytes()
+    else:
+        baseline_blob = subprocess.check_output(['git', '-c', 'safe.directory=' + args.baseline_git_repo,
+                                                '-C', args.baseline_git_repo, 'show',
+                                                args.baseline_ref + ':' + baseline_path])
     sha1 = hashlib.sha1(b'blob ' + str(len(baseline_blob)).encode() + b'\0' + baseline_blob).hexdigest()
     assert sha1 == 'c0ebb1017f883159866b0ee222242036958439e5', 'baseline version mismatch'
     old = load_jsonl(baseline_blob)
