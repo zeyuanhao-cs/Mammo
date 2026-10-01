@@ -43,3 +43,23 @@ batch size 2 × 累积 8、786432 图像像素上限、SDPA、关闭思考。
 训练成功后自动在测试集推理（786432 像素上限、256 新 token、关闭思考）。
 数据从当前 Git checkout 读取，图片通过 `/mammo/images_png` 读取。
 adapter、日志、推理结果和汇总全部写入 `/data/me/mammo` 下带作业 ID 的目录。
+
+## 实验二：Flash Next 思考过程蒸馏
+
+`run_distill_thinking.sh` 通过现有 `http://10.222.10.107:9241/v1` 服务调用
+`qwen38-flash-next`，开启 `enable_thinking`。客户端使用 Slurm `download`
+队列、零 GPU，不启动或修改模型服务。提交时设置 `MAMMO_COMMIT` 为固定代码提交。
+
+输入为 `train_balanced_2to1.json` 的原始 PNG 和真值标注；只处理 2948 个不同的
+图像/标注组合，复用重复采样结果后生成 4657 条训练记录。测试集仅用于校验无重叠。
+要求回复正常结束、思考非空、最终 JSON 与输入真值一致；不合格结果记录错误码，
+连续 10 条失败停止。未覆盖全部样本时不发布最终训练集。
+
+原始回复和生成数据仅存于 `/data/me/mammo/distillation/flash-next-<JOB_ID>/`。
+完成产物为 `train_balanced_2to1_thinking.json`、`dataset_info.json` 和 `summary.json`；
+输出保留原始真值，思考写在 `<think>...</think>` 内。这是基于标注的教师生成解释，
+尚未经临床正确性验证。`progress.json` 仅含汇总进度。
+
+需要断点恢复时显式设置 `DISTILL_RUN_DIR` 为旧运行目录，保持模型、提示词、代码
+提交和参数一致；缓存校验和文件锁避免重复调用与并发覆盖。此脚本只蒸馏，后续
+4B 思考模式微调需另行启动。
