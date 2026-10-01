@@ -130,12 +130,23 @@ def gpu_mem(prefix: str):
     )
 
 
-def parse_prediction(raw: str):
+def parse_prediction(raw: str, thinking: bool = False):
     """从模型原始输出中提取 JSON。解析失败返回 None。"""
     if raw is None:
         return None
 
-    text = THINK_RE.sub("", raw).strip()
+    if thinking:
+        # The template may prefill <think>, so generated text can lack its opening tag.
+        # Never score a JSON object mentioned inside unfinished reasoning as the answer.
+        if "</think>" not in raw:
+            try:
+                direct = json.loads(raw.strip())
+                return direct if isinstance(direct, dict) else None
+            except json.JSONDecodeError:
+                return None
+        text = raw.rsplit("</think>", 1)[1].strip()
+    else:
+        text = THINK_RE.sub("", raw).strip()
 
     # 提取 ```json ... ``` 中的内容
     m = FENCE_RE.search(text)
@@ -198,6 +209,7 @@ def main():
     parser.add_argument("--model", default=BASE_MODEL_PATH, help="基座模型路径")
     parser.add_argument("--adapter", default=DEFAULT_ADAPTER, help="LoRA adapter 路径")
     parser.add_argument("--max-new-tokens", type=int, default=MAX_NEW_TOKENS)
+    parser.add_argument("--enable-thinking", action="store_true", help="开启思考；仅解析思考结束后的最终 JSON")
     parser.add_argument("--image-max-pixels", type=int, default=IMAGE_MAX_PIXELS)
     parser.add_argument("--image-min-pixels", type=int, default=IMAGE_MIN_PIXELS)
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="只推理前 N 条；0 表示全量")
@@ -272,6 +284,8 @@ def main():
     attn_tag = args.flash_attn
     image_tag = IMAGE_TAG if args.image_max_pixels == IMAGE_MAX_PIXELS else f"pixels{args.image_max_pixels}"
     run_name = f"{args.prompt}_{adapter_tag}_{image_tag}_{attn_tag}"
+    if args.enable_thinking:
+        run_name += "_thinking"
 
     out_dir = OUTPUT_ROOT / run_name
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -309,8 +323,7 @@ def main():
         image_max_pixels=args.image_max_pixels,
         image_min_pixels=args.image_min_pixels,
 
-        # 关闭 thinking
-        enable_thinking=False,
+        enable_thinking=args.enable_thinking,
 
         flash_attn=args.flash_attn,
     )
@@ -332,7 +345,7 @@ def main():
         "max_new_tokens": args.max_new_tokens,
         "image_max_pixels": args.image_max_pixels,
         "image_min_pixels": args.image_min_pixels,
-        "enable_thinking": False,
+        "enable_thinking": args.enable_thinking,
         "do_sample": False,
         "infer_backend": "huggingface",
         "finetuning_type": "lora",
@@ -348,7 +361,7 @@ def main():
     # ---------------------- 加载模型 ----------------------
     print(f"[model] base={args.model}")
     print(f"[model] adapter={args.adapter}")
-    print(f"[model] template={TEMPLATE}, enable_thinking=False")
+    print(f"[model] template={TEMPLATE}, enable_thinking={args.enable_thinking}")
     print(f"[model] infer_dtype={INFER_DTYPE}, flash_attn={args.flash_attn}")
 
     gpu_mem("before model load")
@@ -405,14 +418,16 @@ def main():
                     gpu_mem(f"after index={idx}")
 
                 pred_raw = responses[0].response_text.strip()
-                pred_json = parse_prediction(pred_raw)
+                pred_json = parse_prediction(pred_raw, thinking=args.enable_thinking)
                 eval_json = get_eval_json(pred_json)
+                finish_reason = getattr(responses[0], "finish_reason", None)
                 error = None
 
             except Exception as e:
                 pred_raw = ""
                 pred_json = None
                 eval_json = None
+                finish_reason = None
                 error = repr(e)
 
             sec = time.perf_counter() - t1
@@ -433,6 +448,9 @@ def main():
                 "ground_truth": rec["ground_truth"],
                 "seconds": round(sec, 2),
             }
+            if args.enable_thinking:
+                record["thinking_closed"] = "</think>" in pred_raw
+                record["finish_reason"] = finish_reason
             if error is not None:
                 record["error"] = error
 

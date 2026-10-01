@@ -76,3 +76,22 @@ adapter、日志、推理结果和汇总全部写入 `/data/me/mammo` 下带作�
 训练数据与 `summary.json`：保留其他记录，替换通过复核的解释，排除未通过者。
 被排除记录仍保留在原始蒸馏产物中，复核目录包含 `excluded.json` 汇总。
 这是对已发现风险的同模型复核，不表示全数据经过审计或已获医学正确性验证。
+
+### 蒸馏后的 4B 微调与三方案对比
+
+`trial_4b_thinking.yaml` 使用复核后的 4657 条数据、Qwen3.5-4B、2 epoch，保持
+LoRA r=8/alpha=16、学习率 5e-5、batch 2 × 累积 8 与 786432 像素上限。
+启用 `qwen3_5` 思考模板，序列长度为 8192；预检会确认思考标签保留、训练/测试
+无重叠，文本 token 数加保守的图像 token 预算不会截断。
+
+通过已预约的单卡 Slurm 作业运行 `run_exp2_4b_thinking.sh`，设置
+`MAMMO_COMMIT`、`MAMMO_GPU_PHYSICAL`。训练成功后开启思考推理，生成上限为
+4096 token。先推理同一组前 500 张并产生三方案主表，再续推全部 4000 张。
+`compare_thinking.py` 校验原始 4B 的固定 Git 预测与 9B 作业 12080 的结果版本、
+测试图映射和真值，复用相同评测函数。思考内容不参与最终 JSON 评分；未结束的
+思考若仅提及候选 JSON，不作为有效答案。表格同时说明生成预算的差异。
+
+训练、推理、对比产物均在 `/data/me/mammo` 下按作业 ID 隔离；对比表位于
+`runs/exp2-4b-thinking-<JOB_ID>/{comparison_500,comparison_full4000}/comparison.md`。
+原始 4B 只有 500 条对照预测，因此三方案主表限于这 500 张；全量表比较 9B
+和蒸馏思考 4B。原始预测、思考与训练日志保留在服务器，仅回传汇总结果。
