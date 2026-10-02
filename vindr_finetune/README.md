@@ -40,7 +40,7 @@ batch size 2 × 累积 8、786432 图像像素上限、SDPA、关闭思考。
 通过 Slurm 在已预约的 H200 GPU 上运行 `bash vindr_finetune/run_exp1_9b.sh`，
 并设置 `MAMMO_GPU_PHYSICAL` 为提交时固定的物理卡号。
 脚本校验数据哈希、全部图片可读性和模型文件，生成独立的每作业配置，
-训练成功后自动在测试集推理（786432 像素上限、256 新 token、关闭思考）。
+训练成功后只推理 baseline 相同的前 500 条（索引 0–499，786432 像素上限、256 新 token、关闭思考）。
 数据从当前 Git checkout 读取，图片通过 `/mammo/images_png` 读取。
 adapter、日志、推理结果和汇总全部写入 `/data/me/mammo` 下带作业 ID 的目录。
 
@@ -82,11 +82,12 @@ adapter、日志、推理结果和汇总全部写入 `/data/me/mammo` 下带作�
 `trial_4b_thinking.yaml` 使用复核后的 4657 条数据、Qwen3.5-4B、2 epoch，保持
 LoRA r=8/alpha=16、学习率 5e-5、batch 2 × 累积 8 与 786432 像素上限。
 启用 `qwen3_5` 思考模板，序列长度为 8192；预检会确认思考标签保留、训练/测试
-无重叠，文本 token 数加保守的图像 token 预算不会截断。
+无重叠，图像顺序、重复采样权重和最终标签与 baseline 一致，训练提示词仅按
+`thinking_instruction` 转换；文本 token 数加保守的图像 token 预算不会截断。
 
 通过已预约的单卡 Slurm 作业运行 `run_exp2_4b_thinking.sh`，设置
 `MAMMO_COMMIT`、`MAMMO_GPU_PHYSICAL`。训练成功后开启思考推理，生成上限为
-4096 token。先推理同一组前 500 张并产生三方案主表，再续推全部 4000 张。
+4096 token。只推理 baseline 同一组前 500 张并产生三方案主表，完成后退出。
 `compare_thinking.py` 校验原始 4B 的固定 Git 预测与 9B 作业 12080 的结果版本、
 测试图映射和真值，复用相同评测函数。思考内容不参与最终 JSON 评分；未结束的
 思考若仅提及候选 JSON，不作为有效答案。表格同时说明生成预算的差异。
@@ -95,6 +96,9 @@ LoRA r=8/alpha=16、学习率 5e-5、batch 2 × 累积 8 与 786432 像素上限
 固定 Git blob SHA-1 校验版本，不依赖 Git 或网络。
 
 训练、推理、对比产物均在 `/data/me/mammo` 下按作业 ID 隔离；对比表位于
-`runs/exp2-4b-thinking-<JOB_ID>/{comparison_500,comparison_full4000}/comparison.md`。
-原始 4B 只有 500 条对照预测，因此三方案主表限于这 500 张；全量表比较 9B
-和蒸馏思考 4B。原始预测、思考与训练日志保留在服务器，仅回传汇总结果。
+`runs/exp2-4b-thinking-<JOB_ID>/comparison_500/comparison.md`。
+测试源文件有 4000 条，baseline 的 round3.sh 实际只推理前 500 条：357 张有病灶、
+143 张正常。训练集为 4657 条（2948 张不同图片），包含 3105 条有病灶和 1552 条正常。
+历史 9B 全量输出和蒸馏4B额外输出保留，但对比脚本仅选择 baseline 的 500 个索引；
+范围外输出不参与三方案评分，测试源文件行数也不作为推理进度的分母。
+原始预测、思考与训练日志保留在服务器，仅回传汇总结果。

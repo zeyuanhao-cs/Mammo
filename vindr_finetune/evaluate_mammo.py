@@ -173,7 +173,7 @@ def main():
     args = parser.parse_args()
     blob = Path(args.predictions).read_bytes()
     rows = load_jsonl(blob)
-    assert len(rows) == 4000 and {r['index'] for r in rows} == set(range(4000)), 'incomplete or duplicate inference'
+    assert len(rows) in (500, 4000) and {r['index'] for r in rows} == set(range(len(rows))), 'incomplete or duplicate inference'
     old_blob = subprocess.check_output(['git', '-C', args.baseline_git_repo, 'show', args.baseline_ref + ':' + args.baseline_path])
     old = load_jsonl(old_blob)
     old_ids = {row['index'] for row in old}
@@ -186,7 +186,7 @@ def main():
     assert mismatches == image_mismatches == 0, 'ground truth or test image mapping mismatch'
     baseline = evaluate(old)
     new_paired = evaluate([new_map[row['index']] for row in old])
-    new_full = evaluate(rows)
+    new_full = evaluate(rows) if len(rows) == 4000 else None
     table_checks = {key: round(baseline['metrics'][key] * 100, 1) == value for key, value in TABLE_4B_2TO1.items()}
     if args.verify_table:
         assert all(table_checks.values()), 'cannot reproduce collaborator table: ' + str(table_checks)

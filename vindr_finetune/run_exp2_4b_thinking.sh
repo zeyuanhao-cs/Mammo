@@ -21,12 +21,14 @@ mkdir -p "$RUN_DIR" "$HF_HOME" "$XDG_CACHE_HOME" "$TMPDIR"
 trap 'rc=$?; echo "phase=failed exit_code=$rc"; exit "$rc"' ERR
 
 python3 - <<'PY'
-import hashlib,json,os
+import hashlib,json,os,sys
 from pathlib import Path
+sys.path.insert(0,os.environ['SCRIPT_DIR'])
 import yaml
 from transformers import AutoTokenizer
 from llamafactory.hparams import DataArguments
 from llamafactory.data.template import get_template_and_fix_tokenizer
+from distill_thinking import thinking_instruction, SOURCE_SHA
 
 source=Path(os.environ['SCRIPT_DIR']); run=Path(os.environ['RUN_DIR'])
 config=yaml.safe_load((source/'trial_4b_thinking.yaml').read_text())
@@ -37,13 +39,16 @@ assert sha==summary['output_sha256']=='8152daecd7a1dd16ddcd5033fa40eb111c3510d6d
 assert summary['state']=='complete' and summary['output_rows']==4657 and summary['excluded_rows']==0
 assert summary['verdict_counts']=={'accept':0,'revised':2,'reject':0}
 rows=json.loads(blob); assert len(rows)==4657
-original=json.loads((source/'data/train_balanced_2to1.json').read_text())
+original_blob=(source/'data/train_balanced_2to1.json').read_bytes()
+assert hashlib.sha256(original_blob).hexdigest()==SOURCE_SHA, 'baseline train version mismatch'
+original=json.loads(original_blob); assert len(original)==len(rows)==4657
 test_file=source/'data/direct_test.json';test_blob=test_file.read_bytes()
 assert hashlib.sha256(test_blob).hexdigest()=='6eddbabedff8e37df2f5629585b4947fea3cbea6df9f61d9a1fed13548b8249e'
 test=json.loads(test_blob); assert len(test)==4000
 train_images=set();test_images=set(); pairs={}
 for row, old in zip(rows,original):
     assert row['images']==old['images'] and row['instruction'].count('<image>')==len(row['images'])==1
+    assert row['instruction']==thinking_instruction(old['instruction']), 'unexpected training prompt change'
     assert row['output'].startswith('<think>') and row['output'].endswith('</think>\n'+old['output'])
     assert row['output'].count('<think>')==row['output'].count('</think>')==1
     train_images.update(row['images']);pairs.setdefault((row['images'][0],row['output']),row)
@@ -77,6 +82,8 @@ config['output_dir']=os.environ['ADAPTER_DIR']
     'gpu_physical':os.environ['MAMMO_GPU_PHYSICAL'],'train_rows':4657,'train_unique_images':2948,
     'train_sha256':sha,'test_rows':4000,'test_sha256':hashlib.sha256(test_blob).hexdigest(),
     'train_test_overlap':0,'max_text_tokens':max_text,'vision_token_allowance':2048,
+    'baseline_train_sha256':SOURCE_SHA,'baseline_test_indices':list(range(500)),
+    'evaluation_rows':500,'test_source_rows':4000,
     'cutoff_len':config['cutoff_len'],'epochs':2,'enable_thinking':True,'infer_max_new_tokens':4096},indent=2))
 print(json.dumps({'phase':'preflight_complete','train_rows':4657,'test_rows':4000,'overlap':0,
                   'max_text_tokens':max_text,'cutoff_len':config['cutoff_len'],'enable_thinking':True}),flush=True)
@@ -102,7 +109,4 @@ compare() {
 echo "phase=infer_paired500_start job_id=${JOB_ID}"
 infer 500 > "$RUN_DIR/infer_paired500.log" 2>&1
 compare comparison_500
-echo "phase=infer_full4000_start job_id=${JOB_ID}"
-infer 0 > "$RUN_DIR/infer_full4000.log" 2>&1
-compare comparison_full4000
 echo "phase=complete job_id=${JOB_ID}"

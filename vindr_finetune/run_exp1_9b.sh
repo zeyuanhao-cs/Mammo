@@ -27,7 +27,8 @@ import yaml
 
 source = Path(os.environ['SCRIPT_DIR'])
 run = Path(os.environ['RUN_DIR'])
-manifest = {'job_id': os.environ['JOB_ID'], 'git_commit': os.environ.get('MAMMO_COMMIT'), 'datasets': {}}
+manifest = {'job_id': os.environ['JOB_ID'], 'git_commit': os.environ.get('MAMMO_COMMIT'), 'datasets': {},
+            'evaluation_rows': 500, 'baseline_test_indices': list(range(500)), 'test_source_rows': 4000}
 sets = {}
 for name, count, expected_hash in [
     ('train_balanced_2to1', 4657, '93d53adefac511f8d355e5dc72ead78526a54e1c2e1d55a6aba0890bc1584ce9'),
@@ -74,7 +75,7 @@ python3 "$SCRIPT_DIR/infer_lora.py" \
     --prompt direct --split test \
     --model /data/models/Qwen3.5-9B --adapter "$ADAPTER_DIR" \
     --image-root /mammo --image-max-pixels 786432 --image-min-pixels 262144 \
-    --max-new-tokens 256 --flash-attn sdpa > "$RUN_DIR/infer.log" 2>&1
+    --max-new-tokens 256 --flash-attn sdpa --limit 500 > "$RUN_DIR/infer.log" 2>&1
 
 python3 - <<'PY'
 import hashlib
@@ -96,7 +97,7 @@ summary = {'rows': count, 'unique_indices': len(indices), 'runtime_errors': fail
            'invalid_json': invalid, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
 (Path(os.environ['RUN_DIR']) / 'inference_summary.json').write_text(json.dumps(summary, indent=2))
 print(json.dumps(summary), flush=True)
-assert count == 4000 and indices == set(range(4000)), 'incomplete inference'
+assert count == 500 and indices == set(range(500)), 'incomplete baseline-aligned inference'
 assert failures == 0, 'inference has runtime errors; inspect aggregate error categories'
 PY
 echo "phase=complete job_id=${JOB_ID}"

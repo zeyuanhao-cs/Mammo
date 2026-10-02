@@ -22,6 +22,22 @@ METRIC_NAMES = {
 }
 
 
+def baseline_subset(rows, baseline, test, require_image_ids=True):
+    """Score exactly the baseline indices, preserving any extra output separately."""
+    baseline_ids = [r['index'] for r in baseline]
+    assert len(baseline_ids) == len(set(baseline_ids)) == 500
+    assert set(baseline_ids) == set(range(500)), 'baseline test subset changed'
+    by_index = {r['index']: r for r in rows}
+    assert len(by_index) == len(rows), 'duplicate prediction indices'
+    assert set(baseline_ids) <= set(by_index), 'missing baseline predictions'
+    selected = [by_index[i] for i in baseline_ids]
+    assert all(ground_truth(r) == json.loads(test[r['index']]['output']) for r in selected), 'ground truth mismatch'
+    if require_image_ids:
+        assert all(r['image_id'] == Path(test[r['index']]['images'][0]).stem for r in selected), 'image mapping mismatch'
+        assert not any(r.get('error') for r in selected), 'runtime inference errors'
+    return selected
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--predictions', required=True, type=Path)
@@ -50,38 +66,35 @@ def main():
     current_blob = args.predictions.read_bytes()
     current = load_jsonl(current_blob)
     test = json.loads(args.test_data.read_text())
-    for rows, count in [(old, 500), (nine, 4000), (current, len(current))]:
-        assert count in (500, 4000) and len(rows) == count
-        assert {r['index'] for r in rows} == set(range(count)), 'missing or duplicate indices'
-        assert all(ground_truth(r) == json.loads(test[r['index']]['output']) for r in rows)
-        if rows is not old:
-            assert all(r['image_id'] == Path(test[r['index']]['images'][0]).stem for r in rows)
-            assert not any(r.get('error') for r in rows), 'runtime inference errors'
-    nine_map = {r['index']: r for r in nine}
-    current_map = {r['index']: r for r in current}
+    assert len(test) == 4000 and len(old) == 500
+    old_selected = baseline_subset(old, old, test, require_image_ids=False)
+    nine_selected = baseline_subset(nine, old, test)
+    current_selected = baseline_subset(current, old, test)
     paired = {
-        '4b_original_500': evaluate(old),
-        '9b_500': evaluate([nine_map[i] for i in range(500)]),
-        '4b_thinking_500': evaluate([current_map[i] for i in range(500)]),
+        '4b_original_500': evaluate(old_selected),
+        '9b_500': evaluate(nine_selected),
+        '4b_thinking_500': evaluate(current_selected),
     }
     assert all(round(paired['4b_original_500']['metrics'][k]*100, 1) == v
                for k, v in TABLE_4B_2TO1.items()), 'collaborator table cannot be reproduced'
     result = {'job_id': args.job_id, 'state': 'complete_paired500',
               'validation': {'paired_count': 500, 'ground_truth_mismatches': 0,
-                             'image_mapping_mismatches': 0, 'baseline_metrics_reproduced': 10},
+                             'image_mapping_mismatches': 0, 'baseline_metrics_reproduced': 10,
+                             'baseline_image_mapping': 'frozen dataset indices; baseline has no image-id field',
+                             'baseline_indices_sha256': hashlib.sha256(json.dumps(sorted(r['index'] for r in old)).encode()).hexdigest()},
               'source': {'baseline_commit': args.baseline_ref, 'baseline_blob_sha1': sha1,
                          'thinking_predictions_sha256': hashlib.sha256(current_blob).hexdigest(),
                          'nine_predictions_sha256': hashlib.sha256(nine_blob).hexdigest()},
-              'paired500': paired, '9b_full4000': evaluate(nine),
-              '4b_thinking_full4000': evaluate(current) if len(current) == 4000 else None,
+              'paired500': paired,
+              'scope': {'test_source_rows': 4000, 'evaluated_rows_each': 500,
+                        'nine_output_rows': len(nine), 'thinking_output_rows': len(current),
+                        'nine_extra_rows_excluded': len(nine)-500, 'thinking_extra_rows_excluded': len(current)-500},
               'comparison_note': 'Matched test cases and evaluator; thinking has a larger generation budget. '
-                                 'Original 4B has only 500 predictions, no full-4000 comparison.',
-              'thinking_output': {'rows': len(current),
-                                  'closed_thinking': sum(r.get('thinking_closed', False) for r in current),
-                                  'token_limit_reached': sum(r.get('finish_reason') == 'length' for r in current)},
+                                 'All three methods score only the original baseline 500 cases.',
+              'thinking_output': {'rows': 500,
+                                  'closed_thinking': sum(r.get('thinking_closed', False) for r in current_selected),
+                                  'token_limit_reached': sum(r.get('finish_reason') == 'length' for r in current_selected)},
               'evaluator_sha256': hashlib.sha256(Path(__file__).with_name('evaluate_mammo.py').read_bytes()).hexdigest()}
-    if len(current) == 4000:
-        result['state'] = 'complete_full4000'
     args.output_dir.mkdir(parents=True, exist_ok=True)
     (args.output_dir / 'metrics.json').write_text(json.dumps(result, indent=2))
     lines = ['# 三方案对比（相同 500 张测试图）', '',
@@ -90,16 +103,13 @@ def main():
     for key, label in METRIC_NAMES.items():
         a, b, c = [paired[name]['metrics'][key]*100 for name in paired]
         lines.append(f'| {label} | {a:.2f}% | {b:.2f}% | {c:.2f}% | {c-a:+.2f} | {c-b:+.2f} |')
-    lines += ['', '原始 4B 仅有 500 条预测。主表使用完全相同的测试样本与评测实现。',
+    lines += ['', '三方案均只评测 baseline 的索引 0–499，共 500 张（357 张有病灶、143 张正常）。',
+              '训练样本为 4657 条、2948 张不同图片；蒸馏版保留图像、顺序、重复权重和最终标签，增加思考指令与监督。',
+              f'已排除额外输出：9B {len(nine)-500} 条，蒸馏4B {len(current)-500} 条。',
               '思考模型使用更大的生成 token 上限；结果同时包含训练方案与推理预算的差异。', '']
-    if len(current) == 4000:
-        lines += ['## 全量 4000 张（9B 与蒸馏思考 4B）', '', '| 指标 | 9B | 蒸馏思考 4B |', '|---|---:|---:|']
-        for key, label in METRIC_NAMES.items():
-            lines.append(f"| {label} | {result['9b_full4000']['metrics'][key]*100:.2f}% | "
-                         f"{result['4b_thinking_full4000']['metrics'][key]*100:.2f}% |")
     (args.output_dir / 'comparison.md').write_text('\n'.join(lines) + '\n')
     print(json.dumps({'phase': 'comparison_complete', 'state': result['state'], 'paired_rows': 500,
-                      'thinking_rows': len(current)}), flush=True)
+                      'thinking_rows': 500, 'extra_rows_excluded': len(current)-500}), flush=True)
 
 
 if __name__ == '__main__':
