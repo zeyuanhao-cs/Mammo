@@ -1,0 +1,38 @@
+{
+  "state": "verified_baseline_alignment",
+  "job_id": 12220,
+  "slurm_state": "CANCELLED",
+  "cancellation_reason": "stop extra inference beyond baseline 500; training and paired evaluation completed",
+  "code_commit": "b14b305a2501d3f704ff6f85fee7cd54c6413fab",
+  "baseline_commit": "20e980b591a666d95aa098bdb4709c51a4c3864a",
+  "train_rows_each": 4657,
+  "train_unique_images_each": 2948,
+  "train_positive_rows": 3105,
+  "baseline_train_sha256": "93d53adefac511f8d355e5dc72ead78526a54e1c2e1d55a6aba0890bc1584ce9",
+  "training_checks": {
+    "image_sequence_mismatches": 0,
+    "expected_thinking_instruction_mismatches": 0,
+    "final_label_mismatches": 0
+  },
+  "training_thinking_change": "expected thinking instruction and rationale supervision; original image sequence, multiplicity and final labels retained",
+  "train_test_overlap": 0,
+  "test_source_rows": 4000,
+  "test_source_sha256": "6eddbabedff8e37df2f5629585b4947fea3cbea6df9f61d9a1fed13548b8249e",
+  "test_source_identical_to_baseline": true,
+  "evaluated_rows_each": 500,
+  "evaluation_indices": "0-499",
+  "evaluation_positive_images": 357,
+  "evaluation_normal_images": 143,
+  "training_global_step": 584,
+  "training_epoch": 2,
+  "paired_counts_unchanged": true,
+  "paired_metrics_unchanged_within_1e-12": true,
+  "scope": {
+    "test_source_rows": 4000,
+    "evaluated_rows_each": 500,
+    "nine_output_rows": 4000,
+    "thinking_output_rows": 646,
+    "nine_extra_rows_excluded": 3500,
+    "thinking_extra_rows_excluded": 146
+  }
+}

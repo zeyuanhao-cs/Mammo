@@ -1,0 +1,194 @@
+{
+  "job_id": "12220",
+  "state": "complete_paired500",
+  "validation": {
+    "paired_count": 500,
+    "ground_truth_mismatches": 0,
+    "image_mapping_mismatches": 0,
+    "baseline_metrics_reproduced": 10,
+    "baseline_image_mapping": "frozen dataset indices; baseline has no image-id field",
+    "baseline_indices_sha256": "2d0f2158e924e7b2523220ddd9d9fe2ebbb42e7ecb1394580c9b93c3f225d6d6"
+  },
+  "source": {
+    "baseline_commit": "20e980b591a666d95aa098bdb4709c51a4c3864a",
+    "baseline_blob_sha1": "c0ebb1017f883159866b0ee222242036958439e5",
+    "thinking_predictions_sha256": "9ed1aca6ea91be35bc28c96855684938e49c52436017a4d7274c477ed0d2c3b8",
+    "nine_predictions_sha256": "3f327ddab60e8e0427c393edec29e9c20ddd8fc1183f9300bda2243a84dcc417"
+  },
+  "paired500": {
+    "4b_original_500": {
+      "metrics": {
+        "json_valid_rate": 0.994,
+        "breast_birads_accuracy": 0.362,
+        "breast_birads_macro_f1": 0.2449606944958044,
+        "breast_density_accuracy": 0.788,
+        "breast_density_macro_f1": 0.4936785525020819,
+        "category_macro_f1": 0.1897952406319546,
+        "localized_f1_iou_0_3": 0.25327510917030566,
+        "finding_birads_accuracy": 0.42528735632183906,
+        "finding_birads_macro_f1": 0.18382352941176472,
+        "joint_finding_f1_iou_0_3": 0.10771470160116449
+      },
+      "counts": {
+        "rows": 500,
+        "valid_json": 497,
+        "runtime_errors": 0,
+        "gt_findings": 488,
+        "predicted_findings": 199,
+        "localized_tp": 87,
+        "joint_tp": 37,
+        "finding_birads_matched_support": 87,
+        "positive_images": 357,
+        "predicted_positive_images": 185,
+        "false_positive_images": 13
+      },
+      "per_category": {
+        "Mass": {
+          "gt": 237,
+          "predicted": 82,
+          "tp": 52,
+          "f1": 0.32601880877742945
+        },
+        "Calcification": {
+          "gt": 115,
+          "predicted": 74,
+          "tp": 32,
+          "f1": 0.3386243386243386
+        },
+        "Asymmetry": {
+          "gt": 79,
+          "predicted": 33,
+          "tp": 2,
+          "f1": 0.03571428571428571
+        },
+        "Architectural Distortion": {
+          "gt": 24,
+          "predicted": 10,
+          "tp": 1,
+          "f1": 0.058823529411764705
+        }
+      }
+    },
+    "9b_500": {
+      "metrics": {
+        "json_valid_rate": 0.994,
+        "breast_birads_accuracy": 0.436,
+        "breast_birads_macro_f1": 0.3151527180621897,
+        "breast_density_accuracy": 0.832,
+        "breast_density_macro_f1": 0.5156918713648073,
+        "category_macro_f1": 0.22189952904238622,
+        "localized_f1_iou_0_3": 0.30140485312899107,
+        "finding_birads_accuracy": 0.5254237288135594,
+        "finding_birads_macro_f1": 0.27762194171731336,
+        "joint_finding_f1_iou_0_3": 0.1583652618135377
+      },
+      "counts": {
+        "rows": 500,
+        "valid_json": 497,
+        "runtime_errors": 0,
+        "gt_findings": 488,
+        "predicted_findings": 295,
+        "localized_tp": 118,
+        "joint_tp": 62,
+        "finding_birads_matched_support": 118,
+        "positive_images": 357,
+        "predicted_positive_images": 277,
+        "false_positive_images": 27
+      },
+      "per_category": {
+        "Mass": {
+          "gt": 237,
+          "predicted": 133,
+          "tp": 74,
+          "f1": 0.4
+        },
+        "Calcification": {
+          "gt": 115,
+          "predicted": 81,
+          "tp": 41,
+          "f1": 0.41836734693877553
+        },
+        "Asymmetry": {
+          "gt": 79,
+          "predicted": 25,
+          "tp": 1,
+          "f1": 0.019230769230769232
+        },
+        "Architectural Distortion": {
+          "gt": 24,
+          "predicted": 56,
+          "tp": 2,
+          "f1": 0.05
+        }
+      }
+    },
+    "4b_thinking_500": {
+      "metrics": {
+        "json_valid_rate": 0.98,
+        "breast_birads_accuracy": 0.302,
+        "breast_birads_macro_f1": 0.1759845389519678,
+        "breast_density_accuracy": 0.738,
+        "breast_density_macro_f1": 0.25513784461152883,
+        "category_macro_f1": 0.08477024451976085,
+        "localized_f1_iou_0_3": 0.11858974358974358,
+        "finding_birads_accuracy": 0.6216216216216216,
+        "finding_birads_macro_f1": 0.2638157894736842,
+        "joint_finding_f1_iou_0_3": 0.07371794871794872
+      },
+      "counts": {
+        "rows": 500,
+        "valid_json": 490,
+        "runtime_errors": 0,
+        "gt_findings": 488,
+        "predicted_findings": 136,
+        "localized_tp": 37,
+        "joint_tp": 23,
+        "finding_birads_matched_support": 37,
+        "positive_images": 357,
+        "predicted_positive_images": 136,
+        "false_positive_images": 20
+      },
+      "per_category": {
+        "Mass": {
+          "gt": 237,
+          "predicted": 68,
+          "tp": 26,
+          "f1": 0.17049180327868851
+        },
+        "Calcification": {
+          "gt": 115,
+          "predicted": 32,
+          "tp": 6,
+          "f1": 0.08163265306122448
+        },
+        "Asymmetry": {
+          "gt": 79,
+          "predicted": 36,
+          "tp": 5,
+          "f1": 0.08695652173913043
+        },
+        "Architectural Distortion": {
+          "gt": 24,
+          "predicted": 0,
+          "tp": 0,
+          "f1": 0
+        }
+      }
+    }
+  },
+  "scope": {
+    "test_source_rows": 4000,
+    "evaluated_rows_each": 500,
+    "nine_output_rows": 4000,
+    "thinking_output_rows": 646,
+    "nine_extra_rows_excluded": 3500,
+    "thinking_extra_rows_excluded": 146
+  },
+  "comparison_note": "Matched test cases and evaluator; thinking has a larger generation budget. All three methods score only the original baseline 500 cases.",
+  "thinking_output": {
+    "rows": 500,
+    "closed_thinking": 490,
+    "token_limit_reached": 10
+  },
+  "evaluator_sha256": "ef658aa477b036166583049417ff295023df56df81e5bf7656441c753e337224"
+}
