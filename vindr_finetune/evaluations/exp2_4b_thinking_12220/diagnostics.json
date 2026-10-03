@@ -1,0 +1,197 @@
+{
+  "state": "aggregate_diagnosis_only_causality_unconfirmed",
+  "job_id": 12220,
+  "evaluated_rows": 500,
+  "first_pass": {
+    "common_valid_rows": 487,
+    "common_valid_metrics": {
+      "original4b": {
+        "json_valid_rate": 1,
+        "breast_birads_accuracy": 0.3613963039014374,
+        "breast_birads_macro_f1": 0.23906892637950344,
+        "breast_density_accuracy": 0.7905544147843943,
+        "breast_density_macro_f1": 0.4909247868963941,
+        "category_macro_f1": 0.19338019946406365,
+        "localized_f1_iou_0_3": 0.2552552552552553,
+        "finding_birads_accuracy": 0.4235294117647059,
+        "finding_birads_macro_f1": 0.1765265265265265,
+        "joint_finding_f1_iou_0_3": 0.10810810810810811
+      },
+      "thinking4b": {
+        "json_valid_rate": 1,
+        "breast_birads_accuracy": 0.31006160164271046,
+        "breast_birads_macro_f1": 0.17855707022990058,
+        "breast_density_accuracy": 0.7515400410677618,
+        "breast_density_macro_f1": 0.2575091764462596,
+        "category_macro_f1": 0.08707628518567465,
+        "localized_f1_iou_0_3": 0.12191103789126853,
+        "finding_birads_accuracy": 0.6216216216216216,
+        "finding_birads_macro_f1": 0.2638157894736842,
+        "joint_finding_f1_iou_0_3": 0.0757825370675453
+      }
+    },
+    "test_prompt_flags": {
+      "json_only": 500,
+      "forbids_explanation": 500
+    },
+    "original4b": {
+      "density_prediction_counts": {
+        "A": 0,
+        "B": 29,
+        "C": 384,
+        "D": 84,
+        "None": 3
+      },
+      "density_gt_counts": {
+        "A": 0,
+        "B": 55,
+        "C": 381,
+        "D": 64
+      },
+      "birads_prediction_counts": {
+        "1": 309,
+        "2": 3,
+        "3": 30,
+        "4": 144,
+        "5": 11,
+        "None": 3
+      },
+      "findings_count": 199,
+      "valid_bbox_count": 199,
+      "unsupported_category_count": 0,
+      "predictions_with_gt_category_on_same_image": 141,
+      "predictions_overlapping_any_gt_iou03": 109
+    },
+    "thinking4b": {
+      "density_prediction_counts": {
+        "A": 1,
+        "B": 15,
+        "C": 474,
+        "D": 0,
+        "None": 10
+      },
+      "density_gt_counts": {
+        "A": 0,
+        "B": 55,
+        "C": 381,
+        "D": 64
+      },
+      "birads_prediction_counts": {
+        "1": 354,
+        "2": 0,
+        "3": 80,
+        "4": 56,
+        "5": 0,
+        "None": 10
+      },
+      "findings_count": 136,
+      "valid_bbox_count": 136,
+      "unsupported_category_count": 0,
+      "predictions_with_gt_category_on_same_image": 82,
+      "predictions_overlapping_any_gt_iou03": 45
+    },
+    "training_rationale": {
+      "rows": 4657,
+      "median_chars": 2254,
+      "max_chars": 15188,
+      "median_rationale_character_fraction": 0.943157132512672,
+      "label_reference_markers": 4646,
+      "task_meta_markers": 4649,
+      "lengths_are_characters_not_tokens": true
+    },
+    "generation": {
+      "rows": 500,
+      "closed_thinking": 490,
+      "length_finish": 10,
+      "median_seconds": 35.635000000000005
+    }
+  },
+  "follow_up": {
+    "training_density_counts": {
+      "B": 387,
+      "C": 3799,
+      "D": 445,
+      "A": 26
+    },
+    "training_birads_counts": {
+      "1": 1145,
+      "2": 407,
+      "3": 1184,
+      "4": 1523,
+      "5": 398
+    },
+    "original4b": {
+      "density_per_class": {
+        "A": {
+          "support": 0,
+          "correct": 0
+        },
+        "B": {
+          "support": 55,
+          "correct": 24
+        },
+        "C": {
+          "support": 381,
+          "correct": 330
+        },
+        "D": {
+          "support": 64,
+          "correct": 40
+        }
+      },
+      "bbox_outside_0_1": 0,
+      "positive_images": 357,
+      "image_level_detected_positive": 172,
+      "false_positive_images": 13,
+      "image_level_finding_recall": 0.48179271708683474
+    },
+    "thinking4b": {
+      "density_per_class": {
+        "A": {
+          "support": 0,
+          "correct": 0
+        },
+        "B": {
+          "support": 55,
+          "correct": 6
+        },
+        "C": {
+          "support": 381,
+          "correct": 363
+        },
+        "D": {
+          "support": 64,
+          "correct": 0
+        }
+      },
+      "bbox_outside_0_1": 0,
+      "positive_images": 357,
+      "image_level_detected_positive": 116,
+      "false_positive_images": 20,
+      "image_level_finding_recall": 0.32492997198879553
+    },
+    "review": {
+      "output_rows": 4657,
+      "excluded_rows": 0,
+      "verdict_counts": {
+        "accept": 0,
+        "revised": 2,
+        "reject": 0
+      },
+      "all_samples_model_reviewed": false,
+      "clinically_validated": false
+    }
+  },
+  "training_prompt": {
+    "training_prompt_flags": {
+      "requests_thinking": 4657,
+      "remaining_json_only": 0,
+      "forbids_explanation": 0
+    }
+  },
+  "caveats": [
+    "Rationale length fractions are character fractions, not measured token loss fractions.",
+    "Label-reference and task-meta markers are lexical flags, not semantic correctness verdicts.",
+    "No new inference or retraining was performed for this diagnosis."
+  ]
+}
