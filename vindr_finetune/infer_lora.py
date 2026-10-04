@@ -24,6 +24,8 @@ VinDr-Mammo VLM 推理 - LoRA 微调后模型版本 (LLaMA-Factory, GPU/BF16)
 """
 
 import argparse
+import hashlib
+import fcntl
 import json
 import os
 import re
@@ -33,6 +35,7 @@ from pathlib import Path
 import torch
 from tqdm.auto import tqdm
 from llamafactory.chat import ChatModel
+from cot_protocol import transform_instruction, completed_indices
 
 
 # ============================== CONFIG ==============================
@@ -135,7 +138,12 @@ def parse_prediction(raw: str, thinking: bool = False):
     if raw is None:
         return None
 
-    if thinking:
+    if raw.rfind("<think>") > raw.rfind("</think>"):
+        return None
+
+    if "</think>" in raw:
+        text = raw.rsplit("</think>", 1)[1].strip()
+    elif thinking:
         # The template may prefill <think>, so generated text can lack its opening tag.
         # Never score a JSON object mentioned inside unfinished reasoning as the answer.
         if "</think>" not in raw:
@@ -210,6 +218,8 @@ def main():
     parser.add_argument("--adapter", default=DEFAULT_ADAPTER, help="LoRA adapter 路径")
     parser.add_argument("--max-new-tokens", type=int, default=MAX_NEW_TOKENS)
     parser.add_argument("--enable-thinking", action="store_true", help="开启思考；仅解析思考结束后的最终 JSON")
+    parser.add_argument("--instruction-mode", choices=["original", "thinking", "neutral"], default="original")
+    parser.add_argument("--output-dir", type=Path, help="独立实验输出目录，仅允许 /data/me/mammo 下")
     parser.add_argument("--image-max-pixels", type=int, default=IMAGE_MAX_PIXELS)
     parser.add_argument("--image-min-pixels", type=int, default=IMAGE_MIN_PIXELS)
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="只推理前 N 条；0 表示全量")
@@ -240,6 +250,12 @@ def main():
 
     # ---------------------- 读取数据 ----------------------
     data_file, records = load_records(args.prompt, args.split)
+
+    if args.instruction_mode != "original":
+        if args.prompt != "direct":
+            parser.error("instruction-mode requires --prompt direct")
+        for rec in records:
+            rec["messages"][0]["content"] = transform_instruction(rec["messages"][0]["content"], args.instruction_mode)
 
     if args.limit > 0:
         records = records[:args.limit]
@@ -286,9 +302,15 @@ def main():
     run_name = f"{args.prompt}_{adapter_tag}_{image_tag}_{attn_tag}"
     if args.enable_thinking:
         run_name += "_thinking"
+    if args.instruction_mode != "original":
+        run_name += "_" + args.instruction_mode
 
-    out_dir = OUTPUT_ROOT / run_name
+    out_dir = args.output_dir if args.output_dir is not None else OUTPUT_ROOT / run_name
+    if args.output_dir is not None and not out_dir.resolve().is_relative_to(Path("/data/me/mammo").resolve()):
+        parser.error("output-dir must be inside /data/me/mammo")
     out_dir.mkdir(parents=True, exist_ok=True)
+    output_lock = (out_dir / ".inference.lock").open("a")
+    fcntl.flock(output_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
     out_file = out_dir / "predictions.jsonl"
     config_file = out_dir / "run_config.json"
@@ -296,7 +318,7 @@ def main():
     # ---------------------- 断点续推 ----------------------
     done = set()
 
-    if out_file.exists():
+    if args.output_dir is None and out_file.exists():
         with open(out_file, "r", encoding="utf-8") as f:
             for line in f:
                 try:
@@ -346,6 +368,10 @@ def main():
         "image_max_pixels": args.image_max_pixels,
         "image_min_pixels": args.image_min_pixels,
         "enable_thinking": args.enable_thinking,
+        "instruction_mode": args.instruction_mode,
+        "selected_indices": [r["index"] for r in records],
+        "data_sha256": hashlib.sha256(Path(data_file).read_bytes()).hexdigest(),
+        "selected_messages_sha256": hashlib.sha256(json.dumps([r["messages"] for r in records], sort_keys=True).encode()).hexdigest(),
         "do_sample": False,
         "infer_backend": "huggingface",
         "finetuning_type": "lora",
@@ -353,8 +379,29 @@ def main():
         "flash_attn": args.flash_attn,
     }
 
-    with open(config_file, "w", encoding="utf-8") as f:
-        json.dump(run_config, f, ensure_ascii=False, indent=2)
+    if args.output_dir is not None:
+        adapter_file = Path(args.adapter) / "adapter_model.safetensors"
+        run_config["adapter_sha256"] = hashlib.sha256(adapter_file.read_bytes()).hexdigest()
+        run_config["adapter_config_sha256"] = hashlib.sha256((Path(args.adapter) / "adapter_config.json").read_bytes()).hexdigest()
+        if config_file.exists():
+            existing_config = json.loads(config_file.read_text())
+            if existing_config != run_config:
+                raise ValueError("RESUME_CONFIG_MISMATCH")
+        elif out_file.exists() and out_file.stat().st_size:
+            raise ValueError("PREDICTIONS_WITHOUT_CONFIG")
+        done = completed_indices(out_file)
+        if not done <= {r["index"] for r in records}:
+            raise ValueError("EXISTING_PREDICTIONS_OUTSIDE_SELECTED_SCOPE")
+
+    if args.output_dir is None or not config_file.exists():
+        temporary_config = config_file.with_suffix(".json.part")
+        with temporary_config.open("w", encoding="utf-8") as f:
+            json.dump(run_config, f, ensure_ascii=False, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        temporary_config.replace(config_file)
+    if done and args.output_dir is not None:
+        print(f"[resume] 已完成 {len(done)} 条，将跳过这些 index")
 
     print(f"[config] saved to {config_file}")
 
@@ -421,6 +468,7 @@ def main():
                 pred_json = parse_prediction(pred_raw, thinking=args.enable_thinking)
                 eval_json = get_eval_json(pred_json)
                 finish_reason = getattr(responses[0], "finish_reason", None)
+                generated_tokens = getattr(responses[0], "response_length", None)
                 error = None
 
             except Exception as e:
@@ -428,6 +476,7 @@ def main():
                 pred_json = None
                 eval_json = None
                 finish_reason = None
+                generated_tokens = None
                 error = repr(e)
 
             sec = time.perf_counter() - t1
@@ -445,12 +494,13 @@ def main():
                 "prediction_raw": pred_raw,
                 "prediction_json": pred_json,
                 "eval_json": eval_json,
+                "generated_tokens": generated_tokens,
+                "finish_reason": finish_reason,
                 "ground_truth": rec["ground_truth"],
                 "seconds": round(sec, 2),
             }
             if args.enable_thinking:
                 record["thinking_closed"] = "</think>" in pred_raw
-                record["finish_reason"] = finish_reason
             if error is not None:
                 record["error"] = error
 

@@ -21,6 +21,8 @@ class ThinkingParserTests(unittest.TestCase):
 
     def test_truncated_reasoning_never_becomes_a_prediction(self):
         self.assertIsNone(parse('<think>Candidate {"breast_birads":5}',True))
+        self.assertIsNone(parse('<think>Candidate {"breast_birads":5}',False))
+        self.assertEqual(parse('Candidate {"breast_birads":5}</think>\n{"breast_birads":1}',False),{'breast_birads':1})
         self.assertIsNone(parse('Reasoning candidate {"breast_birads":5}',True))
         self.assertEqual(parse('{"breast_birads":1}',True),{'breast_birads':1})
 
