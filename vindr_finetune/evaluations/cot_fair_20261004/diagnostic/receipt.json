@@ -1,0 +1,8 @@
+{
+  "job_id": 12523,
+  "slurm_state": "COMPLETED",
+  "runtime_seconds": 8993,
+  "evaluated_rows": 500,
+  "code_commit": "dc97e435223a662fef3f7c0b552b6aa7853525c0",
+  "kind": "old_adapter_prompt_alignment_diagnostic"
+}
