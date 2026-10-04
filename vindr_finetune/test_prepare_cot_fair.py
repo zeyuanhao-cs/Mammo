@@ -35,6 +35,28 @@ def response(value, reasoning="Do not use this internal reasoning as a training 
 
 
 class PreparationTests(unittest.TestCase):
+    def test_truncated_teacher_retry_grows_budget_and_records_metadata(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            image = root / "image.png"
+            image.write_bytes(b"fixture")
+            args = SimpleNamespace(model="fixture", base_url="http://unused", timeout=240,
+                                   output_dir=root, retry_truncation=True)
+            budgets = []
+            def call(request, timeout):
+                budgets.append(json.loads(request.data)["max_tokens"])
+                reply = response(decision())
+                if len(budgets) < 3:
+                    reply["choices"][0]["finish_reason"] = "length"
+                return io.BytesIO(json.dumps(reply).encode())
+            with patch.object(fair, "image_path", return_value=image), \
+                    patch.object(fair.urllib.request, "urlopen", side_effect=call), \
+                    patch.object(fair.time, "sleep"):
+                self.assertEqual(fair.request_stage(args, row(), "generate"), decision())
+            self.assertEqual(budgets, [4096, 8192, 16384])
+            meta = json.loads(next((root / "retry_metadata").glob("*.json")).read_text())
+            self.assertEqual(meta["max_tokens"], 16384)
+
     def test_only_structured_final_rationale_is_used(self):
         value = decision()
         self.assertEqual(fair.unpack(response(value), LABEL, "generate"), value)

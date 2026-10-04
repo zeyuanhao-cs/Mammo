@@ -125,11 +125,11 @@ def request_stage(args, row, stage, candidate=None):
         "response_format": {"type": "json_schema", "json_schema": {
             "name": "short_grounded_rationale", "strict": True, "schema": SCHEMA}},
     }
-    request = urllib.request.Request(args.base_url.rstrip("/") + "/chat/completions",
-        data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
     # Two retries, three calls maximum per stage. Do not convert any transport,
     # format, truncation or label mismatch error into a semantic exclusion.
     for attempt in range(3):
+        request = urllib.request.Request(args.base_url.rstrip("/") + "/chat/completions",
+            data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
         try:
             with urllib.request.urlopen(request, timeout=args.timeout) as response:
                 reply = json.load(response)
@@ -145,6 +145,15 @@ def request_stage(args, row, stage, candidate=None):
             code, retryable = "INVALID_RESPONSE_SCHEMA", True
         if not retryable or attempt == 2:
             raise Rejected(code) from None
+        if code == "INCOMPLETE_GENERATION" and getattr(args, "retry_truncation", False):
+            body["max_tokens"] = min(body["max_tokens"] * 2, 16384)
+            receipt_dir = args.output_dir / "retry_metadata"
+            receipt_dir.mkdir(exist_ok=True)
+            atomic_json(receipt_dir / (key_for(row) + "." + stage + ".json"), {
+                "code": code, "next_attempt": attempt + 2,
+                "max_tokens": body["max_tokens"],
+                "implementation_sha256": digest(Path(__file__).read_bytes()),
+                "timestamp": time.time()})
         time.sleep(5)
 
 
@@ -308,6 +317,8 @@ def main():
     parser.add_argument("--base-url", default="http://10.222.10.107:9241/v1")
     parser.add_argument("--model", default="qwen38-flash-next")
     parser.add_argument("--timeout", type=int, default=240)
+    parser.add_argument("--retry-truncation", action="store_true",
+                        help="Retry truncated teacher replies at 8192/16384 tokens; preserve short final target limits")
     parser.add_argument("--workers", type=int, choices=range(1, 9), default=4,
                         help="Concurrent independent pairs; operational only, may change on resume")
     parser.add_argument("--git-commit", default="unspecified")
