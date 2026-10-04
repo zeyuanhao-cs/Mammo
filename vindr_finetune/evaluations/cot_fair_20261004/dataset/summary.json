@@ -1,0 +1,68 @@
+{
+  "source_sha256": "93d53adefac511f8d355e5dc72ead78526a54e1c2e1d55a6aba0890bc1584ce9",
+  "test_sha256": "6eddbabedff8e37df2f5629585b4947fea3cbea6df9f61d9a1fed13548b8249e",
+  "source_rows": 4657,
+  "unique_pairs": 2948,
+  "test_rows": 4000,
+  "base_url": "http://10.222.10.107:9241/v1",
+  "model": "qwen38-flash-next",
+  "max_tokens": 4096,
+  "temperature": 0.2,
+  "top_p": 0.95,
+  "teacher_enable_thinking": true,
+  "rationale_limit_unit": "characters",
+  "rationale_min": 80,
+  "rationale_max": 1000,
+  "prompt_sha256": "001697d2210b53ff50c1bed1a5367102a9e2ee67b8ea20e223356093b4553963",
+  "neutral_instruction_sha256": "6ac33c3b1857fbd88b2e0b68097885f0170710e8d1cc28ab20aac9a803a7ab2d",
+  "git_commit": "05be86ce062e59a3a289efa4fa84a6b37e055912",
+  "protocol_version": 1,
+  "state": "complete",
+  "output_rows": 4632,
+  "accepted_unique": 2929,
+  "excluded_unique": 19,
+  "excluded_rows": 25,
+  "generation_verdict_counts": {
+    "accept": 2942,
+    "reject": 6
+  },
+  "review_verdict_counts": {
+    "accept": 2679,
+    "revised": 250,
+    "reject": 19
+  },
+  "train_test_overlap": 0,
+  "all_retained_pairs_model_reviewed": true,
+  "all_samples_model_reviewed": true,
+  "clinically_validated": false,
+  "final_labels_preserved": true,
+  "sampling_order_and_multiplicity_preserved": true,
+  "rationale_chars": {
+    "min": 155,
+    "max": 647,
+    "mean": 340.2
+  },
+  "outputs": {
+    "direct_train": {
+      "path": "/data/me/mammo/cot-fair-20261004/dataset/direct_train.json",
+      "sha256": "8451cae397298e94ac4f3d23078d86d3a4ab53d944ec01a108334b37983eb05d",
+      "bytes": 8525663
+    },
+    "cot_train": {
+      "path": "/data/me/mammo/cot-fair-20261004/dataset/cot_train.json",
+      "sha256": "5b6d29f2428c634e7eeee57d5cc84f9f23387f358a0b75afad1a2e32149143af",
+      "bytes": 10155417
+    },
+    "dataset_info": {
+      "path": "/data/me/mammo/cot-fair-20261004/dataset/dataset_info.json",
+      "sha256": "15a9b62180600020782c150e694929e1030b2134b5062c8938f425150191a0b2",
+      "bytes": 334
+    },
+    "excluded": {
+      "path": "/data/me/mammo/cot-fair-20261004/dataset/excluded.json",
+      "sha256": "b5ff094ccf03bfa028e90c033156f23a8e8f31e09306e5a9ece6fd9f9e90f16c",
+      "bytes": 3021
+    }
+  },
+  "workers_at_completion": 4
+}
