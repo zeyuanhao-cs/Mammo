@@ -9,6 +9,7 @@ an example. summary.json is published last and is the only completion marker.
 import argparse
 import base64
 import collections
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 import fcntl
 import inspect
 import json
@@ -183,7 +184,50 @@ def cached_stage(args, key, row, stage, candidate=None):
     return value
 
 
+def prepared_pairs(args, unique):
+    """Yield completed pairs with at most workers futures outstanding.
+
+    Only a worker's own per-pair cache is mutated concurrently. The caller owns
+    all aggregate counters and publication. On failure, pending work is cancelled
+    and already running calls can finish writing their resumable caches.
+    """
+    workers = args.workers
+    if type(workers) is not int or not 1 <= workers <= 8:
+        raise Rejected("INVALID_WORKER_COUNT")
+
+    def prepare(key, row):
+        draft = cached_stage(args, key, row, "generate")
+        reviewed = cached_stage(args, key, row, "review", draft)
+        return key, draft, reviewed
+
+    remaining = iter(unique.items())
+    executor = ThreadPoolExecutor(max_workers=workers)
+    pending = set()
+    try:
+        for _ in range(workers):
+            item = next(remaining, None)
+            if item is not None:
+                pending.add(executor.submit(prepare, *item))
+        while pending:
+            done, pending = wait(pending, return_when=FIRST_COMPLETED)
+            # Resolve the entire completed batch before scheduling anything new;
+            # one failing future stops publication even if others succeeded.
+            results = [future.result() for future in done]
+            for result in results:
+                yield result
+            for _ in results:
+                item = next(remaining, None)
+                if item is not None:
+                    pending.add(executor.submit(prepare, *item))
+    finally:
+        for future in pending:
+            future.cancel()
+        executor.shutdown(wait=True, cancel_futures=True)
+
+
 def execute(args):
+    if type(args.workers) is not int or not 1 <= args.workers <= 8:
+        raise Rejected("INVALID_WORKER_COUNT")
     source_blob, test_blob = args.source.read_bytes(), args.test.read_bytes()
     if digest(source_blob) != SOURCE_SHA or digest(test_blob) != TEST_SHA:
         raise Rejected("SOURCE_VERSION_MISMATCH")
@@ -213,16 +257,16 @@ def execute(args):
     atomic_json(manifest_path, manifest)
     (args.output_dir / "cache").mkdir(exist_ok=True)
     decisions, generated, started = {}, collections.Counter(), time.monotonic()
-    print(json.dumps({"phase": "start", "source_rows": len(rows), "unique_total": len(unique)}), flush=True)
-    for key, row in unique.items():
-        draft = cached_stage(args, key, row, "generate")
+    print(json.dumps({"phase": "start", "source_rows": len(rows), "unique_total": len(unique),
+                      "workers": args.workers}), flush=True)
+    for key, draft, reviewed in prepared_pairs(args, unique):
         generated[draft["verdict"]] += 1
-        decisions[key] = cached_stage(args, key, row, "review", draft)
+        decisions[key] = reviewed
         if decisions:
             progress = {"phase": "reviewing", "reviewed_unique": len(decisions),
                 "unique_total": len(unique), "review_verdict_counts": dict(collections.Counter(
                     d["verdict"] for d in decisions.values())),
-                "elapsed_this_run_s": round(time.monotonic() - started, 1)}
+                "elapsed_this_run_s": round(time.monotonic() - started, 1), "workers": args.workers}
             atomic_json(args.output_dir / "progress.json", progress)
             print(json.dumps(progress), flush=True)
     direct, cot, excluded = build_arms(rows, decisions)
@@ -247,7 +291,7 @@ def execute(args):
         "all_samples_model_reviewed": True, "clinically_validated": False,
         "final_labels_preserved": True, "sampling_order_and_multiplicity_preserved": True,
         "rationale_chars": {"min": min(lengths), "max": max(lengths), "mean": round(sum(lengths) / len(lengths), 1)},
-        "outputs": outputs}
+        "outputs": outputs, "workers_at_completion": args.workers}
     atomic_json(args.output_dir / "summary.json", summary)
     atomic_json(args.output_dir / "progress.json", {"phase": "complete", "output_rows": len(direct),
                                                   "reviewed_unique": len(decisions)})
@@ -264,6 +308,8 @@ def main():
     parser.add_argument("--base-url", default="http://10.222.10.107:9241/v1")
     parser.add_argument("--model", default="qwen38-flash-next")
     parser.add_argument("--timeout", type=int, default=240)
+    parser.add_argument("--workers", type=int, choices=range(1, 9), default=4,
+                        help="Concurrent independent pairs; operational only, may change on resume")
     parser.add_argument("--git-commit", default="unspecified")
     args = parser.parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)

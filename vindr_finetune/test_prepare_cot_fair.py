@@ -4,6 +4,7 @@ import io
 import json
 from pathlib import Path
 import tempfile
+import threading
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
@@ -83,7 +84,7 @@ class PreparationTests(unittest.TestCase):
             source.write_text(json.dumps([row("a"), row("b"), row("a")]))
             test.write_text(json.dumps([row("test")]))
             args = SimpleNamespace(source=source, test=test, output_dir=out, image_root=root,
-                                   model="fixture", base_url="http://unused", git_commit="fixture")
+                                   model="fixture", base_url="http://unused", git_commit="fixture", workers=1)
             calls = []
 
             def request(args, r, stage, candidate=None):
@@ -111,6 +112,42 @@ class PreparationTests(unittest.TestCase):
                 self.assertEqual(before, len(calls), "completed rerun should make no teacher calls")
                 for output in summary["outputs"].values():
                     self.assertEqual(output["sha256"], fair.digest(Path(output["path"]).read_bytes()))
+
+    def test_parallel_pairs_are_bounded_and_review_follows_own_draft(self):
+        args = SimpleNamespace(workers=4)
+        unique = {str(i): row(str(i)) for i in range(9)}
+        barrier = threading.Barrier(4, timeout=3)
+        lock = threading.Lock()
+        calls, generated, active, peak = [], set(), 0, 0
+
+        def cached(args, key, r, stage, candidate=None):
+            nonlocal active, peak
+            with lock:
+                calls.append((key, stage))
+                active += 1
+                peak = max(peak, active)
+            if stage == "generate":
+                if int(key) < 4:
+                    barrier.wait()
+                with lock:
+                    generated.add(key)
+            else:
+                self.assertIn(key, generated)
+                self.assertEqual(candidate, decision())
+            with lock:
+                active -= 1
+            return decision()
+
+        with patch.object(fair, "cached_stage", side_effect=cached):
+            results = list(fair.prepared_pairs(args, unique))
+        self.assertEqual({key for key, _, _ in results}, set(unique))
+        self.assertEqual(len(results), 9)
+        self.assertEqual(peak, 4)
+        self.assertEqual(len(calls), 18)
+        for key in unique:
+            self.assertLess(calls.index((key, "generate")), calls.index((key, "review")))
+        with self.assertRaisesRegex(fair.Rejected, "INVALID_WORKER_COUNT"):
+            list(fair.prepared_pairs(SimpleNamespace(workers=9), unique))
 
     def test_network_retries_bounded_and_never_become_semantic_reject(self):
         args = SimpleNamespace(image_root=Path("/unused"), model="fixture", base_url="http://unused", timeout=1)
