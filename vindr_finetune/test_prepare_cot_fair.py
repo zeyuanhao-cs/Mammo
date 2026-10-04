@@ -43,8 +43,10 @@ class PreparationTests(unittest.TestCase):
             args = SimpleNamespace(model="fixture", base_url="http://unused", timeout=240,
                                    output_dir=root, retry_truncation=True)
             budgets = []
+            thinking = []
             def call(request, timeout):
                 budgets.append(json.loads(request.data)["max_tokens"])
+                thinking.append(json.loads(request.data)["chat_template_kwargs"]["enable_thinking"])
                 reply = response(decision())
                 if len(budgets) < 3:
                     reply["choices"][0]["finish_reason"] = "length"
@@ -53,9 +55,11 @@ class PreparationTests(unittest.TestCase):
                     patch.object(fair.urllib.request, "urlopen", side_effect=call), \
                     patch.object(fair.time, "sleep"):
                 self.assertEqual(fair.request_stage(args, row(), "generate"), decision())
-            self.assertEqual(budgets, [4096, 8192, 16384])
+            self.assertEqual(budgets, [4096, 8192, 4096])
+            self.assertEqual(thinking, [True, True, False])
             meta = json.loads(next((root / "retry_metadata").glob("*.json")).read_text())
-            self.assertEqual(meta["max_tokens"], 16384)
+            self.assertEqual(meta["max_tokens"], 4096)
+            self.assertFalse(meta["teacher_enable_thinking"])
 
     def test_only_structured_final_rationale_is_used(self):
         value = decision()
