@@ -1,0 +1,1155 @@
+{
+  "progress": {
+    "job_id": "12574",
+    "protocol_sha256": "f4d14c2828b0f32cd655cdf84263f0578c73e9095e3fb3b31e6b3aebd2e2bf75",
+    "stage": "seed43.train.direct",
+    "state": "running",
+    "timestamp": 1791203181.4482715
+  },
+  "comparison": {
+    "state": "partial",
+    "complete_cells": 4,
+    "expected_cells": 12,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "arms": {
+      "A": "\u4ec5 JSON \u8bad\u7ec3 / \u5173\u95ed\u601d\u8003",
+      "B": "\u4ec5 JSON \u8bad\u7ec3 / \u5f00\u542f\u601d\u8003",
+      "C": "CoT \u8bad\u7ec3 / \u5173\u95ed\u601d\u8003",
+      "D": "CoT \u8bad\u7ec3 / \u5f00\u542f\u601d\u8003"
+    },
+    "test": {
+      "source_sha256": "6eddbabedff8e37df2f5629585b4947fea3cbea6df9f61d9a1fed13548b8249e",
+      "evaluated_indices": [
+        0,
+        499
+      ],
+      "rows": 500
+    },
+    "cells": {
+      "42": {
+        "A": {
+          "state": "complete",
+          "sha256": "35da1b2241ef0e857df3e7b4b93f7f33a035433cab200c7d642db32f7767cb08",
+          "observed_rows": 500,
+          "metrics": {
+            "json_valid_rate": 1.0,
+            "breast_birads_accuracy": 0.41,
+            "breast_birads_macro_f1": 0.32758990552001666,
+            "breast_density_accuracy": 0.838,
+            "breast_density_macro_f1": 0.49667413133652144,
+            "category_macro_f1": 0.2104316593084897,
+            "localized_f1_iou_0_3": 0.25487646293888166,
+            "finding_birads_accuracy": 0.5510204081632653,
+            "finding_birads_macro_f1": 0.3143478260869565,
+            "joint_finding_f1_iou_0_3": 0.14044213263979194
+          },
+          "counts": {
+            "rows": 500,
+            "valid_json": 500,
+            "runtime_errors": 0,
+            "gt_findings": 488,
+            "predicted_findings": 281,
+            "localized_tp": 98,
+            "joint_tp": 54,
+            "finding_birads_matched_support": 98,
+            "positive_images": 357,
+            "predicted_positive_images": 250,
+            "false_positive_images": 24
+          },
+          "per_category": {
+            "Mass": {
+              "gt": 237,
+              "predicted": 116,
+              "tp": 54,
+              "f1": 0.3059490084985836,
+              "false_negative": 183,
+              "false_positive": 62,
+              "recall": 0.22784810126582278
+            },
+            "Calcification": {
+              "gt": 115,
+              "predicted": 98,
+              "tp": 37,
+              "f1": 0.3474178403755869,
+              "false_negative": 78,
+              "false_positive": 61,
+              "recall": 0.3217391304347826
+            },
+            "Asymmetry": {
+              "gt": 79,
+              "predicted": 56,
+              "tp": 5,
+              "f1": 0.07407407407407407,
+              "false_negative": 74,
+              "false_positive": 51,
+              "recall": 0.06329113924050633
+            },
+            "Architectural Distortion": {
+              "gt": 24,
+              "predicted": 11,
+              "tp": 2,
+              "f1": 0.11428571428571428,
+              "false_negative": 22,
+              "false_positive": 9,
+              "recall": 0.08333333333333333
+            }
+          },
+          "quality": {
+            "invalid_json_rate": 0.0,
+            "runtime_error_rate": 0.0,
+            "truncated": 0,
+            "finish_reason_known": 500,
+            "normal_images": 143,
+            "normal_false_positive_rate": 0.16783216783216784,
+            "positive_image_detection_rate": 0.6330532212885154,
+            "missed_positive_images": 131,
+            "truncation_rate": 0.0
+          },
+          "cost": {
+            "output_tokens": {
+              "count": 500,
+              "mean": 52.95,
+              "sum": 26475
+            },
+            "seconds": {
+              "count": 500,
+              "mean": 1.90162,
+              "sum": 950.81
+            }
+          },
+          "per_breast_birads": {
+            "1": {
+              "support": 115,
+              "predicted": 248,
+              "correct": 102,
+              "missed": 13,
+              "recall": 0.8869565217391304
+            },
+            "2": {
+              "support": 28,
+              "predicted": 3,
+              "correct": 0,
+              "missed": 28,
+              "recall": 0.0
+            },
+            "3": {
+              "support": 165,
+              "predicted": 80,
+              "correct": 33,
+              "missed": 132,
+              "recall": 0.2
+            },
+            "4": {
+              "support": 147,
+              "predicted": 144,
+              "correct": 55,
+              "missed": 92,
+              "recall": 0.3741496598639456
+            },
+            "5": {
+              "support": 45,
+              "predicted": 25,
+              "correct": 15,
+              "missed": 30,
+              "recall": 0.3333333333333333
+            }
+          },
+          "per_density": {
+            "A": {
+              "support": 0,
+              "predicted": 0,
+              "correct": 0,
+              "missed": 0,
+              "recall": null
+            },
+            "B": {
+              "support": 55,
+              "predicted": 39,
+              "correct": 30,
+              "missed": 25,
+              "recall": 0.5454545454545454
+            },
+            "C": {
+              "support": 381,
+              "predicted": 440,
+              "correct": 370,
+              "missed": 11,
+              "recall": 0.9711286089238845
+            },
+            "D": {
+              "support": 64,
+              "predicted": 21,
+              "correct": 19,
+              "missed": 45,
+              "recall": 0.296875
+            }
+          }
+        },
+        "B": {
+          "state": "complete",
+          "sha256": "c86f08a81e753edef6b37621189194794a953dbad82c09de17855ad3e601e91f",
+          "observed_rows": 500,
+          "metrics": {
+            "json_valid_rate": 0.38,
+            "breast_birads_accuracy": 0.186,
+            "breast_birads_macro_f1": 0.17754679898365616,
+            "breast_density_accuracy": 0.28,
+            "breast_density_macro_f1": 0.3182679923297753,
+            "category_macro_f1": 0.10473082203915315,
+            "localized_f1_iou_0_3": 0.14482758620689656,
+            "finding_birads_accuracy": 0.6428571428571429,
+            "finding_birads_macro_f1": 0.28517647058823525,
+            "joint_finding_f1_iou_0_3": 0.09310344827586207
+          },
+          "counts": {
+            "rows": 500,
+            "valid_json": 190,
+            "runtime_errors": 0,
+            "gt_findings": 488,
+            "predicted_findings": 92,
+            "localized_tp": 42,
+            "joint_tp": 27,
+            "finding_birads_matched_support": 42,
+            "positive_images": 357,
+            "predicted_positive_images": 83,
+            "false_positive_images": 5
+          },
+          "per_category": {
+            "Mass": {
+              "gt": 237,
+              "predicted": 47,
+              "tp": 22,
+              "f1": 0.15492957746478872,
+              "false_negative": 215,
+              "false_positive": 25,
+              "recall": 0.09282700421940929
+            },
+            "Calcification": {
+              "gt": 115,
+              "predicted": 44,
+              "tp": 19,
+              "f1": 0.2389937106918239,
+              "false_negative": 96,
+              "false_positive": 25,
+              "recall": 0.16521739130434782
+            },
+            "Asymmetry": {
+              "gt": 79,
+              "predicted": 1,
+              "tp": 1,
+              "f1": 0.025,
+              "false_negative": 78,
+              "false_positive": 0,
+              "recall": 0.012658227848101266
+            },
+            "Architectural Distortion": {
+              "gt": 24,
+              "predicted": 0,
+              "tp": 0,
+              "f1": 0.0,
+              "false_negative": 24,
+              "false_positive": 0,
+              "recall": 0.0
+            }
+          },
+          "quality": {
+            "invalid_json_rate": 0.62,
+            "runtime_error_rate": 0.0,
+            "truncated": 297,
+            "finish_reason_known": 500,
+            "normal_images": 143,
+            "normal_false_positive_rate": 0.03496503496503497,
+            "positive_image_detection_rate": 0.2184873949579832,
+            "missed_positive_images": 279,
+            "truncation_rate": 0.594
+          },
+          "cost": {
+            "output_tokens": {
+              "count": 500,
+              "mean": 3096.682,
+              "sum": 1548341
+            },
+            "seconds": {
+              "count": 500,
+              "mean": 90.93118,
+              "sum": 45465.59
+            }
+          },
+          "per_breast_birads": {
+            "1": {
+              "support": 115,
+              "predicted": 107,
+              "correct": 47,
+              "missed": 68,
+              "recall": 0.40869565217391307
+            },
+            "2": {
+              "support": 28,
+              "predicted": 0,
+              "correct": 0,
+              "missed": 28,
+              "recall": 0.0
+            },
+            "3": {
+              "support": 165,
+              "predicted": 28,
+              "correct": 16,
+              "missed": 149,
+              "recall": 0.09696969696969697
+            },
+            "4": {
+              "support": 147,
+              "predicted": 54,
+              "correct": 30,
+              "missed": 117,
+              "recall": 0.20408163265306123
+            },
+            "5": {
+              "support": 45,
+              "predicted": 1,
+              "correct": 0,
+              "missed": 45,
+              "recall": 0.0
+            }
+          },
+          "per_density": {
+            "A": {
+              "support": 0,
+              "predicted": 0,
+              "correct": 0,
+              "missed": 0,
+              "recall": null
+            },
+            "B": {
+              "support": 55,
+              "predicted": 20,
+              "correct": 17,
+              "missed": 38,
+              "recall": 0.3090909090909091
+            },
+            "C": {
+              "support": 381,
+              "predicted": 112,
+              "correct": 97,
+              "missed": 284,
+              "recall": 0.2545931758530184
+            },
+            "D": {
+              "support": 64,
+              "predicted": 58,
+              "correct": 26,
+              "missed": 38,
+              "recall": 0.40625
+            }
+          }
+        },
+        "C": {
+          "state": "complete",
+          "sha256": "2d312e1e4024809a41a3556d0f8ac036052b8a6aba346bf84ef2efdd536d32ca",
+          "observed_rows": 500,
+          "metrics": {
+            "json_valid_rate": 1.0,
+            "breast_birads_accuracy": 0.214,
+            "breast_birads_macro_f1": 0.22638933968044098,
+            "breast_density_accuracy": 0.662,
+            "breast_density_macro_f1": 0.43368440054864377,
+            "category_macro_f1": 0.12666957026713124,
+            "localized_f1_iou_0_3": 0.18612521150592218,
+            "finding_birads_accuracy": 0.4727272727272727,
+            "finding_birads_macro_f1": 0.2785596572181938,
+            "joint_finding_f1_iou_0_3": 0.08798646362098139
+          },
+          "counts": {
+            "rows": 500,
+            "valid_json": 500,
+            "runtime_errors": 0,
+            "gt_findings": 488,
+            "predicted_findings": 103,
+            "localized_tp": 55,
+            "joint_tp": 26,
+            "finding_birads_matched_support": 55,
+            "positive_images": 357,
+            "predicted_positive_images": 98,
+            "false_positive_images": 6
+          },
+          "per_category": {
+            "Mass": {
+              "gt": 237,
+              "predicted": 50,
+              "tp": 30,
+              "f1": 0.20905923344947736,
+              "false_negative": 207,
+              "false_positive": 20,
+              "recall": 0.12658227848101267
+            },
+            "Calcification": {
+              "gt": 115,
+              "predicted": 53,
+              "tp": 25,
+              "f1": 0.2976190476190476,
+              "false_negative": 90,
+              "false_positive": 28,
+              "recall": 0.21739130434782608
+            },
+            "Asymmetry": {
+              "gt": 79,
+              "predicted": 0,
+              "tp": 0,
+              "f1": 0.0,
+              "false_negative": 79,
+              "false_positive": 0,
+              "recall": 0.0
+            },
+            "Architectural Distortion": {
+              "gt": 24,
+              "predicted": 0,
+              "tp": 0,
+              "f1": 0.0,
+              "false_negative": 24,
+              "false_positive": 0,
+              "recall": 0.0
+            }
+          },
+          "quality": {
+            "invalid_json_rate": 0.0,
+            "runtime_error_rate": 0.0,
+            "truncated": 0,
+            "finish_reason_known": 500,
+            "normal_images": 143,
+            "normal_false_positive_rate": 0.04195804195804196,
+            "positive_image_detection_rate": 0.25770308123249297,
+            "missed_positive_images": 265,
+            "truncation_rate": 0.0
+          },
+          "cost": {
+            "output_tokens": {
+              "count": 500,
+              "mean": 35.14,
+              "sum": 17570
+            },
+            "seconds": {
+              "count": 500,
+              "mean": 1.30854,
+              "sum": 654.27
+            }
+          },
+          "per_breast_birads": {
+            "1": {
+              "support": 115,
+              "predicted": 143,
+              "correct": 53,
+              "missed": 62,
+              "recall": 0.4608695652173913
+            },
+            "2": {
+              "support": 28,
+              "predicted": 259,
+              "correct": 16,
+              "missed": 12,
+              "recall": 0.5714285714285714
+            },
+            "3": {
+              "support": 165,
+              "predicted": 57,
+              "correct": 19,
+              "missed": 146,
+              "recall": 0.11515151515151516
+            },
+            "4": {
+              "support": 147,
+              "predicted": 22,
+              "correct": 8,
+              "missed": 139,
+              "recall": 0.05442176870748299
+            },
+            "5": {
+              "support": 45,
+              "predicted": 19,
+              "correct": 11,
+              "missed": 34,
+              "recall": 0.24444444444444444
+            }
+          },
+          "per_density": {
+            "A": {
+              "support": 0,
+              "predicted": 22,
+              "correct": 0,
+              "missed": 0,
+              "recall": null
+            },
+            "B": {
+              "support": 55,
+              "predicted": 142,
+              "correct": 43,
+              "missed": 12,
+              "recall": 0.7818181818181819
+            },
+            "C": {
+              "support": 381,
+              "predicted": 298,
+              "correct": 261,
+              "missed": 120,
+              "recall": 0.6850393700787402
+            },
+            "D": {
+              "support": 64,
+              "predicted": 38,
+              "correct": 27,
+              "missed": 37,
+              "recall": 0.421875
+            }
+          }
+        },
+        "D": {
+          "state": "complete",
+          "sha256": "0c641cdbc7e1c98f7200b6c9c72d04151b018afc382431e2866047e6a5f5f3fe",
+          "observed_rows": 500,
+          "metrics": {
+            "json_valid_rate": 1.0,
+            "breast_birads_accuracy": 0.352,
+            "breast_birads_macro_f1": 0.2630873091714512,
+            "breast_density_accuracy": 0.788,
+            "breast_density_macro_f1": 0.3225624949762881,
+            "category_macro_f1": 0.14796509154605553,
+            "localized_f1_iou_0_3": 0.15524193548387097,
+            "finding_birads_accuracy": 0.5454545454545454,
+            "finding_birads_macro_f1": 0.3151785714285714,
+            "joint_finding_f1_iou_0_3": 0.0846774193548387
+          },
+          "counts": {
+            "rows": 500,
+            "valid_json": 500,
+            "runtime_errors": 0,
+            "gt_findings": 488,
+            "predicted_findings": 504,
+            "localized_tp": 77,
+            "joint_tp": 42,
+            "finding_birads_matched_support": 77,
+            "positive_images": 357,
+            "predicted_positive_images": 479,
+            "false_positive_images": 129
+          },
+          "per_category": {
+            "Mass": {
+              "gt": 237,
+              "predicted": 101,
+              "tp": 49,
+              "f1": 0.28994082840236685,
+              "false_negative": 188,
+              "false_positive": 52,
+              "recall": 0.20675105485232068
+            },
+            "Calcification": {
+              "gt": 115,
+              "predicted": 64,
+              "tp": 22,
+              "f1": 0.24581005586592178,
+              "false_negative": 93,
+              "false_positive": 42,
+              "recall": 0.19130434782608696
+            },
+            "Asymmetry": {
+              "gt": 79,
+              "predicted": 53,
+              "tp": 2,
+              "f1": 0.030303030303030304,
+              "false_negative": 77,
+              "false_positive": 51,
+              "recall": 0.02531645569620253
+            },
+            "Architectural Distortion": {
+              "gt": 24,
+              "predicted": 286,
+              "tp": 4,
+              "f1": 0.025806451612903226,
+              "false_negative": 20,
+              "false_positive": 282,
+              "recall": 0.16666666666666666
+            }
+          },
+          "quality": {
+            "invalid_json_rate": 0.0,
+            "runtime_error_rate": 0.0,
+            "truncated": 0,
+            "finish_reason_known": 500,
+            "normal_images": 143,
+            "normal_false_positive_rate": 0.9020979020979021,
+            "positive_image_detection_rate": 0.9803921568627451,
+            "missed_positive_images": 7,
+            "truncation_rate": 0.0
+          },
+          "cost": {
+            "output_tokens": {
+              "count": 500,
+              "mean": 132.554,
+              "sum": 66277
+            },
+            "seconds": {
+              "count": 500,
+              "mean": 4.16286,
+              "sum": 2081.43
+            }
+          },
+          "per_breast_birads": {
+            "1": {
+              "support": 115,
+              "predicted": 21,
+              "correct": 13,
+              "missed": 102,
+              "recall": 0.11304347826086956
+            },
+            "2": {
+              "support": 28,
+              "predicted": 0,
+              "correct": 0,
+              "missed": 28,
+              "recall": 0.0
+            },
+            "3": {
+              "support": 165,
+              "predicted": 111,
+              "correct": 45,
+              "missed": 120,
+              "recall": 0.2727272727272727
+            },
+            "4": {
+              "support": 147,
+              "predicted": 337,
+              "correct": 104,
+              "missed": 43,
+              "recall": 0.7074829931972789
+            },
+            "5": {
+              "support": 45,
+              "predicted": 31,
+              "correct": 14,
+              "missed": 31,
+              "recall": 0.3111111111111111
+            }
+          },
+          "per_density": {
+            "A": {
+              "support": 0,
+              "predicted": 0,
+              "correct": 0,
+              "missed": 0,
+              "recall": null
+            },
+            "B": {
+              "support": 55,
+              "predicted": 0,
+              "correct": 0,
+              "missed": 55,
+              "recall": 0.0
+            },
+            "C": {
+              "support": 381,
+              "predicted": 477,
+              "correct": 376,
+              "missed": 5,
+              "recall": 0.9868766404199475
+            },
+            "D": {
+              "support": 64,
+              "predicted": 23,
+              "correct": 18,
+              "missed": 46,
+              "recall": 0.28125
+            }
+          }
+        }
+      },
+      "43": {
+        "A": {
+          "state": "pending"
+        },
+        "B": {
+          "state": "pending"
+        },
+        "C": {
+          "state": "pending"
+        },
+        "D": {
+          "state": "pending"
+        }
+      },
+      "44": {
+        "A": {
+          "state": "pending"
+        },
+        "B": {
+          "state": "pending"
+        },
+        "C": {
+          "state": "pending"
+        },
+        "D": {
+          "state": "pending"
+        }
+      }
+    },
+    "arm_summary": {
+      "A": {
+        "state": "pending",
+        "metrics": {
+          "json_valid_rate": {
+            "n": 1,
+            "mean": 1.0,
+            "std": null
+          },
+          "breast_birads_accuracy": {
+            "n": 1,
+            "mean": 0.41,
+            "std": null
+          },
+          "breast_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.32758990552001666,
+            "std": null
+          },
+          "breast_density_accuracy": {
+            "n": 1,
+            "mean": 0.838,
+            "std": null
+          },
+          "breast_density_macro_f1": {
+            "n": 1,
+            "mean": 0.49667413133652144,
+            "std": null
+          },
+          "category_macro_f1": {
+            "n": 1,
+            "mean": 0.2104316593084897,
+            "std": null
+          },
+          "localized_f1_iou_0_3": {
+            "n": 1,
+            "mean": 0.25487646293888166,
+            "std": null
+          },
+          "finding_birads_accuracy": {
+            "n": 1,
+            "mean": 0.5510204081632653,
+            "std": null
+          },
+          "finding_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.3143478260869565,
+            "std": null
+          },
+          "joint_finding_f1_iou_0_3": {
+            "n": 1,
+            "mean": 0.14044213263979194,
+            "std": null
+          }
+        }
+      },
+      "B": {
+        "state": "pending",
+        "metrics": {
+          "json_valid_rate": {
+            "n": 1,
+            "mean": 0.38,
+            "std": null
+          },
+          "breast_birads_accuracy": {
+            "n": 1,
+            "mean": 0.186,
+            "std": null
+          },
+          "breast_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.17754679898365616,
+            "std": null
+          },
+          "breast_density_accuracy": {
+            "n": 1,
+            "mean": 0.28,
+            "std": null
+          },
+          "breast_density_macro_f1": {
+            "n": 1,
+            "mean": 0.3182679923297753,
+            "std": null
+          },
+          "category_macro_f1": {
+            "n": 1,
+            "mean": 0.10473082203915315,
+            "std": null
+          },
+          "localized_f1_iou_0_3": {
+            "n": 1,
+            "mean": 0.14482758620689656,
+            "std": null
+          },
+          "finding_birads_accuracy": {
+            "n": 1,
+            "mean": 0.6428571428571429,
+            "std": null
+          },
+          "finding_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.28517647058823525,
+            "std": null
+          },
+          "joint_finding_f1_iou_0_3": {
+            "n": 1,
+            "mean": 0.09310344827586207,
+            "std": null
+          }
+        }
+      },
+      "C": {
+        "state": "pending",
+        "metrics": {
+          "json_valid_rate": {
+            "n": 1,
+            "mean": 1.0,
+            "std": null
+          },
+          "breast_birads_accuracy": {
+            "n": 1,
+            "mean": 0.214,
+            "std": null
+          },
+          "breast_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.22638933968044098,
+            "std": null
+          },
+          "breast_density_accuracy": {
+            "n": 1,
+            "mean": 0.662,
+            "std": null
+          },
+          "breast_density_macro_f1": {
+            "n": 1,
+            "mean": 0.43368440054864377,
+            "std": null
+          },
+          "category_macro_f1": {
+            "n": 1,
+            "mean": 0.12666957026713124,
+            "std": null
+          },
+          "localized_f1_iou_0_3": {
+            "n": 1,
+            "mean": 0.18612521150592218,
+            "std": null
+          },
+          "finding_birads_accuracy": {
+            "n": 1,
+            "mean": 0.4727272727272727,
+            "std": null
+          },
+          "finding_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.2785596572181938,
+            "std": null
+          },
+          "joint_finding_f1_iou_0_3": {
+            "n": 1,
+            "mean": 0.08798646362098139,
+            "std": null
+          }
+        }
+      },
+      "D": {
+        "state": "pending",
+        "metrics": {
+          "json_valid_rate": {
+            "n": 1,
+            "mean": 1.0,
+            "std": null
+          },
+          "breast_birads_accuracy": {
+            "n": 1,
+            "mean": 0.352,
+            "std": null
+          },
+          "breast_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.2630873091714512,
+            "std": null
+          },
+          "breast_density_accuracy": {
+            "n": 1,
+            "mean": 0.788,
+            "std": null
+          },
+          "breast_density_macro_f1": {
+            "n": 1,
+            "mean": 0.3225624949762881,
+            "std": null
+          },
+          "category_macro_f1": {
+            "n": 1,
+            "mean": 0.14796509154605553,
+            "std": null
+          },
+          "localized_f1_iou_0_3": {
+            "n": 1,
+            "mean": 0.15524193548387097,
+            "std": null
+          },
+          "finding_birads_accuracy": {
+            "n": 1,
+            "mean": 0.5454545454545454,
+            "std": null
+          },
+          "finding_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.3151785714285714,
+            "std": null
+          },
+          "joint_finding_f1_iou_0_3": {
+            "n": 1,
+            "mean": 0.0846774193548387,
+            "std": null
+          }
+        }
+      }
+    },
+    "paired_effects": {
+      "D-A": {
+        "state": "pending",
+        "metrics": {
+          "json_valid_rate": {
+            "n": 1,
+            "mean": 0.0,
+            "std": null
+          },
+          "breast_birads_accuracy": {
+            "n": 1,
+            "mean": -0.057999999999999996,
+            "std": null
+          },
+          "breast_birads_macro_f1": {
+            "n": 1,
+            "mean": -0.06450259634856548,
+            "std": null
+          },
+          "breast_density_accuracy": {
+            "n": 1,
+            "mean": -0.04999999999999993,
+            "std": null
+          },
+          "breast_density_macro_f1": {
+            "n": 1,
+            "mean": -0.17411163636023336,
+            "std": null
+          },
+          "category_macro_f1": {
+            "n": 1,
+            "mean": -0.06246656776243417,
+            "std": null
+          },
+          "localized_f1_iou_0_3": {
+            "n": 1,
+            "mean": -0.0996345274550107,
+            "std": null
+          },
+          "finding_birads_accuracy": {
+            "n": 1,
+            "mean": -0.005565862708719838,
+            "std": null
+          },
+          "finding_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.0008307453416149246,
+            "std": null
+          },
+          "joint_finding_f1_iou_0_3": {
+            "n": 1,
+            "mean": -0.055764713284953235,
+            "std": null
+          }
+        }
+      },
+      "B-A": {
+        "state": "pending",
+        "metrics": {
+          "json_valid_rate": {
+            "n": 1,
+            "mean": -0.62,
+            "std": null
+          },
+          "breast_birads_accuracy": {
+            "n": 1,
+            "mean": -0.22399999999999998,
+            "std": null
+          },
+          "breast_birads_macro_f1": {
+            "n": 1,
+            "mean": -0.1500431065363605,
+            "std": null
+          },
+          "breast_density_accuracy": {
+            "n": 1,
+            "mean": -0.5579999999999999,
+            "std": null
+          },
+          "breast_density_macro_f1": {
+            "n": 1,
+            "mean": -0.17840613900674612,
+            "std": null
+          },
+          "category_macro_f1": {
+            "n": 1,
+            "mean": -0.10570083726933654,
+            "std": null
+          },
+          "localized_f1_iou_0_3": {
+            "n": 1,
+            "mean": -0.1100488767319851,
+            "std": null
+          },
+          "finding_birads_accuracy": {
+            "n": 1,
+            "mean": 0.09183673469387765,
+            "std": null
+          },
+          "finding_birads_macro_f1": {
+            "n": 1,
+            "mean": -0.02917135549872124,
+            "std": null
+          },
+          "joint_finding_f1_iou_0_3": {
+            "n": 1,
+            "mean": -0.047338684363929864,
+            "std": null
+          }
+        }
+      },
+      "D-C": {
+        "state": "pending",
+        "metrics": {
+          "json_valid_rate": {
+            "n": 1,
+            "mean": 0.0,
+            "std": null
+          },
+          "breast_birads_accuracy": {
+            "n": 1,
+            "mean": 0.13799999999999998,
+            "std": null
+          },
+          "breast_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.0366979694910102,
+            "std": null
+          },
+          "breast_density_accuracy": {
+            "n": 1,
+            "mean": 0.126,
+            "std": null
+          },
+          "breast_density_macro_f1": {
+            "n": 1,
+            "mean": -0.11112190557235568,
+            "std": null
+          },
+          "category_macro_f1": {
+            "n": 1,
+            "mean": 0.021295521278924284,
+            "std": null
+          },
+          "localized_f1_iou_0_3": {
+            "n": 1,
+            "mean": -0.03088327602205121,
+            "std": null
+          },
+          "finding_birads_accuracy": {
+            "n": 1,
+            "mean": 0.0727272727272727,
+            "std": null
+          },
+          "finding_birads_macro_f1": {
+            "n": 1,
+            "mean": 0.03661891421037761,
+            "std": null
+          },
+          "joint_finding_f1_iou_0_3": {
+            "n": 1,
+            "mean": -0.0033090442661426883,
+            "std": null
+          }
+        }
+      },
+      "C-A": {
+        "state": "pending",
+        "metrics": {
+          "json_valid_rate": {
+            "n": 1,
+            "mean": 0.0,
+            "std": null
+          },
+          "breast_birads_accuracy": {
+            "n": 1,
+            "mean": -0.19599999999999998,
+            "std": null
+          },
+          "breast_birads_macro_f1": {
+            "n": 1,
+            "mean": -0.10120056583957568,
+            "std": null
+          },
+          "breast_density_accuracy": {
+            "n": 1,
+            "mean": -0.17599999999999993,
+            "std": null
+          },
+          "breast_density_macro_f1": {
+            "n": 1,
+            "mean": -0.06298973078787767,
+            "std": null
+          },
+          "category_macro_f1": {
+            "n": 1,
+            "mean": -0.08376208904135846,
+            "std": null
+          },
+          "localized_f1_iou_0_3": {
+            "n": 1,
+            "mean": -0.06875125143295949,
+            "std": null
+          },
+          "finding_birads_accuracy": {
+            "n": 1,
+            "mean": -0.07829313543599253,
+            "std": null
+          },
+          "finding_birads_macro_f1": {
+            "n": 1,
+            "mean": -0.03578816886876268,
+            "std": null
+          },
+          "joint_finding_f1_iou_0_3": {
+            "n": 1,
+            "mean": -0.05245566901881055,
+            "std": null
+          }
+        }
+      }
+    },
+    "uncertainty": {
+      "method": "paired seed mean and sample standard deviation",
+      "ci": null,
+      "reason": "No verified patient/study grouping; no image-independent CI."
+    },
+    "limitations": [
+      "B and C use a generation mode absent from their training targets.",
+      "D-A changes training supervision and inference together.",
+      "500 cases have been inspected previously; not a pristine confirmatory holdout.",
+      "Finding BI-RADS metrics are conditional on successful localization.",
+      "Runtime errors and invalid predictions remain in all-image denominators."
+    ],
+    "evaluator_sha256": "03f19f8a805b9d7f36b38deaa4e6ec71f57cd5bba8f60b128c61fd01972fa233",
+    "core_evaluator_sha256": "ef658aa477b036166583049417ff295023df56df81e5bf7656441c753e337224"
+  }
+}
