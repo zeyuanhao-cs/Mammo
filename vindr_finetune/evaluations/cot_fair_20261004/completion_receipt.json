@@ -1,0 +1,103 @@
+{
+  "job_id": 12666,
+  "slurm_state": "COMPLETED",
+  "progress": {
+    "arms_per_seed": 4,
+    "job_id": "12666",
+    "protocol_sha256": "f4d14c2828b0f32cd655cdf84263f0578c73e9095e3fb3b31e6b3aebd2e2bf75",
+    "rows_per_arm": 500,
+    "seeds": 3,
+    "stage": "experiment",
+    "state": "complete",
+    "timestamp": 1791293608.3223472
+  },
+  "cells": [
+    {
+      "seed": 42,
+      "arm": "A",
+      "rows": 500,
+      "sha256": "35da1b2241ef0e857df3e7b4b93f7f33a035433cab200c7d642db32f7767cb08",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 42,
+      "arm": "B",
+      "rows": 500,
+      "sha256": "c86f08a81e753edef6b37621189194794a953dbad82c09de17855ad3e601e91f",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 42,
+      "arm": "C",
+      "rows": 500,
+      "sha256": "2d312e1e4024809a41a3556d0f8ac036052b8a6aba346bf84ef2efdd536d32ca",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 42,
+      "arm": "D",
+      "rows": 500,
+      "sha256": "0c641cdbc7e1c98f7200b6c9c72d04151b018afc382431e2866047e6a5f5f3fe",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 43,
+      "arm": "A",
+      "rows": 500,
+      "sha256": "dcd89ae931e9666cadc7f46ee18ff34db422ba4c6b04b142ff82103cc4e6f5be",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 43,
+      "arm": "B",
+      "rows": 500,
+      "sha256": "3f13be138ce6843b444479dd0bfc075ae77235cb443f31edacbd3eae976a0b21",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 43,
+      "arm": "C",
+      "rows": 500,
+      "sha256": "a5df0f6dc4cf09e52831c0b157c23100fa765312f3c8771eac2a76c443f41531",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 43,
+      "arm": "D",
+      "rows": 500,
+      "sha256": "cf800b3d3001d8964298221e0da179f71dc1c12a5792a1ddbeaa35d4a9850018",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 44,
+      "arm": "A",
+      "rows": 500,
+      "sha256": "b83b639fefd5ec01d9d041bbf7da77f42a4e50c280e4b3d1a20cc5503ff13525",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 44,
+      "arm": "B",
+      "rows": 500,
+      "sha256": "913558787afe9c5c8f5b3e536da34a0bf3afb6ee7e7a7e0bcec9a6c24c6a1911",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 44,
+      "arm": "C",
+      "rows": 500,
+      "sha256": "1d612b10f13a32f29b0aa9d693454d8e0eb69e46924dbb64bd16c06edcf4374c",
+      "exact_indices_verified": true
+    },
+    {
+      "seed": 44,
+      "arm": "D",
+      "rows": 500,
+      "sha256": "be4224ef217094cf2c3d2c580620a3f5df83d552bc22674572f4a6f454a54543",
+      "exact_indices_verified": true
+    }
+  ],
+  "final_adapters_verified": 6,
+  "adapter_bytes_each": 65003848,
+  "aggregate_read_job": 12670
+}
