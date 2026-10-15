@@ -1,0 +1,56 @@
+# =============================================================================
+# VinDr-Mammo 2-view (CC+MLO) × Qwen3.5-4B LoRA SFT
+# 训练集: 7999 条全量 (train_raw.json, 未做采样, 阳性:阴性 ≈ 1:9.4)
+# 基于 vindr_finetune/trial.yaml 调整: 路径/数据集/模板适配 NeSI 2-view 设置
+#
+# 运行: llamafactory-cli train 2-view/configs/train_lora_2view.yaml
+# =============================================================================
+
+### dataset_dir
+dataset_dir: /home/zhao/Mammography/Mammo/2-view/data
+
+### model
+model_name_or_path: /nesi/project/massey04900/Mammography/model/Qwen3.5-4B
+trust_remote_code: true
+image_max_pixels: 786432
+image_min_pixels: 262144
+flash_attn: sdpa
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target: all
+
+### dataset
+dataset: vindr_2view_train
+template: qwen3_5_nothink
+cutoff_len: 4096
+val_size: 0
+preprocessing_num_workers: 8  # dill 补丁后多进程可用; 单进程读 16k 图太慢
+dataloader_num_workers: 0  # worker 子进程无法 pickle 梯度检查点局部函数, 改主进程加载
+
+### output
+output_dir: /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view
+resume_from_checkpoint: true
+logging_steps: 10
+save_steps: 100
+save_total_limit: 3
+plot_loss: true
+overwrite_output_dir: true
+report_to: none
+
+### train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 5.0e-5
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.05
+bf16: true
+gradient_checkpointing: true
+### eval
+eval_strategy: "no"

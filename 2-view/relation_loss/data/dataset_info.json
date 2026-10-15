@@ -1,0 +1,22 @@
+{
+  "vindr_2view_train_os_sub": {
+    "file_name": "/home/zhao/Mammography/Mammo/2-view/data/train_llamafactory_os_sub.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "images": "images"
+    }
+  },
+  "vindr_2view_val": {
+    "file_name": "/home/zhao/Mammography/Mammo/2-view/relation_loss/data/val_llamafactory.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "images": "images"
+    }
+  }
+}
