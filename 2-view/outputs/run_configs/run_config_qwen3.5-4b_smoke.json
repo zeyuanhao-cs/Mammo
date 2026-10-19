@@ -1,0 +1,16 @@
+{
+  "model": "/home/z/zhao/Mammography/model/Qwen3.5-4B",
+  "model_tag": "qwen3.5-4b",
+  "adapter": "/home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-os-sub-vt",
+  "template": "qwen3_5",
+  "samples": 4,
+  "max_new_tokens": 256,
+  "image_max_pixels": 786432,
+  "image_min_pixels": 262144,
+  "enable_thinking": false,
+  "do_sample": false,
+  "infer_dtype": "bfloat16",
+  "flash_attn": "sdpa",
+  "data": "/home/z/zhao/Mammography/Mammo/2-view/data/test_local.json",
+  "prompt_file": "/home/z/zhao/Mammography/Mammo/2-view/conf_py/prompt.txt"
+}

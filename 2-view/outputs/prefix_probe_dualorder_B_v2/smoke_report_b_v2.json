@@ -1,0 +1,31 @@
+{
+ "timing": {
+  "greedy": {
+   "sec_per_case": 2.0707349942065774,
+   "elapsed_min": 0.6902449980688592
+  },
+  "down": {
+   "sec_per_case": 2.007860028592404,
+   "elapsed_min": 0.669286676197468
+  },
+  "up3": {
+   "sec_per_case": 2.0110184815013783,
+   "elapsed_min": 0.6703394938337927
+  },
+  "up4": {
+   "sec_per_case": 2.0021696571959184,
+   "elapsed_min": 0.6673898857319728
+  },
+  "up5": {
+   "sec_per_case": 1.990176333708223,
+   "elapsed_min": 0.6633921112360743
+  }
+ },
+ "est_full_min": 336.0653165068167,
+ "smoke_n": 20,
+ "adapter": "/home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-dualorder",
+ "prompt_file": "/home/z/zhao/Mammography/Mammo/2-view/dataset_build/prompt_order_b.txt",
+ "data": "/home/z/zhao/Mammography/Mammo/2-view/data/splits/test_local.json",
+ "preds": "/home/z/zhao/Mammography/Mammo/2-view/outputs/predictions/predictions_qwen3.5-4b_dualorder_b_2000.jsonl",
+ "model": "/home/z/zhao/Mammography/model/Qwen3.5-4B"
+}

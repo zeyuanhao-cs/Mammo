@@ -1,0 +1,743 @@
+[zb] mode=smoke
+[zb] adapter=/home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-dualorder
+[zb] prompt=/home/z/zhao/Mammography/Mammo/2-view/dataset_build/prompt_order_b.txt
+[zb] data=/home/z/zhao/Mammography/Mammo/2-view/data/splits/test_local.json
+[zb] preds=/home/z/zhao/Mammography/Mammo/2-view/outputs/predictions/predictions_qwen3.5-4b_dualorder_b_2000.jsonl
+[zb] model=/home/z/zhao/Mammography/model/Qwen3.5-4B
+[zb] out=/home/z/zhao/Mammography/Mammo/2-view/outputs/prefix_probe_dualorder_B_v2
+[zb] instruction 1303 chars, <image> x2
+[zb] data=2000 条  preds=2000 条
+[cuda] device: NVIDIA A40-24Q
+[INFO|configuration_utils.py:778] 2026-10-19 18:22:45,329 >> loading configuration file /home/z/zhao/Mammography/model/Qwen3.5-4B/config.json
+[INFO|configuration_utils.py:856] 2026-10-19 18:22:45,342 >> Model config Qwen3_5Config {
+  "architectures": [
+    "Qwen3_5ForConditionalGeneration"
+  ],
+  "image_token_id": 248056,
+  "model_type": "qwen3_5",
+  "text_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "attn_output_gate": true,
+    "bos_token_id": null,
+    "dtype": "bfloat16",
+    "eos_token_id": 248044,
+    "full_attention_interval": 4,
+    "head_dim": 256,
+    "hidden_act": "silu",
+    "hidden_size": 2560,
+    "initializer_range": 0.02,
+    "intermediate_size": 9216,
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ],
+    "linear_conv_kernel_dim": 4,
+    "linear_key_head_dim": 128,
+    "linear_num_key_heads": 16,
+    "linear_num_value_heads": 32,
+    "linear_value_head_dim": 128,
+    "mamba_ssm_dtype": "float32",
+    "max_position_embeddings": 262144,
+    "mlp_only_layers": [],
+    "model_type": "qwen3_5_text",
+    "mtp_num_hidden_layers": 1,
+    "mtp_use_dedicated_embeddings": false,
+    "num_attention_heads": 16,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "partial_rotary_factor": 0.25,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_interleaved": true,
+      "mrope_section": [
+        11,
+        11,
+        10
+      ],
+      "partial_rotary_factor": 0.25,
+      "rope_theta": 10000000,
+      "rope_type": "default"
+    },
+    "tie_word_embeddings": true,
+    "use_cache": true,
+    "vocab_size": 248320
+  },
+  "tie_word_embeddings": true,
+  "transformers_version": "5.8.0",
+  "video_token_id": 248057,
+  "vision_config": {
+    "deepstack_visual_indexes": [],
+    "depth": 24,
+    "hidden_act": "gelu_pytorch_tanh",
+    "hidden_size": 1024,
+    "in_channels": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 4096,
+    "model_type": "qwen3_5_vision",
+    "num_heads": 16,
+    "num_position_embeddings": 2304,
+    "out_hidden_size": 2560,
+    "patch_size": 16,
+    "spatial_merge_size": 2,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 248054,
+  "vision_start_token_id": 248053
+}
+
+[INFO|image_processing_base.py:342] 2026-10-19 18:22:45,909 >> loading configuration file /home/z/zhao/Mammography/model/Qwen3.5-4B/preprocessor_config.json
+[INFO|processing_utils.py:1122] 2026-10-19 18:22:45,913 >> loading configuration file None
+[INFO|image_processing_base.py:342] 2026-10-19 18:22:45,913 >> loading configuration file /home/z/zhao/Mammography/model/Qwen3.5-4B/preprocessor_config.json
+[WARNING|logging.py:340] 2026-10-19 18:22:45,913 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+[INFO|image_processing_base.py:342] 2026-10-19 18:22:45,921 >> loading configuration file /home/z/zhao/Mammography/model/Qwen3.5-4B/preprocessor_config.json
+[INFO|image_processing_base.py:385] 2026-10-19 18:22:45,921 >> Image processor Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "merge_size": 2,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 16777216,
+    "shortest_edge": 65536
+  },
+  "temporal_patch_size": 2
+}
+
+[INFO|configuration_utils.py:778] 2026-10-19 18:22:45,921 >> loading configuration file /home/z/zhao/Mammography/model/Qwen3.5-4B/config.json
+[INFO|configuration_utils.py:856] 2026-10-19 18:22:45,929 >> Model config Qwen3_5Config {
+  "architectures": [
+    "Qwen3_5ForConditionalGeneration"
+  ],
+  "image_token_id": 248056,
+  "model_type": "qwen3_5",
+  "text_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "attn_output_gate": true,
+    "bos_token_id": null,
+    "dtype": "bfloat16",
+    "eos_token_id": 248044,
+    "full_attention_interval": 4,
+    "head_dim": 256,
+    "hidden_act": "silu",
+    "hidden_size": 2560,
+    "initializer_range": 0.02,
+    "intermediate_size": 9216,
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ],
+    "linear_conv_kernel_dim": 4,
+    "linear_key_head_dim": 128,
+    "linear_num_key_heads": 16,
+    "linear_num_value_heads": 32,
+    "linear_value_head_dim": 128,
+    "mamba_ssm_dtype": "float32",
+    "max_position_embeddings": 262144,
+    "mlp_only_layers": [],
+    "model_type": "qwen3_5_text",
+    "mtp_num_hidden_layers": 1,
+    "mtp_use_dedicated_embeddings": false,
+    "num_attention_heads": 16,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "partial_rotary_factor": 0.25,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_interleaved": true,
+      "mrope_section": [
+        11,
+        11,
+        10
+      ],
+      "partial_rotary_factor": 0.25,
+      "rope_theta": 10000000,
+      "rope_type": "default"
+    },
+    "tie_word_embeddings": true,
+    "use_cache": true,
+    "vocab_size": 248320
+  },
+  "tie_word_embeddings": true,
+  "transformers_version": "5.8.0",
+  "video_token_id": 248057,
+  "vision_config": {
+    "deepstack_visual_indexes": [],
+    "depth": 24,
+    "hidden_act": "gelu_pytorch_tanh",
+    "hidden_size": 1024,
+    "in_channels": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 4096,
+    "model_type": "qwen3_5_vision",
+    "num_heads": 16,
+    "num_position_embeddings": 2304,
+    "out_hidden_size": 2560,
+    "patch_size": 16,
+    "spatial_merge_size": 2,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 248054,
+  "vision_start_token_id": 248053
+}
+
+[INFO|video_processing_utils.py:684] 2026-10-19 18:22:46,469 >> loading configuration file /home/z/zhao/Mammography/model/Qwen3.5-4B/video_preprocessor_config.json
+[INFO|video_processing_utils.py:684] 2026-10-19 18:22:46,469 >> loading configuration file /home/z/zhao/Mammography/model/Qwen3.5-4B/video_preprocessor_config.json
+[INFO|video_processing_utils.py:727] 2026-10-19 18:22:46,470 >> Video processor Qwen3VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": true,
+  "fps": 2,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 25165824,
+    "shortest_edge": 4096
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen3VLVideoProcessor"
+}
+
+[INFO|processing_utils.py:1199] 2026-10-19 18:22:46,471 >> Processor Qwen3VLProcessor:
+- image_processor: Qwen2VLImageProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_processor_type": "Qwen2VLImageProcessor",
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "merge_size": 2,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "size": {
+    "longest_edge": 16777216,
+    "shortest_edge": 65536
+  },
+  "temporal_patch_size": 2
+}
+
+- tokenizer: Qwen2Tokenizer(name_or_path='/home/z/zhao/Mammography/model/Qwen3.5-4B', vocab_size=248044, model_max_length=262144, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'audio_bos_token': '<|audio_start|>', 'audio_eos_token': '<|audio_end|>', 'audio_token': '<|audio_pad|>', 'image_token': '<|image_pad|>', 'video_token': '<|video_pad|>', 'vision_bos_token': '<|vision_start|>', 'vision_eos_token': '<|vision_end|>'}, added_tokens_decoder={
+	248044: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248045: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248046: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248047: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248048: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248049: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248050: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248051: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248052: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248053: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248054: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248055: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248056: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248057: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248058: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248059: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248060: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248061: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248062: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248063: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248064: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248065: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248066: AddedToken("<tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248067: AddedToken("</tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248068: AddedToken("<think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248069: AddedToken("</think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
+	248070: AddedToken("<|audio_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248071: AddedToken("<|audio_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248072: AddedToken("<tts_pad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248073: AddedToken("<tts_text_bos>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248074: AddedToken("<tts_text_eod>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248075: AddedToken("<tts_text_bos_single>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+	248076: AddedToken("<|audio_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
+})
+- video_processor: Qwen3VLVideoProcessor {
+  "do_convert_rgb": true,
+  "do_normalize": true,
+  "do_rescale": true,
+  "do_resize": true,
+  "do_sample_frames": true,
+  "fps": 2,
+  "image_mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "image_std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "max_frames": 768,
+  "merge_size": 2,
+  "min_frames": 4,
+  "patch_size": 16,
+  "resample": 3,
+  "rescale_factor": 0.00392156862745098,
+  "return_metadata": false,
+  "size": {
+    "longest_edge": 25165824,
+    "shortest_edge": 4096
+  },
+  "temporal_patch_size": 2,
+  "video_processor_type": "Qwen3VLVideoProcessor"
+}
+
+
+{
+  "image_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "image_processor_type": "Qwen2VLImageProcessor",
+    "image_std": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "merge_size": 2,
+    "patch_size": 16,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "longest_edge": 16777216,
+      "shortest_edge": 65536
+    },
+    "temporal_patch_size": 2
+  },
+  "processor_class": "Qwen3VLProcessor",
+  "video_processor": {
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "do_sample_frames": true,
+    "fps": 2,
+    "image_mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "image_std": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "max_frames": 768,
+    "merge_size": 2,
+    "min_frames": 4,
+    "patch_size": 16,
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "return_metadata": false,
+    "size": {
+      "longest_edge": 25165824,
+      "shortest_edge": 4096
+    },
+    "temporal_patch_size": 2,
+    "video_processor_type": "Qwen3VLVideoProcessor"
+  }
+}
+
+[WARNING|2026-10-19 18:22:46] llamafactory.data.template:149 >> You are using reasoning template. If the base model is NOT a reasoning model (i.e., it has a separate Instruct variant), please add `_nothink` suffix to disable thinking. For reasoning-only model families (e.g., Qwen3.6), the suffix is not needed. e.g., qwen3_vl_nothink
+[INFO|configuration_utils.py:778] 2026-10-19 18:22:46,529 >> loading configuration file /home/z/zhao/Mammography/model/Qwen3.5-4B/config.json
+[INFO|configuration_utils.py:856] 2026-10-19 18:22:46,536 >> Model config Qwen3_5Config {
+  "architectures": [
+    "Qwen3_5ForConditionalGeneration"
+  ],
+  "image_token_id": 248056,
+  "model_type": "qwen3_5",
+  "text_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "attn_output_gate": true,
+    "bos_token_id": null,
+    "dtype": "bfloat16",
+    "eos_token_id": 248044,
+    "full_attention_interval": 4,
+    "head_dim": 256,
+    "hidden_act": "silu",
+    "hidden_size": 2560,
+    "initializer_range": 0.02,
+    "intermediate_size": 9216,
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ],
+    "linear_conv_kernel_dim": 4,
+    "linear_key_head_dim": 128,
+    "linear_num_key_heads": 16,
+    "linear_num_value_heads": 32,
+    "linear_value_head_dim": 128,
+    "mamba_ssm_dtype": "float32",
+    "max_position_embeddings": 262144,
+    "mlp_only_layers": [],
+    "model_type": "qwen3_5_text",
+    "mtp_num_hidden_layers": 1,
+    "mtp_use_dedicated_embeddings": false,
+    "num_attention_heads": 16,
+    "num_hidden_layers": 32,
+    "num_key_value_heads": 4,
+    "pad_token_id": null,
+    "partial_rotary_factor": 0.25,
+    "rms_norm_eps": 1e-06,
+    "rope_parameters": {
+      "mrope_interleaved": true,
+      "mrope_section": [
+        11,
+        11,
+        10
+      ],
+      "partial_rotary_factor": 0.25,
+      "rope_theta": 10000000,
+      "rope_type": "default"
+    },
+    "tie_word_embeddings": true,
+    "use_cache": true,
+    "vocab_size": 248320
+  },
+  "tie_word_embeddings": true,
+  "transformers_version": "5.8.0",
+  "video_token_id": 248057,
+  "vision_config": {
+    "deepstack_visual_indexes": [],
+    "depth": 24,
+    "hidden_act": "gelu_pytorch_tanh",
+    "hidden_size": 1024,
+    "in_channels": 3,
+    "initializer_range": 0.02,
+    "intermediate_size": 4096,
+    "model_type": "qwen3_5_vision",
+    "num_heads": 16,
+    "num_position_embeddings": 2304,
+    "out_hidden_size": 2560,
+    "patch_size": 16,
+    "spatial_merge_size": 2,
+    "temporal_patch_size": 2
+  },
+  "vision_end_token_id": 248054,
+  "vision_start_token_id": 248053
+}
+
+[INFO|2026-10-19 18:22:46] llamafactory.model.model_utils.kv_cache:144 >> KV cache is enabled for faster generation.
+[INFO|modeling_utils.py:766] 2026-10-19 18:22:47,049 >> loading weights file /home/z/zhao/Mammography/model/Qwen3.5-4B/model.safetensors.index.json
+[INFO|modeling_utils.py:852] 2026-10-19 18:22:47,050 >> Since the `dtype` attribute can't be found in model's config object, will use dtype=torch.bfloat16 as derived from model's weights
+[INFO|configuration_utils.py:1086] 2026-10-19 18:22:47,052 >> Generate config GenerationConfig {
+  "output_attentions": false,
+  "output_hidden_states": false,
+  "use_cache": true
+}
+
+[WARNING|logging.py:340] 2026-10-19 18:22:47,078 >> The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
+[INFO|accelerate.py:285] 2026-10-19 18:22:47,134 >> We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
+Loading weights:   0%|          | 0/723 [00:00<?, ?it/s]Loading weights:   1%|          | 8/723 [00:00<00:09, 75.97it/s]Loading weights:   6%|▋         | 46/723 [00:00<00:02, 247.23it/s]Loading weights:  13%|█▎        | 94/723 [00:00<00:01, 347.43it/s]Loading weights:  20%|█▉        | 143/723 [00:00<00:01, 396.09it/s]Loading weights:  26%|██▌       | 186/723 [00:00<00:01, 405.08it/s]Loading weights:  32%|███▏      | 233/723 [00:00<00:01, 420.32it/s]Loading weights:  38%|███▊      | 277/723 [00:00<00:01, 423.66it/s]Loading weights:  44%|████▍     | 320/723 [00:00<00:00, 423.07it/s]Loading weights:  50%|█████     | 364/723 [00:00<00:00, 425.08it/s]Loading weights:  57%|█████▋    | 413/723 [00:01<00:00, 440.42it/s]Loading weights:  88%|████████▊ | 636/723 [00:01<00:00, 976.09it/s]Loading weights: 100%|██████████| 723/723 [00:01<00:00, 620.52it/s]
+[INFO|utils.py:412] 2026-10-19 18:22:48,676 >> Generation config file not found, using a generation config created from the model config.
+[INFO|configuration_utils.py:1037] 2026-10-19 18:22:48,676 >> loading configuration file /home/z/zhao/Mammography/model/Qwen3.5-4B/config.json
+[INFO|configuration_utils.py:1086] 2026-10-19 18:22:48,676 >> Generate config GenerationConfig {}
+
+[INFO|dynamic_module_utils.py:441] 2026-10-19 18:22:48,677 >> Could not locate the custom_generate/generate.py inside /home/z/zhao/Mammography/model/Qwen3.5-4B.
+[INFO|2026-10-19 18:22:48] llamafactory.model.model_utils.attention:144 >> Using torch SDPA for faster training and inference.
+[INFO|2026-10-19 18:22:49] llamafactory.model.adapter:144 >> Merged 1 adapter(s).
+[INFO|2026-10-19 18:22:49] llamafactory.model.adapter:144 >> Loaded adapter(s): /home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-dualorder
+[INFO|2026-10-19 18:22:49] llamafactory.model.loader:144 >> all params: 4,539,265,536
+[model] loaded in 4.4s (adapter=/home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-dualorder)
+[zb_greedy] total=20 done=0 pending=20
+zb_greedy:   0%|          | 0/20 [00:00<?, ?case/s][WARNING|utils.py:1986] 2026-10-19 18:22:49,789 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:   0%|          | 0/20 [00:02<?, ?case/s, avg=2.55s, bad=0, skip=0]zb_greedy:   5%|▌         | 1/20 [00:02<00:48,  2.55s/case, avg=2.55s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:22:52,331 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:   5%|▌         | 1/20 [00:04<00:48,  2.55s/case, avg=4.56s, bad=0, skip=0]zb_greedy:  10%|█         | 2/20 [00:04<00:40,  2.23s/case, avg=4.56s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:22:54,328 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  10%|█         | 2/20 [00:06<00:40,  2.23s/case, avg=3.28s, bad=0, skip=0]zb_greedy:  15%|█▌        | 3/20 [00:06<00:36,  2.13s/case, avg=3.28s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:22:56,332 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  15%|█▌        | 3/20 [00:08<00:36,  2.13s/case, avg=2.86s, bad=0, skip=0]zb_greedy:  20%|██        | 4/20 [00:08<00:33,  2.09s/case, avg=2.86s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:22:58,399 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  20%|██        | 4/20 [00:10<00:33,  2.09s/case, avg=2.68s, bad=0, skip=0]zb_greedy:  25%|██▌       | 5/20 [00:10<00:31,  2.10s/case, avg=2.68s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:00,489 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  25%|██▌       | 5/20 [00:12<00:31,  2.10s/case, avg=2.56s, bad=0, skip=0]zb_greedy:  30%|███       | 6/20 [00:12<00:29,  2.09s/case, avg=2.56s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:02,568 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  30%|███       | 6/20 [00:14<00:29,  2.09s/case, avg=2.47s, bad=0, skip=0]zb_greedy:  35%|███▌      | 7/20 [00:14<00:26,  2.07s/case, avg=2.47s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:04,574 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  35%|███▌      | 7/20 [00:16<00:26,  2.07s/case, avg=2.41s, bad=0, skip=0]zb_greedy:  40%|████      | 8/20 [00:16<00:24,  2.06s/case, avg=2.41s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:06,624 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  40%|████      | 8/20 [00:18<00:24,  2.06s/case, avg=2.36s, bad=0, skip=0]zb_greedy:  45%|████▌     | 9/20 [00:18<00:22,  2.05s/case, avg=2.36s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:08,635 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  45%|████▌     | 9/20 [00:20<00:22,  2.05s/case, avg=2.32s, bad=0, skip=0]zb_greedy:  50%|█████     | 10/20 [00:20<00:20,  2.04s/case, avg=2.32s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:10,663 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  50%|█████     | 10/20 [00:22<00:20,  2.04s/case, avg=2.29s, bad=0, skip=0]zb_greedy:  55%|█████▌    | 11/20 [00:22<00:18,  2.03s/case, avg=2.29s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:12,696 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  55%|█████▌    | 11/20 [00:25<00:18,  2.03s/case, avg=2.31s, bad=0, skip=0]zb_greedy:  60%|██████    | 12/20 [00:25<00:17,  2.17s/case, avg=2.31s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:15,149 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  60%|██████    | 12/20 [00:27<00:17,  2.17s/case, avg=2.28s, bad=0, skip=0]zb_greedy:  65%|██████▌   | 13/20 [00:27<00:14,  2.12s/case, avg=2.28s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:17,153 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  65%|██████▌   | 13/20 [00:29<00:14,  2.12s/case, avg=2.26s, bad=0, skip=0]zb_greedy:  70%|███████   | 14/20 [00:29<00:12,  2.08s/case, avg=2.26s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:19,150 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  70%|███████   | 14/20 [00:31<00:12,  2.08s/case, avg=2.24s, bad=0, skip=0]zb_greedy:  75%|███████▌  | 15/20 [00:31<00:10,  2.06s/case, avg=2.24s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:21,157 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  75%|███████▌  | 15/20 [00:33<00:10,  2.06s/case, avg=2.23s, bad=0, skip=0]zb_greedy:  80%|████████  | 16/20 [00:33<00:08,  2.04s/case, avg=2.23s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:23,147 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  80%|████████  | 16/20 [00:35<00:08,  2.04s/case, avg=2.21s, bad=0, skip=0]zb_greedy:  85%|████████▌ | 17/20 [00:35<00:06,  2.03s/case, avg=2.21s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:25,164 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  85%|████████▌ | 17/20 [00:37<00:06,  2.03s/case, avg=2.20s, bad=0, skip=0]zb_greedy:  90%|█████████ | 18/20 [00:37<00:04,  2.02s/case, avg=2.20s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:27,163 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  90%|█████████ | 18/20 [00:39<00:04,  2.02s/case, avg=2.19s, bad=0, skip=0]zb_greedy:  95%|█████████▌| 19/20 [00:39<00:02,  2.02s/case, avg=2.19s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:29,172 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_greedy:  95%|█████████▌| 19/20 [00:41<00:02,  2.02s/case, avg=2.18s, bad=0, skip=0]zb_greedy: 100%|██████████| 20/20 [00:41<00:00,  2.02s/case, avg=2.18s, bad=0, skip=0]zb_greedy: 100%|██████████| 20/20 [00:41<00:00,  2.07s/case, avg=2.18s, bad=0, skip=0]
+[zb_greedy] new=20 bad=0 skip=0 elapsed=0.7 min (2.07s/case) repro=20/20
+[zb_down] total=20 done=0 pending=20
+zb_down:   0%|          | 0/20 [00:00<?, ?case/s][WARNING|utils.py:1986] 2026-10-19 18:23:31,187 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:   0%|          | 0/20 [00:02<?, ?case/s, avg=2.04s, bad=0, skip=0]zb_down:   5%|▌         | 1/20 [00:02<00:38,  2.04s/case, avg=2.04s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:33,224 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:   5%|▌         | 1/20 [00:04<00:38,  2.04s/case, avg=4.01s, bad=0, skip=0]zb_down:  10%|█         | 2/20 [00:04<00:36,  2.00s/case, avg=4.01s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:35,205 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  10%|█         | 2/20 [00:06<00:36,  2.00s/case, avg=3.03s, bad=0, skip=0]zb_down:  15%|█▌        | 3/20 [00:06<00:34,  2.03s/case, avg=3.03s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:37,262 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  15%|█▌        | 3/20 [00:08<00:34,  2.03s/case, avg=2.70s, bad=0, skip=0]zb_down:  20%|██        | 4/20 [00:08<00:32,  2.02s/case, avg=2.70s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:39,275 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  20%|██        | 4/20 [00:10<00:32,  2.02s/case, avg=2.52s, bad=0, skip=0]zb_down:  25%|██▌       | 5/20 [00:10<00:30,  2.01s/case, avg=2.52s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:41,262 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  25%|██▌       | 5/20 [00:12<00:30,  2.01s/case, avg=2.41s, bad=0, skip=0]zb_down:  30%|███       | 6/20 [00:12<00:27,  2.00s/case, avg=2.41s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:43,246 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  30%|███       | 6/20 [00:14<00:27,  2.00s/case, avg=2.34s, bad=0, skip=0]zb_down:  35%|███▌      | 7/20 [00:14<00:25,  1.99s/case, avg=2.34s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:45,218 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  35%|███▌      | 7/20 [00:16<00:25,  1.99s/case, avg=2.29s, bad=0, skip=0]zb_down:  40%|████      | 8/20 [00:16<00:23,  2.00s/case, avg=2.29s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:47,224 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  40%|████      | 8/20 [00:18<00:23,  2.00s/case, avg=2.25s, bad=0, skip=0]zb_down:  45%|████▌     | 9/20 [00:18<00:21,  1.99s/case, avg=2.25s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:49,241 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  45%|████▌     | 9/20 [00:20<00:21,  1.99s/case, avg=2.23s, bad=0, skip=0]zb_down:  50%|█████     | 10/20 [00:20<00:20,  2.02s/case, avg=2.23s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:51,283 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  50%|█████     | 10/20 [00:22<00:20,  2.02s/case, avg=2.21s, bad=0, skip=0]zb_down:  55%|█████▌    | 11/20 [00:22<00:18,  2.01s/case, avg=2.21s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:53,318 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  55%|█████▌    | 11/20 [00:24<00:18,  2.01s/case, avg=2.20s, bad=0, skip=0]zb_down:  60%|██████    | 12/20 [00:24<00:16,  2.02s/case, avg=2.20s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:55,336 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  60%|██████    | 12/20 [00:26<00:16,  2.02s/case, avg=2.18s, bad=0, skip=0]zb_down:  65%|██████▌   | 13/20 [00:26<00:14,  2.02s/case, avg=2.18s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:57,360 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  65%|██████▌   | 13/20 [00:28<00:14,  2.02s/case, avg=2.17s, bad=0, skip=0]zb_down:  70%|███████   | 14/20 [00:28<00:12,  2.02s/case, avg=2.17s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:23:59,350 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  70%|███████   | 14/20 [00:30<00:12,  2.02s/case, avg=2.15s, bad=0, skip=0]zb_down:  75%|███████▌  | 15/20 [00:30<00:10,  2.01s/case, avg=2.15s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:01,322 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  75%|███████▌  | 15/20 [00:32<00:10,  2.01s/case, avg=2.14s, bad=0, skip=0]zb_down:  80%|████████  | 16/20 [00:32<00:07,  2.00s/case, avg=2.14s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:03,307 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  80%|████████  | 16/20 [00:34<00:07,  2.00s/case, avg=2.13s, bad=0, skip=0]zb_down:  85%|████████▌ | 17/20 [00:34<00:05,  1.99s/case, avg=2.13s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:05,303 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  85%|████████▌ | 17/20 [00:36<00:05,  1.99s/case, avg=2.12s, bad=0, skip=0]zb_down:  90%|█████████ | 18/20 [00:36<00:03,  1.99s/case, avg=2.12s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:07,299 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  90%|█████████ | 18/20 [00:38<00:03,  1.99s/case, avg=2.12s, bad=0, skip=0]zb_down:  95%|█████████▌| 19/20 [00:38<00:02,  2.01s/case, avg=2.12s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:09,329 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_down:  95%|█████████▌| 19/20 [00:40<00:02,  2.01s/case, avg=2.11s, bad=0, skip=0]zb_down: 100%|██████████| 20/20 [00:40<00:00,  2.01s/case, avg=2.11s, bad=0, skip=0]zb_down: 100%|██████████| 20/20 [00:40<00:00,  2.01s/case, avg=2.11s, bad=0, skip=0]
+[zb_down] new=20 bad=0 skip=0 elapsed=0.7 min (2.01s/case)
+[zb_up3] total=20 done=0 pending=20
+zb_up3:   0%|          | 0/20 [00:00<?, ?case/s][WARNING|utils.py:1986] 2026-10-19 18:24:11,344 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:   0%|          | 0/20 [00:02<?, ?case/s, avg=2.01s, bad=0, skip=0]zb_up3:   5%|▌         | 1/20 [00:02<00:38,  2.01s/case, avg=2.01s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:13,357 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:   5%|▌         | 1/20 [00:04<00:38,  2.01s/case, avg=4.02s, bad=0, skip=0]zb_up3:  10%|█         | 2/20 [00:04<00:36,  2.01s/case, avg=4.02s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:15,360 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  10%|█         | 2/20 [00:06<00:36,  2.01s/case, avg=3.01s, bad=0, skip=0]zb_up3:  15%|█▌        | 3/20 [00:06<00:34,  2.00s/case, avg=3.01s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:17,357 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  15%|█▌        | 3/20 [00:08<00:34,  2.00s/case, avg=2.67s, bad=0, skip=0]zb_up3:  20%|██        | 4/20 [00:08<00:32,  2.00s/case, avg=2.67s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:19,363 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  20%|██        | 4/20 [00:10<00:32,  2.00s/case, avg=2.51s, bad=0, skip=0]zb_up3:  25%|██▌       | 5/20 [00:10<00:30,  2.00s/case, avg=2.51s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:21,368 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  25%|██▌       | 5/20 [00:12<00:30,  2.00s/case, avg=2.41s, bad=0, skip=0]zb_up3:  30%|███       | 6/20 [00:12<00:28,  2.01s/case, avg=2.41s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:23,377 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  30%|███       | 6/20 [00:14<00:28,  2.01s/case, avg=2.34s, bad=0, skip=0]zb_up3:  35%|███▌      | 7/20 [00:14<00:26,  2.01s/case, avg=2.34s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:25,384 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  35%|███▌      | 7/20 [00:16<00:26,  2.01s/case, avg=2.29s, bad=0, skip=0]zb_up3:  40%|████      | 8/20 [00:16<00:24,  2.01s/case, avg=2.29s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:27,428 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  40%|████      | 8/20 [00:18<00:24,  2.01s/case, avg=2.26s, bad=0, skip=0]zb_up3:  45%|████▌     | 9/20 [00:18<00:22,  2.02s/case, avg=2.26s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:29,467 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  45%|████▌     | 9/20 [00:20<00:22,  2.02s/case, avg=2.24s, bad=0, skip=0]zb_up3:  50%|█████     | 10/20 [00:20<00:20,  2.02s/case, avg=2.24s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:31,468 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  50%|█████     | 10/20 [00:22<00:20,  2.02s/case, avg=2.21s, bad=0, skip=0]zb_up3:  55%|█████▌    | 11/20 [00:22<00:18,  2.02s/case, avg=2.21s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:33,473 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  55%|█████▌    | 11/20 [00:24<00:18,  2.02s/case, avg=2.19s, bad=0, skip=0]zb_up3:  60%|██████    | 12/20 [00:24<00:16,  2.01s/case, avg=2.19s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:35,480 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  60%|██████    | 12/20 [00:26<00:16,  2.01s/case, avg=2.18s, bad=0, skip=0]zb_up3:  65%|██████▌   | 13/20 [00:26<00:14,  2.01s/case, avg=2.18s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:37,491 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  65%|██████▌   | 13/20 [00:28<00:14,  2.01s/case, avg=2.17s, bad=0, skip=0]zb_up3:  70%|███████   | 14/20 [00:28<00:12,  2.01s/case, avg=2.17s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:39,493 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  70%|███████   | 14/20 [00:30<00:12,  2.01s/case, avg=2.15s, bad=0, skip=0]zb_up3:  75%|███████▌  | 15/20 [00:30<00:10,  2.01s/case, avg=2.15s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:41,495 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  75%|███████▌  | 15/20 [00:32<00:10,  2.01s/case, avg=2.14s, bad=0, skip=0]zb_up3:  80%|████████  | 16/20 [00:32<00:08,  2.01s/case, avg=2.14s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:43,513 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  80%|████████  | 16/20 [00:34<00:08,  2.01s/case, avg=2.14s, bad=0, skip=0]zb_up3:  85%|████████▌ | 17/20 [00:34<00:06,  2.01s/case, avg=2.14s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:45,522 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  85%|████████▌ | 17/20 [00:36<00:06,  2.01s/case, avg=2.13s, bad=0, skip=0]zb_up3:  90%|█████████ | 18/20 [00:36<00:04,  2.01s/case, avg=2.13s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:47,539 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  90%|█████████ | 18/20 [00:38<00:04,  2.01s/case, avg=2.12s, bad=0, skip=0]zb_up3:  95%|█████████▌| 19/20 [00:38<00:02,  2.01s/case, avg=2.12s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:49,553 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up3:  95%|█████████▌| 19/20 [00:40<00:02,  2.01s/case, avg=2.12s, bad=0, skip=0]zb_up3: 100%|██████████| 20/20 [00:40<00:00,  2.01s/case, avg=2.12s, bad=0, skip=0]zb_up3: 100%|██████████| 20/20 [00:40<00:00,  2.01s/case, avg=2.12s, bad=0, skip=0]
+[zb_up3] new=20 bad=0 skip=0 elapsed=0.7 min (2.01s/case)
+[zb_up4] total=20 done=0 pending=20
+zb_up4:   0%|          | 0/20 [00:00<?, ?case/s][WARNING|utils.py:1986] 2026-10-19 18:24:51,563 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:   0%|          | 0/20 [00:02<?, ?case/s, avg=2.01s, bad=0, skip=0]zb_up4:   5%|▌         | 1/20 [00:02<00:38,  2.01s/case, avg=2.01s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:53,572 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:   5%|▌         | 1/20 [00:04<00:38,  2.01s/case, avg=4.02s, bad=0, skip=0]zb_up4:  10%|█         | 2/20 [00:04<00:36,  2.01s/case, avg=4.02s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:55,588 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  10%|█         | 2/20 [00:06<00:36,  2.01s/case, avg=3.02s, bad=0, skip=0]zb_up4:  15%|█▌        | 3/20 [00:06<00:34,  2.01s/case, avg=3.02s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:57,627 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  15%|█▌        | 3/20 [00:08<00:34,  2.01s/case, avg=2.69s, bad=0, skip=0]zb_up4:  20%|██        | 4/20 [00:08<00:32,  2.03s/case, avg=2.69s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:24:59,769 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  20%|██        | 4/20 [00:10<00:32,  2.03s/case, avg=2.55s, bad=0, skip=0]zb_up4:  25%|██▌       | 5/20 [00:10<00:30,  2.06s/case, avg=2.55s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:01,764 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  25%|██▌       | 5/20 [00:12<00:30,  2.06s/case, avg=2.44s, bad=0, skip=0]zb_up4:  30%|███       | 6/20 [00:12<00:28,  2.04s/case, avg=2.44s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:03,776 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  30%|███       | 6/20 [00:14<00:28,  2.04s/case, avg=2.37s, bad=0, skip=0]zb_up4:  35%|███▌      | 7/20 [00:14<00:26,  2.03s/case, avg=2.37s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:05,769 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  35%|███▌      | 7/20 [00:16<00:26,  2.03s/case, avg=2.32s, bad=0, skip=0]zb_up4:  40%|████      | 8/20 [00:16<00:24,  2.02s/case, avg=2.32s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:07,780 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  40%|████      | 8/20 [00:18<00:24,  2.02s/case, avg=2.28s, bad=0, skip=0]zb_up4:  45%|████▌     | 9/20 [00:18<00:22,  2.01s/case, avg=2.28s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:09,773 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  45%|████▌     | 9/20 [00:20<00:22,  2.01s/case, avg=2.24s, bad=0, skip=0]zb_up4:  50%|█████     | 10/20 [00:20<00:20,  2.01s/case, avg=2.24s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:11,753 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  50%|█████     | 10/20 [00:22<00:20,  2.01s/case, avg=2.22s, bad=0, skip=0]zb_up4:  55%|█████▌    | 11/20 [00:22<00:17,  2.00s/case, avg=2.22s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:13,732 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  55%|█████▌    | 11/20 [00:24<00:17,  2.00s/case, avg=2.20s, bad=0, skip=0]zb_up4:  60%|██████    | 12/20 [00:24<00:15,  1.99s/case, avg=2.20s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:15,714 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  60%|██████    | 12/20 [00:26<00:15,  1.99s/case, avg=2.18s, bad=0, skip=0]zb_up4:  65%|██████▌   | 13/20 [00:26<00:13,  1.99s/case, avg=2.18s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:17,697 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  65%|██████▌   | 13/20 [00:28<00:13,  1.99s/case, avg=2.16s, bad=0, skip=0]zb_up4:  70%|███████   | 14/20 [00:28<00:11,  1.99s/case, avg=2.16s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:19,678 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  70%|███████   | 14/20 [00:30<00:11,  1.99s/case, avg=2.15s, bad=0, skip=0]zb_up4:  75%|███████▌  | 15/20 [00:30<00:09,  1.99s/case, avg=2.15s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:21,654 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  75%|███████▌  | 15/20 [00:32<00:09,  1.99s/case, avg=2.14s, bad=0, skip=0]zb_up4:  80%|████████  | 16/20 [00:32<00:07,  1.98s/case, avg=2.14s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:23,640 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  80%|████████  | 16/20 [00:34<00:07,  1.98s/case, avg=2.13s, bad=0, skip=0]zb_up4:  85%|████████▌ | 17/20 [00:34<00:05,  1.98s/case, avg=2.13s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:25,625 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  85%|████████▌ | 17/20 [00:36<00:05,  1.98s/case, avg=2.12s, bad=0, skip=0]zb_up4:  90%|█████████ | 18/20 [00:36<00:03,  1.98s/case, avg=2.12s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:27,618 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  90%|█████████ | 18/20 [00:38<00:03,  1.98s/case, avg=2.11s, bad=0, skip=0]zb_up4:  95%|█████████▌| 19/20 [00:38<00:01,  1.99s/case, avg=2.11s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:29,618 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up4:  95%|█████████▌| 19/20 [00:40<00:01,  1.99s/case, avg=2.11s, bad=0, skip=0]zb_up4: 100%|██████████| 20/20 [00:40<00:00,  1.99s/case, avg=2.11s, bad=0, skip=0]zb_up4: 100%|██████████| 20/20 [00:40<00:00,  2.00s/case, avg=2.11s, bad=0, skip=0]
+[zb_up4] new=20 bad=0 skip=0 elapsed=0.7 min (2.00s/case)
+[zb_up5] total=20 done=0 pending=20
+zb_up5:   0%|          | 0/20 [00:00<?, ?case/s][WARNING|utils.py:1986] 2026-10-19 18:25:31,607 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:   0%|          | 0/20 [00:01<?, ?case/s, avg=1.99s, bad=0, skip=0]zb_up5:   5%|▌         | 1/20 [00:01<00:37,  1.99s/case, avg=1.99s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:33,599 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:   5%|▌         | 1/20 [00:03<00:37,  1.99s/case, avg=3.98s, bad=0, skip=0]zb_up5:  10%|█         | 2/20 [00:03<00:35,  1.99s/case, avg=3.98s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:35,585 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  10%|█         | 2/20 [00:05<00:35,  1.99s/case, avg=2.98s, bad=0, skip=0]zb_up5:  15%|█▌        | 3/20 [00:05<00:33,  1.99s/case, avg=2.98s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:37,570 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  15%|█▌        | 3/20 [00:07<00:33,  1.99s/case, avg=2.65s, bad=0, skip=0]zb_up5:  20%|██        | 4/20 [00:07<00:31,  1.99s/case, avg=2.65s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:39,563 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  20%|██        | 4/20 [00:09<00:31,  1.99s/case, avg=2.49s, bad=0, skip=0]zb_up5:  25%|██▌       | 5/20 [00:09<00:29,  1.99s/case, avg=2.49s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:41,583 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  25%|██▌       | 5/20 [00:11<00:29,  1.99s/case, avg=2.39s, bad=0, skip=0]zb_up5:  30%|███       | 6/20 [00:11<00:28,  2.00s/case, avg=2.39s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:43,583 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  30%|███       | 6/20 [00:13<00:28,  2.00s/case, avg=2.33s, bad=0, skip=0]zb_up5:  35%|███▌      | 7/20 [00:13<00:25,  2.00s/case, avg=2.33s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:45,569 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  35%|███▌      | 7/20 [00:15<00:25,  2.00s/case, avg=2.28s, bad=0, skip=0]zb_up5:  40%|████      | 8/20 [00:15<00:23,  2.00s/case, avg=2.28s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:47,557 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  40%|████      | 8/20 [00:17<00:23,  2.00s/case, avg=2.24s, bad=0, skip=0]zb_up5:  45%|████▌     | 9/20 [00:17<00:21,  1.99s/case, avg=2.24s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:49,545 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  45%|████▌     | 9/20 [00:19<00:21,  1.99s/case, avg=2.21s, bad=0, skip=0]zb_up5:  50%|█████     | 10/20 [00:19<00:19,  1.99s/case, avg=2.21s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:51,525 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  50%|█████     | 10/20 [00:21<00:19,  1.99s/case, avg=2.19s, bad=0, skip=0]zb_up5:  55%|█████▌    | 11/20 [00:21<00:17,  1.99s/case, avg=2.19s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:53,502 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  55%|█████▌    | 11/20 [00:23<00:17,  1.99s/case, avg=2.17s, bad=0, skip=0]zb_up5:  60%|██████    | 12/20 [00:23<00:15,  1.98s/case, avg=2.17s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:55,486 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  60%|██████    | 12/20 [00:25<00:15,  1.98s/case, avg=2.16s, bad=0, skip=0]zb_up5:  65%|██████▌   | 13/20 [00:25<00:13,  1.98s/case, avg=2.16s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:57,474 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  65%|██████▌   | 13/20 [00:27<00:13,  1.98s/case, avg=2.14s, bad=0, skip=0]zb_up5:  70%|███████   | 14/20 [00:27<00:11,  1.99s/case, avg=2.14s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:25:59,456 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  70%|███████   | 14/20 [00:29<00:11,  1.99s/case, avg=2.13s, bad=0, skip=0]zb_up5:  75%|███████▌  | 15/20 [00:29<00:09,  1.98s/case, avg=2.13s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:26:01,433 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  75%|███████▌  | 15/20 [00:31<00:09,  1.98s/case, avg=2.12s, bad=0, skip=0]zb_up5:  80%|████████  | 16/20 [00:31<00:07,  1.98s/case, avg=2.12s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:26:03,424 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  80%|████████  | 16/20 [00:33<00:07,  1.98s/case, avg=2.11s, bad=0, skip=0]zb_up5:  85%|████████▌ | 17/20 [00:33<00:05,  1.98s/case, avg=2.11s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:26:05,408 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  85%|████████▌ | 17/20 [00:35<00:05,  1.98s/case, avg=2.11s, bad=0, skip=0]zb_up5:  90%|█████████ | 18/20 [00:35<00:03,  1.98s/case, avg=2.11s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:26:07,398 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  90%|█████████ | 18/20 [00:37<00:03,  1.98s/case, avg=2.10s, bad=0, skip=0]zb_up5:  95%|█████████▌| 19/20 [00:37<00:01,  1.99s/case, avg=2.10s, bad=0, skip=0][WARNING|utils.py:1986] 2026-10-19 18:26:09,396 >> Setting `pad_token_id` to `eos_token_id`:248044 for open-end generation.
+zb_up5:  95%|█████████▌| 19/20 [00:39<00:01,  1.99s/case, avg=2.09s, bad=0, skip=0]zb_up5: 100%|██████████| 20/20 [00:39<00:00,  2.00s/case, avg=2.09s, bad=0, skip=0]zb_up5: 100%|██████████| 20/20 [00:39<00:00,  1.99s/case, avg=2.09s, bad=0, skip=0]
+[zb_up5] new=20 bad=0 skip=0 elapsed=0.7 min (1.99s/case)
+
+==============================================================================
+[样本 1] id=0025a5dc99fd5c742026f0b2b030d3e9_L
+  原预测 (prediction_raw) : {"breast_density": "C", "breast_birads": 1, "findings": {"mass": 0, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0}}
+  前缀 (各条件共用文本)   : '{"breast_density": "C", "breast_birads": 1, "findings":'
+  [greedy] 前缀='{"breast_density": "C", "breast_birads": 1, "findings":'
+           完整生成=' {"mass": 0, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0'  n_findings_1=0
+           findings (值, P(1)) = {'mass': (0, 0.0001), 'suspicious_calcification': (0, 0.0), 'asymmetry': (0, 0.0007), 'architectural_distortion': (0, 0.0001)}
+  [down  ] 前缀='{"breast_density": "C", "breast_birads": 1, "findings":'
+           完整生成=' {"mass": 0, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0'  n_findings_1=0
+           findings (值, P(1)) = {'mass': (0, 0.0001), 'suspicious_calcification': (0, 0.0), 'asymmetry': (0, 0.0007), 'architectural_distortion': (0, 0.0001)}
+  [up3   ] 前缀='{"breast_density": "C", "breast_birads": 3, "findings":'
+           完整生成=' {"mass": 0, "suspicious_calcification": 0, "asymmetry": 1, "architectural_distortion": 0'  n_findings_1=1
+           findings (值, P(1)) = {'mass': (0, 0.4073), 'suspicious_calcification': (0, 0.0159), 'asymmetry': (1, 0.8519), 'architectural_distortion': (0, 0.0373)}
+  [up4   ] 前缀='{"breast_density": "C", "breast_birads": 4, "findings":'
+           完整生成=' {"mass": 1, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0'  n_findings_1=1
+           findings (值, P(1)) = {'mass': (1, 0.5927), 'suspicious_calcification': (0, 0.0159), 'asymmetry': (0, 0.0675), 'architectural_distortion': (0, 0.0759)}
+  [up5   ] 前缀='{"breast_density": "C", "breast_birads": 5, "findings":'
+           完整生成=' {"mass": 1, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0'  n_findings_1=1
+           findings (值, P(1)) = {'mass': (1, 0.8669), 'suspicious_calcification': (0, 0.0601), 'asymmetry': (0, 0.0953), 'architectural_distortion': (0, 0.1067)}
+
+==============================================================================
+[样本 2] id=0025a5dc99fd5c742026f0b2b030d3e9_R
+  原预测 (prediction_raw) : {"breast_density": "C", "breast_birads": 1, "findings": {"mass": 0, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0}}
+  前缀 (各条件共用文本)   : '{"breast_density": "C", "breast_birads": 1, "findings":'
+  [greedy] 前缀='{"breast_density": "C", "breast_birads": 1, "findings":'
+           完整生成=' {"mass": 0, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0'  n_findings_1=0
+           findings (值, P(1)) = {'mass': (0, 0.0001), 'suspicious_calcification': (0, 0.0), 'asymmetry': (0, 0.0003), 'architectural_distortion': (0, 0.0001)}
+  [down  ] 前缀='{"breast_density": "C", "breast_birads": 1, "findings":'
+           完整生成=' {"mass": 0, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0'  n_findings_1=0
+           findings (值, P(1)) = {'mass': (0, 0.0001), 'suspicious_calcification': (0, 0.0), 'asymmetry': (0, 0.0003), 'architectural_distortion': (0, 0.0001)}
+  [up3   ] 前缀='{"breast_density": "C", "breast_birads": 3, "findings":'
+           完整生成=' {"mass": 0, "suspicious_calcification": 0, "asymmetry": 1, "architectural_distortion": 0'  n_findings_1=1
+           findings (值, P(1)) = {'mass': (0, 0.3208), 'suspicious_calcification': (0, 0.023), 'asymmetry': (1, 0.867), 'architectural_distortion': (0, 0.0293)}
+  [up4   ] 前缀='{"breast_density": "C", "breast_birads": 4, "findings":'
+           完整生成=' {"mass": 1, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0'  n_findings_1=1
+           findings (值, P(1)) = {'mass': (1, 0.5622), 'suspicious_calcification': (0, 0.0421), 'asymmetry': (0, 0.0759), 'architectural_distortion': (0, 0.1067)}
+  [up5   ] 前缀='{"breast_density": "C", "breast_birads": 5, "findings":'
+           完整生成=' {"mass": 1, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0'  n_findings_1=1
+           findings (值, P(1)) = {'mass': (1, 0.8175), 'suspicious_calcification': (0, 0.1645), 'asymmetry': (0, 0.133), 'architectural_distortion': (0, 0.148)}
+==============================================================================
+
+[SMOKE] sec/case: greedy=2.07  down=2.01  up3=2.01  up4=2.00  up5=1.99
+[SMOKE] 全量 2000 条 × 3 条件 预估 ≈ 336 min (不含模型加载)
+[total] 206s

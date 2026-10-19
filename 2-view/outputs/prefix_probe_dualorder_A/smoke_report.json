@@ -1,0 +1,23 @@
+{
+ "timing": {
+  "greedy": {
+   "sec_per_case": 0.7931712357560172,
+   "elapsed_min": 0.2643904119186724
+  },
+  "zero": {
+   "sec_per_case": 0.7672080942080356,
+   "elapsed_min": 0.25573603140267853
+  },
+  "inject": {
+   "sec_per_case": 0.7654041131492704,
+   "elapsed_min": 0.25513470438309016
+  }
+ },
+ "est_full_min": 77.52611477044411,
+ "smoke_n": 20,
+ "adapter": "/home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-dualorder",
+ "prompt_file": "dataset_build/prompt_order_a.txt",
+ "data": "/home/z/zhao/Mammography/Mammo/2-view/data/splits/test_local.json",
+ "preds": "/home/z/zhao/Mammography/Mammo/2-view/outputs/predictions/predictions_qwen3.5-4b_dualorder_a_2000.jsonl",
+ "model": "/home/z/zhao/Mammography/model/Qwen3.5-4B"
+}
