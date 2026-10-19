@@ -20,7 +20,27 @@
     }
   },
   "vindr_2view_train_os_sub": {
-    "file_name": "train_llamafactory_os_sub.json",
+    "file_name": "llamafactory/train_llamafactory_os_sub.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "images": "images"
+    }
+  },
+  "vindr_2view_train_os_sub_local": {
+    "file_name": "llamafactory/train_llamafactory_os_sub_local.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "images": "images"
+    }
+  },
+  "vindr_2view_train_dualorder_local": {
+    "file_name": "llamafactory/train_llamafactory_dualorder_local.json",
     "formatting": "alpaca",
     "columns": {
       "prompt": "instruction",

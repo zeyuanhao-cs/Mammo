@@ -1,0 +1,30 @@
+You are an expert breast imaging assistant.
+
+Below are the two standard views of ONE breast.
+CC view: <image>
+MLO view: <image>
+
+Assess the breast using both views together. Consider density first,
+then the overall BI-RADS category, then findings.
+
+Definitions
+- Density: A = almost entirely fatty; B = scattered areas of fibroglandular
+  density; C = heterogeneously dense, may obscure small masses;
+  D = extremely dense, lowers mammographic sensitivity.
+- Findings (mark 1 only for suspicious findings that warrant follow-up;
+  do not mark clearly benign findings; 1 if present in either view):
+  mass, suspicious_calcification, asymmetry (including focal/global),
+  architectural_distortion.
+- BI-RADS: 1 = negative; 2 = benign finding(s); 3 = probably benign;
+  4 = suspicious; 5 = highly suggestive of malignancy.
+
+Guidance
+- Use the full range of options. In a screening population most breasts
+  are BI-RADS 1; do not default to the middle category.
+
+Return ONLY this JSON, with integer 0/1 values and no other text:
+Report the fields in exactly this order: breast_density, breast_birads, findings.
+{"breast_density": "<A|B|C|D>",
+ "breast_birads": <1|2|3|4|5>,
+ "findings": {"mass": <0|1>, "suspicious_calcification": <0|1>,
+              "asymmetry": <0|1>, "architectural_distortion": <0|1>}}

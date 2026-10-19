@@ -1,0 +1,61 @@
+# =============================================================================
+# VinDr-Mammo 2-view (CC+MLO) × Qwen3.5-4B LoRA SFT — Repeat-OS 子训练集 本地版
+# 基于 train_lora_2view_os_sub_vt.yaml, 仅做本地适配:
+#   - 模型路径 -> 本地 ModelScope 下载的 Qwen3.5-4B
+#   - 数据集   -> 图片路径已重写为本地的 vindr_2view_train_os_sub_local
+#   - 输出目录 -> 本地 model/
+#
+# 运行: llamafactory-cli train 2-view/configs/train_lora_2view_os_sub_vt_local.yaml
+# =============================================================================
+
+### dataset_dir
+dataset_dir: /home/z/zhao/Mammography/Mammo/2-view/data
+
+### model
+model_name_or_path: /home/z/zhao/Mammography/model/Qwen3.5-4B
+trust_remote_code: true
+image_max_pixels: 786432
+image_min_pixels: 262144
+flash_attn: sdpa
+
+### method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target: all
+freeze_vision_tower: false  # 解冻视觉塔: visual.blocks 纳入 LoRA 目标
+
+### dataset
+dataset: vindr_2view_train_dualorder_local
+template: qwen3_5_nothink
+cutoff_len: 4096
+val_size: 0
+preprocessing_num_workers: 8  # dill 补丁后多进程可用
+dataloader_num_workers: 0  # worker 子进程无法 pickle 梯度检查点局部函数, 改主进程加载
+
+### output
+output_dir: /home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-dualorder
+# 断点续训: 留空(=None)时, 若 output_dir 里存在 checkpoint-*, 自动从最近一个续训
+#   (parser.py 要求 resume_from_checkpoint 为 None 且 overwrite_output_dir 为 false)
+# 也可显式指定: resume_from_checkpoint: /home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-os-sub-vt/checkpoint-200
+logging_steps: 10
+save_steps: 100
+save_total_limit: 3
+plot_loss: true
+overwrite_output_dir: false  # 必须 false, 否则自动续训分支被跳过
+report_to: none
+
+### train
+per_device_train_batch_size: 1   # 本地 A40-24G, 原配置 2 会 OOM; 有效 batch 仍 = 1*16 = 16
+gradient_accumulation_steps: 16
+learning_rate: 5.0e-5
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.05
+bf16: true
+gradient_checkpointing: true
+### eval
+eval_strategy: "no"

@@ -1,879 +1,0 @@
-=== resume training start: Sun Oct  4 15:55:33 NZDT 2026 ===
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-[INFO|2026-10-04 15:55:56] llamafactory.hparams.parser:651 >> Process rank: 0, world size: 1, device: cuda:0, distributed training: False, compute dtype: torch.bfloat16
-[INFO|configuration_utils.py:778] 2026-10-04 15:55:56,293 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/config.json
-[INFO|configuration_utils.py:856] 2026-10-04 15:55:56,311 >> Model config Qwen3_5Config {
-  "architectures": [
-    "Qwen3_5ForConditionalGeneration"
-  ],
-  "image_token_id": 248056,
-  "model_type": "qwen3_5",
-  "text_config": {
-    "attention_bias": false,
-    "attention_dropout": 0.0,
-    "attn_output_gate": true,
-    "bos_token_id": null,
-    "dtype": "bfloat16",
-    "eos_token_id": 248044,
-    "full_attention_interval": 4,
-    "head_dim": 256,
-    "hidden_act": "silu",
-    "hidden_size": 2560,
-    "initializer_range": 0.02,
-    "intermediate_size": 9216,
-    "layer_types": [
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention"
-    ],
-    "linear_conv_kernel_dim": 4,
-    "linear_key_head_dim": 128,
-    "linear_num_key_heads": 16,
-    "linear_num_value_heads": 32,
-    "linear_value_head_dim": 128,
-    "mamba_ssm_dtype": "float32",
-    "max_position_embeddings": 262144,
-    "mlp_only_layers": [],
-    "model_type": "qwen3_5_text",
-    "mtp_num_hidden_layers": 1,
-    "mtp_use_dedicated_embeddings": false,
-    "num_attention_heads": 16,
-    "num_hidden_layers": 32,
-    "num_key_value_heads": 4,
-    "pad_token_id": null,
-    "partial_rotary_factor": 0.25,
-    "rms_norm_eps": 1e-06,
-    "rope_parameters": {
-      "mrope_interleaved": true,
-      "mrope_section": [
-        11,
-        11,
-        10
-      ],
-      "partial_rotary_factor": 0.25,
-      "rope_theta": 10000000,
-      "rope_type": "default"
-    },
-    "tie_word_embeddings": true,
-    "use_cache": true,
-    "vocab_size": 248320
-  },
-  "tie_word_embeddings": true,
-  "transformers_version": "5.8.0",
-  "video_token_id": 248057,
-  "vision_config": {
-    "deepstack_visual_indexes": [],
-    "depth": 24,
-    "hidden_act": "gelu_pytorch_tanh",
-    "hidden_size": 1024,
-    "in_channels": 3,
-    "initializer_range": 0.02,
-    "intermediate_size": 4096,
-    "model_type": "qwen3_5_vision",
-    "num_heads": 16,
-    "num_position_embeddings": 2304,
-    "out_hidden_size": 2560,
-    "patch_size": 16,
-    "spatial_merge_size": 2,
-    "temporal_patch_size": 2
-  },
-  "vision_end_token_id": 248054,
-  "vision_start_token_id": 248053
-}
-
-[INFO|image_processing_base.py:342] 2026-10-04 15:55:57,132 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/preprocessor_config.json
-[INFO|processing_utils.py:1122] 2026-10-04 15:55:57,152 >> loading configuration file None
-[INFO|image_processing_base.py:342] 2026-10-04 15:55:57,154 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/preprocessor_config.json
-[WARNING|logging.py:340] 2026-10-04 15:55:57,154 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
-[INFO|image_processing_base.py:342] 2026-10-04 15:55:57,168 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/preprocessor_config.json
-[INFO|image_processing_base.py:385] 2026-10-04 15:55:57,169 >> Image processor Qwen2VLImageProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_processor_type": "Qwen2VLImageProcessor",
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "merge_size": 2,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "size": {
-    "longest_edge": 16777216,
-    "shortest_edge": 65536
-  },
-  "temporal_patch_size": 2
-}
-
-[INFO|configuration_utils.py:778] 2026-10-04 15:55:57,169 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/config.json
-[INFO|configuration_utils.py:856] 2026-10-04 15:55:57,178 >> Model config Qwen3_5Config {
-  "architectures": [
-    "Qwen3_5ForConditionalGeneration"
-  ],
-  "image_token_id": 248056,
-  "model_type": "qwen3_5",
-  "text_config": {
-    "attention_bias": false,
-    "attention_dropout": 0.0,
-    "attn_output_gate": true,
-    "bos_token_id": null,
-    "dtype": "bfloat16",
-    "eos_token_id": 248044,
-    "full_attention_interval": 4,
-    "head_dim": 256,
-    "hidden_act": "silu",
-    "hidden_size": 2560,
-    "initializer_range": 0.02,
-    "intermediate_size": 9216,
-    "layer_types": [
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention"
-    ],
-    "linear_conv_kernel_dim": 4,
-    "linear_key_head_dim": 128,
-    "linear_num_key_heads": 16,
-    "linear_num_value_heads": 32,
-    "linear_value_head_dim": 128,
-    "mamba_ssm_dtype": "float32",
-    "max_position_embeddings": 262144,
-    "mlp_only_layers": [],
-    "model_type": "qwen3_5_text",
-    "mtp_num_hidden_layers": 1,
-    "mtp_use_dedicated_embeddings": false,
-    "num_attention_heads": 16,
-    "num_hidden_layers": 32,
-    "num_key_value_heads": 4,
-    "pad_token_id": null,
-    "partial_rotary_factor": 0.25,
-    "rms_norm_eps": 1e-06,
-    "rope_parameters": {
-      "mrope_interleaved": true,
-      "mrope_section": [
-        11,
-        11,
-        10
-      ],
-      "partial_rotary_factor": 0.25,
-      "rope_theta": 10000000,
-      "rope_type": "default"
-    },
-    "tie_word_embeddings": true,
-    "use_cache": true,
-    "vocab_size": 248320
-  },
-  "tie_word_embeddings": true,
-  "transformers_version": "5.8.0",
-  "video_token_id": 248057,
-  "vision_config": {
-    "deepstack_visual_indexes": [],
-    "depth": 24,
-    "hidden_act": "gelu_pytorch_tanh",
-    "hidden_size": 1024,
-    "in_channels": 3,
-    "initializer_range": 0.02,
-    "intermediate_size": 4096,
-    "model_type": "qwen3_5_vision",
-    "num_heads": 16,
-    "num_position_embeddings": 2304,
-    "out_hidden_size": 2560,
-    "patch_size": 16,
-    "spatial_merge_size": 2,
-    "temporal_patch_size": 2
-  },
-  "vision_end_token_id": 248054,
-  "vision_start_token_id": 248053
-}
-
-[INFO|video_processing_utils.py:684] 2026-10-04 15:55:57,915 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/video_preprocessor_config.json
-[INFO|video_processing_utils.py:684] 2026-10-04 15:55:57,916 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/video_preprocessor_config.json
-[INFO|video_processing_utils.py:727] 2026-10-04 15:55:57,917 >> Video processor Qwen3VLVideoProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "do_sample_frames": true,
-  "fps": 2,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "max_frames": 768,
-  "merge_size": 2,
-  "min_frames": 4,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "return_metadata": false,
-  "size": {
-    "longest_edge": 25165824,
-    "shortest_edge": 4096
-  },
-  "temporal_patch_size": 2,
-  "video_processor_type": "Qwen3VLVideoProcessor"
-}
-
-[INFO|processing_utils.py:1199] 2026-10-04 15:55:57,918 >> Processor Qwen3VLProcessor:
-- image_processor: Qwen2VLImageProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_processor_type": "Qwen2VLImageProcessor",
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "merge_size": 2,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "size": {
-    "longest_edge": 16777216,
-    "shortest_edge": 65536
-  },
-  "temporal_patch_size": 2
-}
-
-- tokenizer: Qwen2Tokenizer(name_or_path='/nesi/project/massey04900/Mammography/model/Qwen3.5-4B', vocab_size=248044, model_max_length=262144, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'audio_bos_token': '<|audio_start|>', 'audio_eos_token': '<|audio_end|>', 'audio_token': '<|audio_pad|>', 'image_token': '<|image_pad|>', 'video_token': '<|video_pad|>', 'vision_bos_token': '<|vision_start|>', 'vision_eos_token': '<|vision_end|>'}, added_tokens_decoder={
-	248044: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248045: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248046: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248047: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248048: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248049: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248050: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248051: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248052: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248053: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248054: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248055: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248056: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248057: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248058: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248059: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248060: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248061: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248062: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248063: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248064: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248065: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248066: AddedToken("<tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248067: AddedToken("</tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248068: AddedToken("<think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248069: AddedToken("</think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248070: AddedToken("<|audio_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248071: AddedToken("<|audio_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248072: AddedToken("<tts_pad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248073: AddedToken("<tts_text_bos>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248074: AddedToken("<tts_text_eod>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248075: AddedToken("<tts_text_bos_single>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248076: AddedToken("<|audio_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-})
-- video_processor: Qwen3VLVideoProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "do_sample_frames": true,
-  "fps": 2,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "max_frames": 768,
-  "merge_size": 2,
-  "min_frames": 4,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "return_metadata": false,
-  "size": {
-    "longest_edge": 25165824,
-    "shortest_edge": 4096
-  },
-  "temporal_patch_size": 2,
-  "video_processor_type": "Qwen3VLVideoProcessor"
-}
-
-
-{
-  "image_processor": {
-    "do_convert_rgb": true,
-    "do_normalize": true,
-    "do_rescale": true,
-    "do_resize": true,
-    "image_mean": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "image_processor_type": "Qwen2VLImageProcessor",
-    "image_std": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "merge_size": 2,
-    "patch_size": 16,
-    "resample": 3,
-    "rescale_factor": 0.00392156862745098,
-    "size": {
-      "longest_edge": 16777216,
-      "shortest_edge": 65536
-    },
-    "temporal_patch_size": 2
-  },
-  "processor_class": "Qwen3VLProcessor",
-  "video_processor": {
-    "do_convert_rgb": true,
-    "do_normalize": true,
-    "do_rescale": true,
-    "do_resize": true,
-    "do_sample_frames": true,
-    "fps": 2,
-    "image_mean": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "image_std": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "max_frames": 768,
-    "merge_size": 2,
-    "min_frames": 4,
-    "patch_size": 16,
-    "resample": 3,
-    "rescale_factor": 0.00392156862745098,
-    "return_metadata": false,
-    "size": {
-      "longest_edge": 25165824,
-      "shortest_edge": 4096
-    },
-    "temporal_patch_size": 2,
-    "video_processor_type": "Qwen3VLVideoProcessor"
-  }
-}
-
-[INFO|2026-10-04 15:55:58] llamafactory.data.loader:144 >> Loading dataset train_llamafactory_full.json...
-Parameter 'function'=<bound method SupervisedDatasetProcessor.preprocess_dataset of SupervisedDatasetProcessor(template=Template(format_user=StringFormatter(slots=['<|im_start|>user\n{{content}}<|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_assistant=StringFormatter(slots=['{{content}}<|im_end|>\n'], tool_format=None), format_system=StringFormatter(slots=['<|im_start|>system\n{{content}}<|im_end|>\n'], tool_format=None), format_function=FunctionFormatter(slots=['{{content}}<|im_end|>\n'], tool_format='qwen3_5'), format_observation=StringFormatter(slots=['<|im_start|>user\n<tool_response>\n{{content}}\n</tool_response><|im_end|>\n<|im_start|>assistant\n'], tool_format=None), format_tools=ToolFormatter(slots=[], tool_format='qwen3_5'), format_prefix=EmptyFormatter(slots=[], tool_format=None), default_system='', stop_words=['<|im_end|>'], thought_words=('<think>\n', '\n</think>\n\n'), tool_call_words=('<tool_call>', '</tool_call>'), efficient_eos=False, replace_eos=True, replace_jinja_template=False, enable_thinking=True, preserve_thinking=False, mm_plugin=Qwen3VLPlugin(image_token='<|image_pad|>', video_token='<|video_pad|>', audio_token=None, expand_mm_tokens=True, vision_bos_token='<|vision_start|>', vision_eos_token='<|vision_end|>')), tokenizer=Qwen2Tokenizer(name_or_path='/nesi/project/massey04900/Mammography/model/Qwen3.5-4B', vocab_size=248044, model_max_length=262144, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'audio_bos_token': '<|audio_start|>', 'audio_eos_token': '<|audio_end|>', 'audio_token': '<|audio_pad|>', 'image_token': '<|image_pad|>', 'video_token': '<|video_pad|>', 'vision_bos_token': '<|vision_start|>', 'vision_eos_token': '<|vision_end|>'}, added_tokens_decoder={
-	248044: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248045: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248046: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248047: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248048: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248049: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248050: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248051: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248052: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248053: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248054: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248055: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248056: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248057: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248058: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248059: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248060: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248061: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248062: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248063: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248064: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248065: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248066: AddedToken("<tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248067: AddedToken("</tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248068: AddedToken("<think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248069: AddedToken("</think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248070: AddedToken("<|audio_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248071: AddedToken("<|audio_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248072: AddedToken("<tts_pad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248073: AddedToken("<tts_text_bos>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248074: AddedToken("<tts_text_eod>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248075: AddedToken("<tts_text_bos_single>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248076: AddedToken("<|audio_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-}), processor=Qwen3VLProcessor:
-- image_processor: Qwen2VLImageProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_processor_type": "Qwen2VLImageProcessor",
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "merge_size": 2,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "size": {
-    "longest_edge": 16777216,
-    "shortest_edge": 65536
-  },
-  "temporal_patch_size": 2
-}
-
-- tokenizer: Qwen2Tokenizer(name_or_path='/nesi/project/massey04900/Mammography/model/Qwen3.5-4B', vocab_size=248044, model_max_length=262144, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'audio_bos_token': '<|audio_start|>', 'audio_eos_token': '<|audio_end|>', 'audio_token': '<|audio_pad|>', 'image_token': '<|image_pad|>', 'video_token': '<|video_pad|>', 'vision_bos_token': '<|vision_start|>', 'vision_eos_token': '<|vision_end|>'}, added_tokens_decoder={
-	248044: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248045: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248046: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248047: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248048: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248049: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248050: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248051: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248052: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248053: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248054: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248055: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248056: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248057: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248058: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248059: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248060: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248061: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248062: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248063: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248064: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248065: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248066: AddedToken("<tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248067: AddedToken("</tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248068: AddedToken("<think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248069: AddedToken("</think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248070: AddedToken("<|audio_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248071: AddedToken("<|audio_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248072: AddedToken("<tts_pad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248073: AddedToken("<tts_text_bos>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248074: AddedToken("<tts_text_eod>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248075: AddedToken("<tts_text_bos_single>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248076: AddedToken("<|audio_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-})
-- video_processor: Qwen3VLVideoProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "do_sample_frames": true,
-  "fps": 2,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "max_frames": 768,
-  "merge_size": 2,
-  "min_frames": 4,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "return_metadata": false,
-  "size": {
-    "longest_edge": 25165824,
-    "shortest_edge": 4096
-  },
-  "temporal_patch_size": 2,
-  "video_processor_type": "Qwen3VLVideoProcessor"
-}
-
-
-{
-  "image_processor": {
-    "do_convert_rgb": true,
-    "do_normalize": true,
-    "do_rescale": true,
-    "do_resize": true,
-    "image_mean": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "image_processor_type": "Qwen2VLImageProcessor",
-    "image_std": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "merge_size": 2,
-    "patch_size": 16,
-    "resample": 3,
-    "rescale_factor": 0.00392156862745098,
-    "size": {
-      "longest_edge": 16777216,
-      "shortest_edge": 65536
-    },
-    "temporal_patch_size": 2
-  },
-  "processor_class": "Qwen3VLProcessor",
-  "video_processor": {
-    "do_convert_rgb": true,
-    "do_normalize": true,
-    "do_rescale": true,
-    "do_resize": true,
-    "do_sample_frames": true,
-    "fps": 2,
-    "image_mean": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "image_std": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "max_frames": 768,
-    "merge_size": 2,
-    "min_frames": 4,
-    "patch_size": 16,
-    "resample": 3,
-    "rescale_factor": 0.00392156862745098,
-    "return_metadata": false,
-    "size": {
-      "longest_edge": 25165824,
-      "shortest_edge": 4096
-    },
-    "temporal_patch_size": 2,
-    "video_processor_type": "Qwen3VLVideoProcessor"
-  }
-}
-, data_args=DataArguments(template='qwen3_5_nothink', dataset=['vindr_2view_train'], eval_dataset=None, dataset_dir='/home/zhao/Mammography/Mammo/2-view', media_dir='/home/zhao/Mammography/Mammo/2-view', cutoff_len=4096, train_on_prompt=False, mask_history=False, streaming=False, buffer_size=16384, mix_strategy='concat', interleave_probs=None, overwrite_cache=False, preprocessing_batch_size=1000, preprocessing_num_workers=8, max_samples=None, eval_num_beams=None, ignore_pad_token_for_loss=True, val_size=0, eval_on_each_dataset=False, packing=False, neat_packing=False, tool_format=None, default_system=None, enable_thinking=True, reasoning_effort='xhigh', preserve_thinking=None, tokenized_path=None, data_shared_file_system=False))> of the transform datasets.arrow_dataset.Dataset._map_single couldn't be hashed properly, a random hash was used instead. Make sure your transforms and parameters are serializable with pickle or dill for the dataset fingerprinting and caching to work. If you reuse this transform, the caching mechanism will consider it to be different from the previous calls and recompute everything. This warning is only showed once. Subsequent hashing failures won't be showed.
-Running tokenizer on dataset (num_proc=8):   0%|          | 0/7999 [00:00<?, ? examples/s]Running tokenizer on dataset (num_proc=8):  13%|█▎        | 1000/7999 [07:36<53:17,  2.19 examples/s]Running tokenizer on dataset (num_proc=8):  25%|██▌       | 2000/7999 [07:48<19:31,  5.12 examples/s]Running tokenizer on dataset (num_proc=8):  25%|██▌       | 2000/7999 [07:59<19:31,  5.12 examples/s]Running tokenizer on dataset (num_proc=8):  38%|███▊      | 3000/7999 [08:03<09:24,  8.86 examples/s]Running tokenizer on dataset (num_proc=8):  50%|█████     | 4000/7999 [08:13<04:48, 13.86 examples/s]Running tokenizer on dataset (num_proc=8):  63%|██████▎   | 5000/7999 [08:16<02:21, 21.18 examples/s]Running tokenizer on dataset (num_proc=8):  75%|███████▌  | 6000/7999 [08:19<01:04, 31.21 examples/s]Running tokenizer on dataset (num_proc=8):  88%|████████▊ | 7000/7999 [08:20<00:21, 45.76 examples/s]Running tokenizer on dataset (num_proc=8): 100%|██████████| 7999/7999 [08:21<00:00, 64.38 examples/s]Running tokenizer on dataset (num_proc=8): 100%|██████████| 7999/7999 [08:22<00:00, 15.92 examples/s]
-[INFO|configuration_utils.py:778] 2026-10-04 16:04:21,414 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/config.json
-[INFO|configuration_utils.py:856] 2026-10-04 16:04:21,424 >> Model config Qwen3_5Config {
-  "architectures": [
-    "Qwen3_5ForConditionalGeneration"
-  ],
-  "image_token_id": 248056,
-  "model_type": "qwen3_5",
-  "text_config": {
-    "attention_bias": false,
-    "attention_dropout": 0.0,
-    "attn_output_gate": true,
-    "bos_token_id": null,
-    "dtype": "bfloat16",
-    "eos_token_id": 248044,
-    "full_attention_interval": 4,
-    "head_dim": 256,
-    "hidden_act": "silu",
-    "hidden_size": 2560,
-    "initializer_range": 0.02,
-    "intermediate_size": 9216,
-    "layer_types": [
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention"
-    ],
-    "linear_conv_kernel_dim": 4,
-    "linear_key_head_dim": 128,
-    "linear_num_key_heads": 16,
-    "linear_num_value_heads": 32,
-    "linear_value_head_dim": 128,
-    "mamba_ssm_dtype": "float32",
-    "max_position_embeddings": 262144,
-    "mlp_only_layers": [],
-    "model_type": "qwen3_5_text",
-    "mtp_num_hidden_layers": 1,
-    "mtp_use_dedicated_embeddings": false,
-    "num_attention_heads": 16,
-    "num_hidden_layers": 32,
-    "num_key_value_heads": 4,
-    "pad_token_id": null,
-    "partial_rotary_factor": 0.25,
-    "rms_norm_eps": 1e-06,
-    "rope_parameters": {
-      "mrope_interleaved": true,
-      "mrope_section": [
-        11,
-        11,
-        10
-      ],
-      "partial_rotary_factor": 0.25,
-      "rope_theta": 10000000,
-      "rope_type": "default"
-    },
-    "tie_word_embeddings": true,
-    "use_cache": true,
-    "vocab_size": 248320
-  },
-  "tie_word_embeddings": true,
-  "transformers_version": "5.8.0",
-  "video_token_id": 248057,
-  "vision_config": {
-    "deepstack_visual_indexes": [],
-    "depth": 24,
-    "hidden_act": "gelu_pytorch_tanh",
-    "hidden_size": 1024,
-    "in_channels": 3,
-    "initializer_range": 0.02,
-    "intermediate_size": 4096,
-    "model_type": "qwen3_5_vision",
-    "num_heads": 16,
-    "num_position_embeddings": 2304,
-    "out_hidden_size": 2560,
-    "patch_size": 16,
-    "spatial_merge_size": 2,
-    "temporal_patch_size": 2
-  },
-  "vision_end_token_id": 248054,
-  "vision_start_token_id": 248053
-}
-
-training example:
-input_ids:
-[248045, 846, 198, 2523, 513, 449, 6009, 16708, 30619, 17313, 13, 271, 36948, 513, 279, 1330, 5129, 6001, 314, 23287, 16708, 13, 198, 3580, 1593, 25, 220, 248053, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248054, 198, 44, 1537, 1593, 25, 220, 248053, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248056, 248054, 271, 5439, 425, 279, 16708, 1608, 2107, 6001, 3658, 13, 20495, 16940, 1118, 11, 198, 3282, 14192, 11, 1179, 279, 7830, 45483, 10592, 47876, 5407, 13, 271, 48839, 198, 12, 70145, 25, 357, 283, 4409, 11040, 37694, 26, 417, 283, 35742, 5493, 314, 15336, 11579, 1867, 1231, 198, 220, 16940, 26, 351, 283, 28487, 32025, 6799, 27044, 11, 1189, 38225, 2526, 30599, 26, 198, 220, 414, 283, 8744, 27044, 11, 69569, 33784, 12315, 25598, 13, 198, 12, 7145, 793, 318, 3854, 220, 16, 1132, 364, 30296, 14192, 421, 6870, 1732, 5072, 26, 198, 220, 635, 524, 1804, 9077, 62041, 14192, 26, 220, 16, 413, 2945, 303, 2892, 1593, 1590, 198, 220, 2973, 11, 30296, 36973, 2325, 11, 51505, 31179, 318, 15693, 39742, 37693, 681, 198, 220, 41052, 15559, 25060, 13, 198, 12, 45483, 10592, 47876, 25, 220, 16, 283, 7968, 26, 220, 17, 283, 62041, 8996, 1104, 1174, 220, 18, 283, 4507, 62041, 26, 198, 220, 220, 19, 283, 30296, 26, 220, 20, 283, 7309, 95075, 314, 57224, 6364, 13, 271, 14777, 45522, 198, 12, 1368, 866, 8996, 369, 220, 16, 11, 16708, 853, 396, 7421, 1902, 381, 220, 18, 11, 220, 19, 466, 220, 20, 13, 198, 12, 1368, 660, 14192, 513, 220, 15, 11, 16708, 853, 396, 7421, 1902, 381, 220, 16, 466, 220, 17, 13, 198, 12, 5272, 279, 2400, 2020, 314, 2519, 13, 733, 264, 21574, 6823, 1379, 35148, 198, 220, 513, 45483, 10592, 47876, 220, 16, 26, 635, 524, 1581, 310, 279, 5956, 5407, 13, 271, 5423, 25835, 411, 4566, 11, 440, 7308, 220, 15, 14, 16, 2663, 321, 874, 975, 1414, 25, 198, 4754, 19887, 544, 51559, 763, 3919, 32, 91, 33, 91, 34, 91, 35, 20507, 198, 328, 3772, 793, 763, 5046, 25490, 763, 361, 15, 91, 16, 7813, 328, 82, 28792, 9340, 36973, 2325, 763, 361, 15, 91, 16, 7813, 198, 1025, 328, 299, 1544, 31179, 763, 361, 15, 91, 16, 7813, 328, 1077, 8101, 4038, 15559, 25060, 763, 361, 15, 91, 16, 29, 2069, 198, 328, 19887, 544, 853, 396, 7421, 763, 361, 16, 91, 17, 91, 18, 91, 19, 91, 20, 50289, 248046, 198, 248045, 74455, 198, 4754, 19887, 544, 51559, 763, 328, 34, 487, 328, 3772, 793, 763, 5046, 25490, 763, 220, 15, 11, 328, 82, 28792, 9340, 36973, 2325, 763, 220, 15, 11, 328, 299, 1544, 31179, 763, 220, 15, 11, 328, 1077, 8101, 4038, 15559, 25060, 763, 220, 15, 2069, 328, 19887, 544, 853, 396, 7421, 763, 220, 17, 92, 248046, 198]
-inputs:
-<|im_start|>user
-You are an expert breast imaging assistant.
-
-Below are the two standard views of ONE breast.
-CC view: <|vision_start|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|vision_end|>
-MLO view: <|vision_start|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|image_pad|><|vision_end|>
-
-Assess the breast using both views together. Consider density first,
-then findings, then the overall BI-RADS category.
-
-Definitions
-- Density: A = almost entirely fatty; B = scattered areas of fibroglandular
-  density; C = heterogeneously dense, may obscure small masses;
-  D = extremely dense, lowers mammographic sensitivity.
-- Findings (mark 1 only for suspicious findings that warrant follow-up;
-  do not mark clearly benign findings; 1 if present in either view):
-  mass, suspicious_calcification, asymmetry (including focal/global),
-  architectural_distortion.
-- BI-RADS: 1 = negative; 2 = benign finding(s); 3 = probably benign;
-  4 = suspicious; 5 = highly suggestive of malignancy.
-
-Consistency
-- If any finding is 1, breast_birads must be 3, 4 or 5.
-- If all findings are 0, breast_birads must be 1 or 2.
-- Use the full range of options. In a screening population most breasts
-  are BI-RADS 1; do not default to the middle category.
-
-Return ONLY this JSON, with integer 0/1 values and no other text:
-{"breast_density": "<A|B|C|D>",
- "findings": {"mass": <0|1>, "suspicious_calcification": <0|1>,
-              "asymmetry": <0|1>, "architectural_distortion": <0|1>},
- "breast_birads": <1|2|3|4|5>}<|im_end|>
-<|im_start|>assistant
-{"breast_density": "C", "findings": {"mass": 0, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0}, "breast_birads": 2}<|im_end|>
-
-label_ids:
-[-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 4754, 19887, 544, 51559, 763, 328, 34, 487, 328, 3772, 793, 763, 5046, 25490, 763, 220, 15, 11, 328, 82, 28792, 9340, 36973, 2325, 763, 220, 15, 11, 328, 299, 1544, 31179, 763, 220, 15, 11, 328, 1077, 8101, 4038, 15559, 25060, 763, 220, 15, 2069, 328, 19887, 544, 853, 396, 7421, 763, 220, 17, 92, 248046, 198]
-labels:
-{"breast_density": "C", "findings": {"mass": 0, "suspicious_calcification": 0, "asymmetry": 0, "architectural_distortion": 0}, "breast_birads": 2}<|im_end|>
-
-[INFO|2026-10-04 16:04:21] llamafactory.model.model_utils.kv_cache:144 >> KV cache is disabled during training.
-[INFO|modeling_utils.py:766] 2026-10-04 16:04:21,946 >> loading weights file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/model.safetensors.index.json
-[INFO|modeling_utils.py:852] 2026-10-04 16:04:23,019 >> Since the `dtype` attribute can't be found in model's config object, will use dtype=torch.bfloat16 as derived from model's weights
-[INFO|configuration_utils.py:1086] 2026-10-04 16:04:23,024 >> Generate config GenerationConfig {
-  "output_attentions": false,
-  "output_hidden_states": false,
-  "use_cache": false
-}
-
-[WARNING|logging.py:340] 2026-10-04 16:04:23,059 >> The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
-Loading weights:   0%|          | 0/723 [00:00<?, ?it/s]Loading weights:   0%|          | 1/723 [00:00<08:07,  1.48it/s]Loading weights:   2%|▏         | 14/723 [00:00<00:30, 23.42it/s]Loading weights:   4%|▎         | 26/723 [00:00<00:16, 42.36it/s]Loading weights:   5%|▌         | 37/723 [00:01<00:12, 54.23it/s]Loading weights:   7%|▋         | 47/723 [00:01<00:11, 57.01it/s]Loading weights:   8%|▊         | 58/723 [00:01<00:09, 66.99it/s]Loading weights:  10%|█         | 75/723 [00:01<00:07, 87.92it/s]Loading weights:  12%|█▏        | 86/723 [00:01<00:07, 90.96it/s]Loading weights:  13%|█▎        | 97/723 [00:01<00:07, 88.19it/s]Loading weights:  16%|█▌        | 114/723 [00:01<00:05, 104.08it/s]Loading weights:  18%|█▊        | 129/723 [00:01<00:05, 109.88it/s]Loading weights:  20%|█▉        | 143/723 [00:02<00:05, 111.70it/s]Loading weights:  21%|██▏       | 155/723 [00:02<00:06, 94.45it/s] Loading weights:  24%|██▍       | 172/723 [00:02<00:04, 111.95it/s]Loading weights:  26%|██▌       | 185/723 [00:02<00:04, 114.41it/s]Loading weights:  27%|██▋       | 198/723 [00:02<00:04, 114.33it/s]Loading weights:  29%|██▉       | 210/723 [00:02<00:05, 99.40it/s] Loading weights:  31%|███▏      | 226/723 [00:02<00:04, 109.99it/s]Loading weights:  33%|███▎      | 240/723 [00:02<00:04, 113.23it/s]Loading weights:  35%|███▌      | 254/723 [00:03<00:04, 115.37it/s]Loading weights:  38%|███▊      | 274/723 [00:03<00:03, 136.61it/s]Loading weights:  40%|███▉      | 289/723 [00:03<00:03, 126.41it/s]Loading weights:  42%|████▏     | 306/723 [00:03<00:03, 128.89it/s]Loading weights:  44%|████▍     | 320/723 [00:03<00:03, 118.90it/s]Loading weights:  46%|████▋     | 335/723 [00:03<00:03, 124.94it/s]Loading weights:  48%|████▊     | 348/723 [00:03<00:03, 123.84it/s]Loading weights:  50%|████▉     | 361/723 [00:03<00:03, 118.75it/s]Loading weights:  52%|█████▏    | 379/723 [00:03<00:02, 131.89it/s]Loading weights:  54%|█████▍    | 393/723 [00:04<00:02, 132.46it/s]Loading weights:  57%|█████▋    | 409/723 [00:04<00:02, 133.47it/s]Loading weights:  59%|█████▊    | 423/723 [00:04<00:02, 127.07it/s]Loading weights:  64%|██████▍   | 466/723 [00:04<00:01, 207.94it/s]Loading weights:  78%|███████▊  | 562/723 [00:04<00:00, 414.77it/s]Loading weights:  91%|█████████▏| 660/723 [00:04<00:00, 573.18it/s]Loading weights: 100%|██████████| 723/723 [00:04<00:00, 154.72it/s]
-[INFO|utils.py:412] 2026-10-04 16:04:29,311 >> Generation config file not found, using a generation config created from the model config.
-[INFO|configuration_utils.py:1037] 2026-10-04 16:04:29,312 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/config.json
-[INFO|configuration_utils.py:1086] 2026-10-04 16:04:29,312 >> Generate config GenerationConfig {}
-
-[INFO|dynamic_module_utils.py:441] 2026-10-04 16:04:29,312 >> Could not locate the custom_generate/generate.py inside /nesi/project/massey04900/Mammography/model/Qwen3.5-4B.
-[INFO|2026-10-04 16:04:29] llamafactory.model.model_utils.checkpointing:144 >> Gradient checkpointing enabled.
-[INFO|2026-10-04 16:04:29] llamafactory.model.model_utils.attention:144 >> Using torch SDPA for faster training and inference.
-[INFO|2026-10-04 16:04:29] llamafactory.model.adapter:144 >> Upcasting trainable params to float32.
-[INFO|2026-10-04 16:04:29] llamafactory.model.adapter:144 >> Fine-tuning method: LoRA
-[INFO|2026-10-04 16:04:29] llamafactory.model.model_utils.misc:144 >> Found linear modules: down_proj,k_proj,v_proj,in_proj_qkv,in_proj_z,up_proj,in_proj_b,out_proj,q_proj,gate_proj,o_proj,in_proj_a
-[INFO|2026-10-04 16:04:29] llamafactory.model.model_utils.visual:144 >> Set vision model not trainable: ['visual.pos_embed', 'visual.patch_embed', 'visual.blocks'].
-[INFO|2026-10-04 16:04:29] llamafactory.model.model_utils.visual:144 >> Set multi model projector not trainable: ['model.visual.merger'].
-[INFO|2026-10-04 16:04:29] llamafactory.model.loader:144 >> trainable params: 16,232,448 || all params: 4,555,497,984 || trainable%: 0.3563
-[WARNING|2026-10-04 16:04:29] llamafactory.train.callbacks:155 >> Previous trainer log in this folder will be deleted.
-[WARNING|trainer_utils.py:1238] 2026-10-04 16:04:29,801 >> The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 248046, 'pad_token_id': 248044}.
-[INFO|trainer.py:3343] 2026-10-04 16:04:29,803 >> Loading model from /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/checkpoint-400.
-[INFO|trainer.py:1469] 2026-10-04 16:04:31,070 >> ***** Running training *****
-[INFO|trainer.py:1470] 2026-10-04 16:04:31,070 >>   Num examples = 7,999
-[INFO|trainer.py:1471] 2026-10-04 16:04:31,070 >>   Num Epochs = 1
-[INFO|trainer.py:1472] 2026-10-04 16:04:31,070 >>   Num update steps per epoch = 500
-[INFO|trainer.py:1473] 2026-10-04 16:04:31,070 >>   Instantaneous batch size per device = 2
-[INFO|trainer.py:1476] 2026-10-04 16:04:31,070 >>   Total train batch size (w. parallel, distributed & accumulation) = 16
-[INFO|trainer.py:1477] 2026-10-04 16:04:31,070 >>   Gradient Accumulation steps = 8
-[INFO|trainer.py:1478] 2026-10-04 16:04:31,070 >>   Total optimization steps = 500
-[INFO|trainer.py:1479] 2026-10-04 16:04:31,078 >>   Number of trainable parameters = 16,232,448
-[INFO|trainer.py:1482] 2026-10-04 16:04:31,078 >>   Resuming training from checkpoint with epoch 0 and global step 400
-[INFO|trainer.py:1486] 2026-10-04 16:04:31,078 >>   Fast-forwarding the dataloader past 0 epochs and 3200 batches to resume from the exact training state.
-  0%|          | 0/500 [00:00<?, ?it/s] 80%|████████  | 401/500 [00:33<00:08, 12.11it/s] 80%|████████  | 401/500 [00:48<00:08, 12.11it/s] 80%|████████  | 402/500 [01:03<00:18,  5.21it/s] 81%|████████  | 403/500 [01:34<00:33,  2.92it/s] 81%|████████  | 404/500 [02:05<00:54,  1.78it/s] 81%|████████  | 405/500 [02:35<01:22,  1.15it/s] 81%|████████  | 406/500 [03:06<02:01,  1.29s/it] 81%|████████▏ | 407/500 [03:36<02:54,  1.87s/it] 82%|████████▏ | 408/500 [04:07<04:04,  2.66s/it] 82%|████████▏ | 409/500 [04:38<05:39,  3.73s/it] 82%|████████▏ | 410/500 [05:08<07:39,  5.11s/it]                                                  82%|████████▏ | 410/500 [05:08<07:39,  5.11s/it] 82%|████████▏ | 411/500 [05:39<10:11,  6.87s/it] 82%|████████▏ | 412/500 [06:10<13:15,  9.04s/it] 83%|████████▎ | 413/500 [06:40<16:35, 11.44s/it] 83%|████████▎ | 414/500 [07:11<20:12, 14.10s/it] 83%|████████▎ | 415/500 [07:41<23:53, 16.86s/it] 83%|████████▎ | 416/500 [08:13<27:36, 19.72s/it] 83%|████████▎ | 417/500 [08:44<30:37, 22.14s/it] 84%|████████▎ | 418/500 [09:15<33:05, 24.21s/it] 84%|████████▍ | 419/500 [09:46<35:05, 26.00s/it] 84%|████████▍ | 420/500 [10:18<36:32, 27.40s/it]                                                  84%|████████▍ | 420/500 [10:18<36:32, 27.40s/it] 84%|████████▍ | 421/500 [10:48<37:08, 28.21s/it] 84%|████████▍ | 422/500 [11:19<37:37, 28.94s/it] 85%|████████▍ | 423/500 [11:49<37:42, 29.38s/it] 85%|████████▍ | 424/500 [12:20<37:49, 29.86s/it] 85%|████████▌ | 425/500 [12:51<37:42, 30.17s/it] 85%|████████▌ | 426/500 [13:22<37:25, 30.34s/it] 85%|████████▌ | 427/500 [13:52<36:49, 30.26s/it] 86%|████████▌ | 428/500 [14:23<36:33, 30.46s/it] 86%|████████▌ | 429/500 [14:54<36:10, 30.56s/it] 86%|████████▌ | 430/500 [15:25<35:46, 30.66s/it]                                                  86%|████████▌ | 430/500 [15:25<35:46, 30.66s/it] 86%|████████▌ | 431/500 [15:56<35:32, 30.90s/it] 86%|████████▋ | 432/500 [16:27<34:57, 30.85s/it] 87%|████████▋ | 433/500 [16:58<34:23, 30.80s/it] 87%|████████▋ | 434/500 [17:29<33:55, 30.84s/it] 87%|████████▋ | 435/500 [17:59<33:12, 30.65s/it] 87%|████████▋ | 436/500 [18:28<32:16, 30.26s/it] 87%|████████▋ | 437/500 [18:57<31:28, 29.97s/it] 88%|████████▊ | 438/500 [19:27<30:44, 29.75s/it] 88%|████████▊ | 439/500 [19:56<30:04, 29.58s/it] 88%|████████▊ | 440/500 [20:25<29:31, 29.53s/it]                                                  88%|████████▊ | 440/500 [20:25<29:31, 29.53s/it] 88%|████████▊ | 441/500 [20:55<29:03, 29.55s/it] 88%|████████▊ | 442/500 [21:24<28:29, 29.47s/it] 89%|████████▊ | 443/500 [21:54<27:59, 29.47s/it] 89%|████████▉ | 444/500 [22:23<27:27, 29.41s/it] 89%|████████▉ | 445/500 [22:52<26:55, 29.38s/it] 89%|████████▉ | 446/500 [23:22<26:30, 29.45s/it] 89%|████████▉ | 447/500 [23:52<26:04, 29.53s/it] 90%|████████▉ | 448/500 [24:21<25:37, 29.56s/it] 90%|████████▉ | 449/500 [24:51<25:12, 29.66s/it] 90%|█████████ | 450/500 [25:21<24:46, 29.73s/it]                                                  90%|█████████ | 450/500 [25:21<24:46, 29.73s/it] 90%|█████████ | 451/500 [25:51<24:15, 29.71s/it] 90%|█████████ | 452/500 [26:20<23:43, 29.66s/it] 91%|█████████ | 453/500 [26:50<23:17, 29.74s/it] 91%|█████████ | 454/500 [27:20<22:51, 29.83s/it] 91%|█████████ | 455/500 [27:50<22:20, 29.79s/it] 91%|█████████ | 456/500 [28:19<21:47, 29.71s/it] 91%|█████████▏| 457/500 [28:49<21:17, 29.71s/it] 92%|█████████▏| 458/500 [29:19<20:53, 29.83s/it] 92%|█████████▏| 459/500 [29:50<20:34, 30.11s/it] 92%|█████████▏| 460/500 [30:21<20:11, 30.30s/it]                                                  92%|█████████▏| 460/500 [30:21<20:11, 30.30s/it] 92%|█████████▏| 461/500 [30:52<19:54, 30.62s/it] 92%|█████████▏| 462/500 [31:22<19:15, 30.41s/it] 93%|█████████▎| 463/500 [31:54<18:57, 30.75s/it] 93%|█████████▎| 464/500 [32:25<18:33, 30.92s/it] 93%|█████████▎| 465/500 [32:56<18:01, 30.90s/it] 93%|█████████▎| 466/500 [33:27<17:30, 30.90s/it] 93%|█████████▎| 467/500 [33:58<17:04, 31.06s/it] 94%|█████████▎| 468/500 [34:29<16:36, 31.15s/it] 94%|█████████▍| 469/500 [35:01<16:06, 31.17s/it] 94%|█████████▍| 470/500 [35:32<15:32, 31.10s/it]                                                  94%|█████████▍| 470/500 [35:32<15:32, 31.10s/it] 94%|█████████▍| 471/500 [36:02<14:59, 31.02s/it] 94%|█████████▍| 472/500 [36:34<14:29, 31.07s/it] 95%|█████████▍| 473/500 [37:04<13:57, 31.02s/it] 95%|█████████▍| 474/500 [37:36<13:28, 31.08s/it] 95%|█████████▌| 475/500 [38:07<12:59, 31.20s/it] 95%|█████████▌| 476/500 [38:38<12:26, 31.12s/it] 95%|█████████▌| 477/500 [39:09<11:56, 31.14s/it] 96%|█████████▌| 478/500 [39:40<11:24, 31.10s/it] 96%|█████████▌| 479/500 [40:12<10:53, 31.14s/it] 96%|█████████▌| 480/500 [40:43<10:25, 31.27s/it]                                                  96%|█████████▌| 480/500 [40:43<10:25, 31.27s/it] 96%|█████████▌| 481/500 [41:14<09:50, 31.10s/it] 96%|█████████▋| 482/500 [41:45<09:19, 31.06s/it] 97%|█████████▋| 483/500 [42:16<08:48, 31.10s/it] 97%|█████████▋| 484/500 [42:47<08:16, 31.04s/it] 97%|█████████▋| 485/500 [43:18<07:46, 31.11s/it] 97%|█████████▋| 486/500 [43:50<07:17, 31.23s/it] 97%|█████████▋| 487/500 [44:20<06:43, 31.05s/it] 98%|█████████▊| 488/500 [44:51<06:11, 30.97s/it] 98%|█████████▊| 489/500 [45:22<05:42, 31.09s/it] 98%|█████████▊| 490/500 [45:53<05:10, 31.06s/it]                                                  98%|█████████▊| 490/500 [45:53<05:10, 31.06s/it] 98%|█████████▊| 491/500 [46:25<04:40, 31.22s/it] 98%|█████████▊| 492/500 [46:57<04:10, 31.37s/it] 99%|█████████▊| 493/500 [47:28<03:38, 31.25s/it] 99%|█████████▉| 494/500 [47:59<03:06, 31.14s/it] 99%|█████████▉| 495/500 [48:30<02:35, 31.17s/it] 99%|█████████▉| 496/500 [49:01<02:04, 31.13s/it] 99%|█████████▉| 497/500 [49:33<01:33, 31.33s/it]100%|█████████▉| 498/500 [50:04<01:02, 31.42s/it]100%|█████████▉| 499/500 [50:35<00:31, 31.31s/it]100%|██████████| 500/500 [51:06<00:00, 31.06s/it]                                                 100%|██████████| 500/500 [51:06<00:00, 31.06s/it][INFO|trainer.py:3815] 2026-10-04 16:55:37,406 >> Saving model checkpoint to /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/checkpoint-500
-[INFO|tokenization_utils_base.py:3281] 2026-10-04 16:55:38,201 >> chat template saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/checkpoint-500/chat_template.jinja
-[INFO|tokenization_utils_base.py:2114] 2026-10-04 16:55:38,203 >> tokenizer config file saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/checkpoint-500/tokenizer_config.json
-[INFO|tokenization_utils_base.py:3281] 2026-10-04 16:55:38,809 >> chat template saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/checkpoint-500/chat_template.jinja
-[INFO|tokenization_utils_base.py:2114] 2026-10-04 16:55:38,811 >> tokenizer config file saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/checkpoint-500/tokenizer_config.json
-[INFO|processing_utils.py:881] 2026-10-04 16:55:39,060 >> chat template saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/checkpoint-500/chat_template.jinja
-[INFO|processing_utils.py:899] 2026-10-04 16:55:39,063 >> processor saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/checkpoint-500/processor_config.json
-[INFO|trainer.py:1823] 2026-10-04 16:55:39,064 >> 
-
-Training completed. Do not forget to share your model on huggingface.co/models =)
-
-
-                                                 100%|██████████| 500/500 [51:07<00:00, 31.06s/it]100%|██████████| 500/500 [51:07<00:00,  6.14s/it]
-[INFO|tokenization_utils_base.py:3281] 2026-10-04 16:55:39,069 >> chat template saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/chat_template.jinja
-[INFO|tokenization_utils_base.py:2114] 2026-10-04 16:55:39,070 >> tokenizer config file saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/tokenizer_config.json
-[INFO|processing_utils.py:881] 2026-10-04 16:55:39,292 >> chat template saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/chat_template.jinja
-[INFO|processing_utils.py:899] 2026-10-04 16:55:39,295 >> processor saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/processor_config.json
-[INFO|trainer.py:3815] 2026-10-04 16:55:39,298 >> Saving model checkpoint to /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view
-[INFO|tokenization_utils_base.py:3281] 2026-10-04 16:55:40,095 >> chat template saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/chat_template.jinja
-[INFO|tokenization_utils_base.py:2114] 2026-10-04 16:55:40,096 >> tokenizer config file saved in /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/tokenizer_config.json
-{'loss': '0.02292', 'grad_norm': '0.1822', 'learning_rate': '4.393e-06', 'epoch': '0.82'}
-{'loss': '0.02487', 'grad_norm': '0.2639', 'learning_rate': '3.503e-06', 'epoch': '0.84'}
-{'loss': '0.01806', 'grad_norm': '0.09708', 'learning_rate': '2.706e-06', 'epoch': '0.86'}
-{'loss': '0.02161', 'grad_norm': '0.1218', 'learning_rate': '2.007e-06', 'epoch': '0.88'}
-{'loss': '0.02263', 'grad_norm': '0.08696', 'learning_rate': '1.409e-06', 'epoch': '0.9'}
-{'loss': '0.01935', 'grad_norm': '0.1287', 'learning_rate': '9.135e-07', 'epoch': '0.92'}
-{'loss': '0.02443', 'grad_norm': '0.1634', 'learning_rate': '5.236e-07', 'epoch': '0.94'}
-{'loss': '0.02108', 'grad_norm': '0.1071', 'learning_rate': '2.407e-07', 'epoch': '0.96'}
-{'loss': '0.02151', 'grad_norm': '0.191', 'learning_rate': '6.613e-08', 'epoch': '0.98'}
-{'loss': '0.02202', 'grad_norm': '0.1501', 'learning_rate': '5.468e-10', 'epoch': '1'}
-{'train_runtime': '3068', 'train_samples_per_second': '2.607', 'train_steps_per_second': '0.163', 'train_loss': '0.00437', 'epoch': '1'}
-***** train metrics *****
-  epoch                    =         1.0
-  total_flos               = 344599361GF
-  train_loss               =      0.0044
-  train_runtime            =  0:51:07.98
-  train_samples_per_second =       2.607
-  train_steps_per_second   =       0.163
-Figure saved at: /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view/training_loss.png
-[WARNING|2026-10-04 16:55:40] llamafactory.extras.ploting:149 >> No metric eval_loss to plot.
-[WARNING|2026-10-04 16:55:40] llamafactory.extras.ploting:149 >> No metric eval_accuracy to plot.
-[INFO|modelcard.py:263] 2026-10-04 16:55:40,503 >> Dropping the following result as it does not have all the necessary fields:
-{'task': {'name': 'Causal Language Modeling', 'type': 'text-generation'}}
-=== TRAIN_OK: Sun Oct  4 16:55:44 NZDT 2026 ===
-=== inference start: Sun Oct  4 16:55:44 NZDT 2026 ===
-usage: infer_2view.py [-h] [--model {qwen3.5-4b,medgemma-4b-it}]
-                      [--limit LIMIT] [--adapter ADAPTER]
-                      [--max-new-tokens MAX_NEW_TOKENS] [--template TEMPLATE]
-                      [--out-suffix OUT_SUFFIX] [--data DATA]
-infer_2view.py: error: argument --model: invalid choice: 'qwen3_5_4b' (choose from qwen3.5-4b, medgemma-4b-it)
-=== pipeline end: Sun Oct  4 16:56:06 NZDT 2026 ===

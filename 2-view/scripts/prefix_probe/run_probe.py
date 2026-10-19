@@ -17,9 +17,22 @@ os_sub adapter (Qwen3.5-4B-lora-2view-os-sub) 前缀敏感性 + 隐状态探针 
   probe        val 隐状态训练 logistic regression (CV 选正则), test 报告 macro-OvR / 3v4 AUC
   report       汇总 summary_table.md + full_report.json
 
+zero/inject 前缀 (--zi, 双顺序模型 + prompt_order_a):
+  greedy / zero(findings 全 0) / inject(只把 mass 置 1), density 与 birads 保持贪心,
+  teacher-forcing 到 "breast_birads": 取值位置读 1-5 概率 -> probs_{greedy,zero,inject}_test.jsonl
+
+反方向前缀 (--zi-b, 双顺序模型 + prompt_order_b):
+  只改 BI-RADS (down=1 / up3=3 / up4=4 / up5=5), density 保持贪心;
+  前缀截断到 `"findings":` 冒号之后 (token 边界, 不含 `{`), 由模型贪心续写
+  ` {"mass": ...}`, 记录各自生成出的 0/1 与该步 P(1)
+  -> probs_{greedy,down,up3,up4,up5}_test.jsonl
+
 用法:
   python run_probe.py --mode smoke            # 每阶段 5 条 + 对拍 + 耗时预估
   python run_probe.py --mode full --budget-min 125
+  python run_probe.py --zi --mode smoke --adapter <dualorder> \
+      --prompt-file ../../dataset_build/prompt_order_a.txt --smoke-n 20
+  python run_probe.py --zi-b --mode smoke --adapter <dualorder> --smoke-n 20
 """
 
 import argparse
@@ -33,16 +46,35 @@ THIS_DIR = Path(__file__).resolve().parent          # 2-view/scripts/prefix_prob
 SCRIPTS_DIR = THIS_DIR.parent                       # 2-view/scripts
 PROJ_DIR = SCRIPTS_DIR.parent                       # 2-view
 sys.path.insert(0, str(SCRIPTS_DIR))
+sys.path.insert(0, str(SCRIPTS_DIR / "vlm"))  # score_2view 已迁至 scripts/vlm
 
 import score_2view as S2V   # noqa: E402  (复用 load_instruction/extract_json_text/score_one/FIELD_SPECS)
 
 DEFAULT_ADAPTER = "/nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view-os-sub"
 TEST_DATA = "/nesi/project/massey04900/Mammography/test.json"
-VAL_DATA = str(PROJ_DIR / "data/val_raw.json")
+VAL_DATA = str(PROJ_DIR / "data/splits/val_raw.json")
 TEST_PREDS = str(PROJ_DIR / "outputs/predictions/predictions_qwen3.5-4b_os_sub_test_2000.jsonl")
 VAL_PREDS = str(PROJ_DIR / "outputs/predictions/predictions_qwen3.5-4b_os_sub_val_1600.jsonl")
 REF_SCORED = str(PROJ_DIR / "outputs/scoring/os_sub_test_with_probs.jsonl")
 OUT_ROOT = PROJ_DIR / "outputs" / "prefix_probe"
+
+# zero / inject 前缀干预 (双顺序模型, prompt_order_a) 的默认路径
+ZI_MODES = ("greedy", "zero", "inject")
+ZI_DATA = str(PROJ_DIR / "data/splits/test_local.json")
+ZI_PREDS = str(PROJ_DIR / "outputs/predictions/predictions_qwen3.5-4b_dualorder_a_2000.jsonl")
+ZI_PROMPT = str(PROJ_DIR / "dataset_build/prompt_order_a.txt")
+ZI_OUT = PROJ_DIR / "outputs" / "prefix_probe_dualorder_A"
+
+# 反方向: B 顺序 (density -> birads -> findings), 改 BI-RADS 看 findings 是否跟随
+# v2: 前缀截到 `"findings":` 冒号之后 (token 边界), 避免把 `{"` 切开
+ZB_MODES = ("greedy", "down", "up3", "up4", "up5")
+ZB_BIRADS = {"greedy": None, "down": "1", "up3": "3", "up4": "4", "up5": "5"}
+ZB_DATA = str(PROJ_DIR / "data/splits/test_local.json")
+ZB_PREDS = str(PROJ_DIR / "outputs/predictions/predictions_qwen3.5-4b_dualorder_b_2000.jsonl")
+ZB_PROMPT = str(PROJ_DIR / "dataset_build/prompt_order_b.txt")
+ZB_OUT = PROJ_DIR / "outputs" / "prefix_probe_dualorder_B_v2"
+
+LOCAL_MODEL = "/home/z/zhao/Mammography/model/Qwen3.5-4B"
 
 SMOKE_N = 5
 SEED = 42
@@ -71,8 +103,14 @@ def load_jsonl_preds(path):
 
 
 def build_prefix(completion, mode, gt):
-    """gt / flip: 只替换 findings 数字 (0/1), density 与 birads 保持贪心; 返回新文本."""
-    assert mode in ("gt", "flip")
+    """只替换 findings 数字 (0/1), density 与 breast_birads 一律保持贪心; 返回新文本.
+
+    gt     : findings 取真值
+    flip   : findings 全部取反
+    zero   : 4 个 findings 全置 0
+    inject : 只把 mass 置 1 (其余 findings 保持贪心不动)
+    """
+    assert mode in ("gt", "flip", "zero", "inject")
     text = completion
     for k in FINDINGS:
         m = re.search(rf'("{k}"\s*:\s*)([01])', text)
@@ -80,8 +118,14 @@ def build_prefix(completion, mode, gt):
         cur = m.group(2)
         if mode == "gt":
             new = str(int(bool(gt["findings"][k])))
-        else:
+        elif mode == "flip":
             new = "1" if cur == "0" else "0"
+        elif mode == "zero":
+            new = "0"
+        else:  # inject: 只把 mass 置 1
+            if k != "mass":
+                continue
+            new = "1"
         text = text[:m.start(2)] + new + text[m.end(2):]
     return text
 
@@ -356,6 +400,337 @@ def run_stage_prefix(bundle, instruction, data_recs, order, preds, mode, out_roo
     print(f"[prefix_{mode}] new={len(pending)} none={n_none} elapsed={el/60:.1f} min "
           f"({el/len(pending):.2f}s/case)", flush=True)
     return el / max(len(pending), 1), el
+
+
+def run_stage_zi(bundle, instruction, data_recs, order, preds, mode, out_root,
+                 limit, t_start, budget_min):
+    """greedy / zero / inject: teacher-forcing 到 `"breast_birads":` 取值位置, 取 1-5 概率.
+
+    greedy = 不改文本 (基线); zero = 4 个 findings 全置 0; inject = 只把 mass 置 1。
+    density 与 breast_birads 文本始终是模型自己的贪心值, 故只隔离 findings 前缀的影响。
+    """
+    from tqdm.auto import tqdm
+    jfile = out_root / f"probs_{mode}_test.jsonl"
+    done = set()
+    if jfile.exists():
+        with open(jfile, "r", encoding="utf-8") as f:
+            for line in f:
+                try:
+                    done.add(json.loads(line)["id"])
+                except Exception:
+                    pass
+    ids = order[:limit] if limit else order
+    pending = [i for i in ids if i not in done and i in preds]
+    print(f"[zi_{mode}] total={len(ids)} done={len(done)} pending={len(pending)}", flush=True)
+    if not pending:
+        return 0.0, 0.0
+
+    n_none = 0
+    t0 = time.perf_counter()
+    with open(jfile, "a", encoding="utf-8") as fout:
+        pbar = tqdm(pending, desc=f"zi_{mode}", unit="case", dynamic_ncols=True)
+        for sid in pbar:
+            ts = time.perf_counter()
+            rec = data_recs[sid]
+            pred = preds[sid]
+            gt = pred.get("ground_truth") or rec["output"]
+            completion = S2V.extract_json_text(pred.get("prediction_raw") or "")
+            prefix, probs, probs_norm, argmax_match = None, None, None, None
+            if completion:
+                try:
+                    prefix = (completion if mode == "greedy"
+                              else build_prefix(completion, mode, gt))
+                    probs, probs_norm, argmax_match, _f = S2V.score_one(
+                        *bundle, instruction, rec, prefix)
+                except Exception as e:
+                    print(f"\n[warn] {sid}: {e!r}", flush=True)
+            if probs is None:
+                n_none += 1
+            bi = (probs_norm or {}).get("breast_birads")
+            row = {
+                "id": sid, "mode": mode,
+                "ground_truth": gt,
+                "greedy": pred.get("prediction_json"),
+                "prefix": prefix,
+                "birads_probs": bi,
+                "p_ge3": sum(bi.get(c, 0.0) for c in ("3", "4", "5")) if bi else None,
+                "probs": probs, "probs_norm": probs_norm,
+                "argmax_match": argmax_match,
+                "seconds": round(time.perf_counter() - ts, 2),
+            }
+            fout.write(json.dumps(row, ensure_ascii=False) + "\n")
+            fout.flush()
+            pbar.set_postfix(avg=f"{(time.perf_counter()-t0)/max(pbar.n,1):.2f}s", none=n_none)
+            left_min = budget_min - (time.perf_counter() - t_start) / 60
+            est_min = (time.perf_counter() - t0) / max(pbar.n, 1) * (len(pending) - pbar.n) / 60
+            if left_min < est_min + 10:
+                print(f"\n[budget] 剩余预算 {left_min:.0f}min < 预估 {est_min:.0f}min+10min, "
+                      f"提前停止 (断点续跑)", flush=True)
+                break
+    el = time.perf_counter() - t0
+    print(f"[zi_{mode}] new={len(pending)} none={n_none} elapsed={el/60:.1f} min "
+          f"({el/max(len(pending),1):.2f}s/case)", flush=True)
+    return el / max(len(pending), 1), el
+
+
+def print_zi_samples(out_root, limit_ids, n=2):
+    """并排展示 n 条样本: 贪心输出 / zero 前缀 / inject 前缀 + 各条件下的 P(BI-RADS 1..5)."""
+    rows = {}
+    for mode in ZI_MODES:
+        p = out_root / f"probs_{mode}_test.jsonl"
+        if not p.exists():
+            continue
+        with open(p, "r", encoding="utf-8") as f:
+            for line in f:
+                r = json.loads(line)
+                rows.setdefault(r["id"], {})[mode] = r
+    shown = 0
+    for sid in limit_ids:
+        if shown >= n:
+            break
+        d = rows.get(sid)
+        if not d or "greedy" not in d:
+            continue
+        shown += 1
+        print("\n" + "=" * 78)
+        print(f"[样本 {shown}] id={sid}")
+        print(f"  贪心输出 (原样): {d['greedy'].get('prefix')}")
+        print(f"  zero  前缀     : {(d.get('zero') or {}).get('prefix')}")
+        print(f"  inject 前缀    : {(d.get('inject') or {}).get('prefix')}")
+        for mode in ZI_MODES:
+            bi = (d.get(mode) or {}).get("birads_probs") or {}
+            p3 = (d.get(mode) or {}).get("p_ge3")
+            pv = {c: round(bi.get(c, 0.0), 4) for c in "12345"}
+            print("  P(BI-RADS | %-6s) = %s   P(>=3)=%s"
+                  % (mode, pv, ("%.4f" % p3) if p3 is not None else None))
+    print("=" * 78, flush=True)
+
+
+# ---------------- 反方向: 改 BI-RADS, 让模型续写 findings (B 顺序) ----------------
+
+def build_prefix_birads(completion, mode):
+    """只改 BI-RADS 数字, 截断到 `"findings":` 冒号之后 (不含空格和 `{`).
+
+    返回 (prefix, text): text 是改完 BI-RADS 的完整输出, 用于 token 级对齐校验。
+    截到冒号是为了让最后一个 token 与原文完全一致 (`":`), 让模型自己生成
+    ` {"mass": ...}`, 避免把原文的 `{"` 这个双字符 token 切成 ` {` 的分布外状态。
+    """
+    assert mode in ZB_MODES
+    text = completion
+    new = ZB_BIRADS[mode]
+    if new is not None:
+        text, n = re.subn(r'("breast_birads"\s*:\s*)([1-5])', r"\g<1>" + new, text, count=1)
+        assert n == 1, "completion 缺少 breast_birads 字段"
+    i = text.find('"findings"')
+    assert i > 0, "completion 缺少 findings 字段"
+    j = text.index(":", i + len('"findings"'))
+    return text[: j + 1], text
+
+
+def prefix_token_ok(tokenizer, prefix, full_text):
+    """校验 prefix 的 token 序列是否是完整输出 token 序列的严格前缀 (防半 token 截断)."""
+    p = tokenizer(prefix, add_special_tokens=False)["input_ids"]
+    c = tokenizer(full_text, add_special_tokens=False)["input_ids"]
+    return p == c[: len(p)], p, c
+
+
+def _gen_bundle_inputs(bundle, instruction, rec):
+    """与 score_one / infer 同一套输入构建; 返回 (model, tokenizer, prompt_ids, mm_kwargs)."""
+    import torch
+    model, tokenizer, processor, template = bundle
+    images = list(rec["images"])
+    messages = [{"role": "user", "content": instruction}]
+    messages = template.mm_plugin.process_messages(messages, images, [], [], processor)
+    paired = messages + [{"role": "assistant", "content": ""}]
+    prompt_ids, _ = template.encode_oneturn(tokenizer, paired, None, None)
+    prompt_ids, _ = template.mm_plugin.process_token_ids(prompt_ids, None, images, [], [], tokenizer, processor)
+    mm_inputs = template.mm_plugin.get_mm_inputs(
+        images=images, videos=[], audios=[], imglens=[len(images)], vidlens=[0], audlens=[0],
+        batch_ids=[prompt_ids], processor=processor,
+    )
+    mm_kwargs = {}
+    for key, value in mm_inputs.items():
+        if isinstance(value, list) and isinstance(value[0], torch.Tensor):
+            value = torch.stack(value)
+        elif isinstance(value, list) and isinstance(value[0], list) and isinstance(value[0][0], torch.Tensor):
+            value = torch.stack([torch.stack(v) for v in value])
+        elif not isinstance(value, torch.Tensor):
+            value = torch.tensor(value)
+        if torch.is_floating_point(value):
+            value = value.to(model.dtype)
+        if key == "second_per_grid_ts":
+            mm_kwargs[key] = value.tolist()
+        else:
+            mm_kwargs[key] = value.to(model.device)
+    return model, tokenizer, prompt_ids, mm_kwargs
+
+
+def generate_findings(bundle, instruction, rec, prefix_text, max_new=64):
+    """给定前缀后贪心续写, 记录 4 个 finding 生成出的 0/1 与该步的 P(1).
+
+    前缀停在 `"findings":` 冒号之后, ` {"mass": ...}` 的结构与数字全部由模型自己生成。
+    """
+    import torch
+    from transformers import StoppingCriteria, StoppingCriteriaList
+
+    model, tokenizer, prompt_ids, mm_kwargs = _gen_bundle_inputs(bundle, instruction, rec)
+    pfx_ids = tokenizer(prefix_text, add_special_tokens=False)["input_ids"]
+    input_ids = prompt_ids + pfx_ids
+    ids_t = torch.tensor([input_ids], device=model.device)
+    attn = torch.ones_like(ids_t)
+
+    class _AllFindings(StoppingCriteria):
+        def __call__(self, cur_ids, scores, **kw):
+            txt = tokenizer.decode(cur_ids[0][len(input_ids):], skip_special_tokens=True)
+            return all(re.search(rf'"{k}"\s*:\s*[01]', txt) for k in FINDINGS)
+
+    with torch.inference_mode():
+        out = model.generate(
+            input_ids=ids_t, attention_mask=attn, max_new_tokens=max_new,
+            do_sample=False, return_dict_in_generate=True, output_scores=True,
+            stopping_criteria=StoppingCriteriaList([_AllFindings()]), **mm_kwargs,
+        )
+    gen_ids = [int(t) for t in out.sequences[0][len(input_ids):].tolist()]
+    scores = [s[0].float() for s in out.scores] if out.scores else []
+
+    findings = {k: {"value": None, "p1": None} for k in FINDINGS}
+    gen_text = ""
+    for j, tid in enumerate(gen_ids):
+        gen_text += tokenizer.decode([tid], skip_special_tokens=True)
+        for k in FINDINGS:
+            if findings[k]["value"] is not None:
+                continue
+            m = re.search(rf'"{k}"\s*:\s*([01])', gen_text)
+            if not m:
+                continue
+            findings[k]["value"] = int(m.group(1))
+            if j < len(scores):          # 该步的 P(1): 用 offsets 定位追加的 "1" 所在 token
+                ctx_text = prefix_text + gen_text[: m.start(1)]
+                enc = tokenizer(ctx_text + "1", add_special_tokens=False,
+                                return_offsets_mapping=True)
+                full, offs = enc["input_ids"], enc["offset_mapping"]
+                t1 = next((i for i, (s, e) in enumerate(offs) if s <= len(ctx_text) < e), None)
+                if t1 is not None:
+                    pr = torch.softmax(scores[j], dim=-1)
+                    findings[k]["p1"] = float(pr[full[t1]])
+    return {"gen_text": gen_text, "findings": findings,
+            "n_parsed": sum(1 for v in findings.values() if v["value"] is not None)}
+
+
+def run_stage_zi_b(bundle, instruction, data_recs, order, preds, mode, out_root,
+                   limit, t_start, budget_min):
+    """greedy / down / up: 改 B 顺序的 BI-RADS 前缀, teacher-forcing 到 `"findings": {` 后续写."""
+    from tqdm.auto import tqdm
+    jfile = out_root / f"probs_{mode}_test.jsonl"
+    done = set()
+    if jfile.exists():
+        with open(jfile, "r", encoding="utf-8") as f:
+            for line in f:
+                try:
+                    done.add(json.loads(line)["id"])
+                except Exception:
+                    pass
+    ids = order[:limit] if limit else order
+    pending = [i for i in ids if i not in done and i in preds]
+    print(f"[zb_{mode}] total={len(ids)} done={len(done)} pending={len(pending)}", flush=True)
+    if not pending:
+        return 0.0, 0.0
+
+    n_bad = n_repro = n_skip = 0
+    t0 = time.perf_counter()
+    tokenizer = bundle[1]
+    with open(jfile, "a", encoding="utf-8") as fout:
+        pbar = tqdm(pending, desc=f"zb_{mode}", unit="case", dynamic_ncols=True)
+        for sid in pbar:
+            ts = time.perf_counter()
+            rec = data_recs[sid]
+            pred = preds[sid]
+            gt = pred.get("ground_truth") or rec["output"]
+            completion = S2V.extract_json_text(pred.get("prediction_raw") or "")
+            prefix, gen = None, None
+            if completion:
+                try:
+                    prefix, full_text = build_prefix_birads(completion, mode)
+                    ok_pfx, p_ids, c_ids = prefix_token_ok(tokenizer, prefix, full_text)
+                    if not ok_pfx:
+                        n_skip += 1
+                        print(f"\n[skip] {sid}: prefix 不是完整输出的 token 前缀 "
+                              f"(len {len(p_ids)} vs {len(c_ids)})", flush=True)
+                        continue
+                    gen = generate_findings(bundle, instruction, rec, prefix)
+                except Exception as e:
+                    print(f"\n[warn] {sid}: {e!r}", flush=True)
+            if gen is None or gen["n_parsed"] < len(FINDINGS):
+                n_bad += 1
+            if gen and mode == "greedy":
+                gf = ((pred.get("prediction_json") or {}).get("findings") or {})
+                if all(gen["findings"][k]["value"] == (int(gf.get(k)) if gf.get(k) is not None else None)
+                       for k in FINDINGS):
+                    n_repro += 1
+            vals = {k: (gen["findings"][k]["value"] if gen else None) for k in FINDINGS}
+            row = {
+                "id": sid, "mode": mode,
+                "ground_truth": gt,
+                "greedy": pred.get("prediction_json"),
+                "prefix": prefix,
+                "gen_text": (gen or {}).get("gen_text"),
+                "findings": (gen or {}).get("findings"),
+                "n_findings_1": (None if not gen else sum(1 for v in vals.values() if v == 1)),
+                "n_parsed": (gen or {}).get("n_parsed"),
+                "prefix_token_ok": True,
+                "seconds": round(time.perf_counter() - ts, 2),
+            }
+            fout.write(json.dumps(row, ensure_ascii=False) + "\n")
+            fout.flush()
+            pbar.set_postfix(avg=f"{(time.perf_counter()-t0)/max(pbar.n,1):.2f}s",
+                             bad=n_bad, skip=n_skip)
+            left_min = budget_min - (time.perf_counter() - t_start) / 60
+            est_min = (time.perf_counter() - t0) / max(pbar.n, 1) * (len(pending) - pbar.n) / 60
+            if left_min < est_min + 10:
+                print(f"\n[budget] 剩余预算 {left_min:.0f}min < 预估 {est_min:.0f}min+10min, "
+                      f"提前停止 (断点续跑)", flush=True)
+                break
+    el = time.perf_counter() - t0
+    extra = f" repro={n_repro}/{len(pending)}" if mode == "greedy" else ""
+    print(f"[zb_{mode}] new={len(pending)} bad={n_bad} skip={n_skip} "
+          f"elapsed={el/60:.1f} min "
+          f"({el/max(len(pending),1):.2f}s/case){extra}", flush=True)
+    return el / max(len(pending), 1), el
+
+
+def print_zb_samples(out_root, limit_ids, n=2):
+    """并排展示 2 条样本在 5 个条件下的完整生成 (前缀 -> 续写 -> findings)."""
+    rows = {}
+    for mode in ZB_MODES:
+        p = out_root / f"probs_{mode}_test.jsonl"
+        if not p.exists():
+            continue
+        with open(p, "r", encoding="utf-8") as f:
+            for line in f:
+                r = json.loads(line)
+                rows.setdefault(r["id"], {})[mode] = r
+    shown = 0
+    for sid in limit_ids:
+        if shown >= n:
+            break
+        d = rows.get(sid)
+        if not d or "greedy" not in d:
+            continue
+        shown += 1
+        g = d["greedy"]
+        print("\n" + "=" * 78)
+        print(f"[样本 {shown}] id={sid}")
+        print(f"  原预测 (prediction_raw) : {json.dumps(g.get('greedy'), ensure_ascii=False)}")
+        print(f"  前缀 (各条件共用文本)   : {g.get('prefix')!r}")
+        for mode in ZB_MODES:
+            r = d.get(mode) or {}
+            fs = r.get("findings") or {}
+            brief = {k: (fs.get(k, {}).get("value"), round(fs.get(k, {}).get("p1") or 0.0, 4))
+                     for k in FINDINGS}
+            print(f"  [{mode:6s}] 前缀={r.get('prefix')!r}")
+            print(f"           完整生成={r.get('gen_text')!r}  n_findings_1={r.get('n_findings_1')}")
+            print(f"           findings (值, P(1)) = {brief}")
+    print("=" * 78, flush=True)
 
 
 def gate_check(out_root, ref_scored, limit_ids):
@@ -837,6 +1212,126 @@ def build_report(out_root, smoke=False):
     print(f"[report] -> {out_root/'summary_table.md'}, {out_root/'full_report.json'}", flush=True)
 
 
+# ---------------- zero / inject 专用入口 ----------------
+
+def run_zi(args):
+    """只跑 greedy / zero / inject 三条件 (双顺序模型 + prompt_order_a), 不做隐状态探针."""
+    mode = args.mode or "smoke"
+    if not args.mode:
+        print("[zi] 未指定 --mode, 按 smoke 处理", flush=True)
+    out_root = Path(args.out_root) if args.out_root else ZI_OUT
+    out_root.mkdir(parents=True, exist_ok=True)
+
+    data_path = args.data or ZI_DATA
+    preds_path = args.preds or ZI_PREDS
+    prompt_file = Path(args.prompt_file) if args.prompt_file else Path(ZI_PROMPT)
+    model_path = args.model_path or (
+        S2V.MODEL_PATH if Path(S2V.MODEL_PATH).exists() else LOCAL_MODEL)
+    S2V.MODEL_PATH = model_path            # run_ablation.load_model 读的是这个模块属性
+
+    print(f"[zi] mode={mode}\n[zi] adapter={args.adapter}\n[zi] prompt={prompt_file}\n"
+          f"[zi] data={data_path}\n[zi] preds={preds_path}\n[zi] model={model_path}\n"
+          f"[zi] out={out_root}", flush=True)
+
+    t_start = time.perf_counter()
+    smoke = mode == "smoke"
+    limit = args.smoke_n if smoke else 0
+    budget = 1e9 if smoke else args.budget_min
+
+    instruction = S2V.load_instruction(prompt_file)
+    print(f"[zi] instruction {len(instruction)} chars, <image> x{instruction.count('<image>')}",
+          flush=True)
+    data_recs, order = load_json_recs(data_path)
+    preds = load_jsonl_preds(preds_path)
+    print(f"[zi] data={len(order)} 条  preds={len(preds)} 条", flush=True)
+
+    sys.path.insert(0, str(SCRIPTS_DIR / "ablation"))
+    from run_ablation import load_model
+    bundle = load_model(args.adapter)
+
+    timing = {}
+    for m in ZI_MODES:
+        spc, el = run_stage_zi(bundle, instruction, data_recs, order, preds, m, out_root,
+                               limit, t_start, budget)
+        timing[m] = {"sec_per_case": spc, "elapsed_min": el / 60}
+
+    ids = order[:limit] if limit else order
+    print_zi_samples(out_root, ids, args.print_samples)
+
+    if smoke:
+        est = sum(timing[m]["sec_per_case"] for m in ZI_MODES) * len(order) / 60
+        print("\n[SMOKE] sec/case: " + "  ".join(
+            f"{m}={timing[m]['sec_per_case']:.2f}" for m in ZI_MODES), flush=True)
+        print(f"[SMOKE] 全量 {len(order)} 条 × 3 条件 预估 ≈ {est:.0f} min (不含模型加载)",
+              flush=True)
+        json.dump({"timing": timing, "est_full_min": est, "smoke_n": len(ids),
+                   "adapter": args.adapter, "prompt_file": str(prompt_file),
+                   "data": data_path, "preds": preds_path, "model": model_path},
+                  open(out_root / "smoke_report.json", "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1)
+    print(f"[total] {time.perf_counter() - t_start:.0f}s", flush=True)
+    return 0
+
+
+def run_zi_b(args):
+    """反方向前缀干预: B 顺序 (density -> birads -> findings), 改 BI-RADS 后让其续写 findings."""
+    mode = args.mode or "smoke"
+    if not args.mode:
+        print("[zb] 未指定 --mode, 按 smoke 处理", flush=True)
+    out_root = Path(args.out_root) if args.out_root else ZB_OUT
+    out_root.mkdir(parents=True, exist_ok=True)
+
+    data_path = args.data or ZB_DATA
+    preds_path = args.preds or ZB_PREDS
+    prompt_file = Path(args.prompt_file) if args.prompt_file else Path(ZB_PROMPT)
+    model_path = args.model_path or (
+        S2V.MODEL_PATH if Path(S2V.MODEL_PATH).exists() else LOCAL_MODEL)
+    S2V.MODEL_PATH = model_path
+
+    print(f"[zb] mode={mode}\n[zb] adapter={args.adapter}\n[zb] prompt={prompt_file}\n"
+          f"[zb] data={data_path}\n[zb] preds={preds_path}\n[zb] model={model_path}\n"
+          f"[zb] out={out_root}", flush=True)
+
+    t_start = time.perf_counter()
+    smoke = mode == "smoke"
+    limit = args.smoke_n if smoke else 0
+    budget = 1e9 if smoke else args.budget_min
+
+    instruction = S2V.load_instruction(prompt_file)
+    print(f"[zb] instruction {len(instruction)} chars, <image> x{instruction.count('<image>')}",
+          flush=True)
+    data_recs, order = load_json_recs(data_path)
+    preds = load_jsonl_preds(preds_path)
+    print(f"[zb] data={len(order)} 条  preds={len(preds)} 条", flush=True)
+
+    sys.path.insert(0, str(SCRIPTS_DIR / "ablation"))
+    from run_ablation import load_model
+    bundle = load_model(args.adapter)
+
+    timing = {}
+    for m in ZB_MODES:
+        spc, el = run_stage_zi_b(bundle, instruction, data_recs, order, preds, m, out_root,
+                                 limit, t_start, budget)
+        timing[m] = {"sec_per_case": spc, "elapsed_min": el / 60}
+
+    ids = order[:limit] if limit else order
+    print_zb_samples(out_root, ids, args.print_samples)
+
+    if smoke:
+        est = sum(timing[m]["sec_per_case"] for m in ZB_MODES) * len(order) / 60
+        print("\n[SMOKE] sec/case: " + "  ".join(
+            f"{m}={timing[m]['sec_per_case']:.2f}" for m in ZB_MODES), flush=True)
+        print(f"[SMOKE] 全量 {len(order)} 条 × {len(ZB_MODES)} 条件 预估 ≈ {est:.0f} min "
+              f"(不含模型加载)", flush=True)
+        json.dump({"timing": timing, "est_full_min": est, "smoke_n": len(ids),
+                   "adapter": args.adapter, "prompt_file": str(prompt_file),
+                   "data": data_path, "preds": preds_path, "model": model_path},
+                  open(out_root / "smoke_report_b_v2.json", "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1)
+    print(f"[total] {time.perf_counter() - t_start:.0f}s", flush=True)
+    return 0
+
+
 # ---------------- main ----------------
 
 def main():
@@ -847,14 +1342,37 @@ def main():
     ap.add_argument("--skip-report", action="store_true")
     ap.add_argument("--report-only", action="store_true",
                     help="不加载模型, 只读 outputs/prefix_probe 已有文件跑探针和报告")
+    ap.add_argument("--zi", action="store_true",
+                    help="只跑 greedy / zero / inject 前缀 (teacher-forcing 到 breast_birads)")
+    ap.add_argument("--zi-b", action="store_true", dest="zi_b",
+                    help="反方向: B 顺序, 只改 BI-RADS (down=1 / up=4), 后续写 findings")
+    ap.add_argument("--adapter", default=DEFAULT_ADAPTER, help="LoRA adapter 路径")
+    ap.add_argument("--prompt-file", default=None,
+                    help="prompt 文件 (默认 score_2view.PROMPT_FILE; --zi 默认 prompt_order_a.txt)")
+    ap.add_argument("--model-path", default=None,
+                    help="基座模型路径 (默认: NeSI 路径存在则用它, 否则用本地 Qwen3.5-4B)")
+    ap.add_argument("--data", default=None, help="test json (--zi 默认 data/splits/test_local.json)")
+    ap.add_argument("--preds", default=None,
+                    help="贪心预测 jsonl (--zi 默认 predictions_qwen3.5-4b_dualorder_a_2000.jsonl)")
+    ap.add_argument("--out-root", default=None,
+                    help="输出目录 (--zi 默认 outputs/prefix_probe_dualorder_A)")
+    ap.add_argument("--smoke-n", type=int, default=SMOKE_N, help="smoke 模式样本数")
+    ap.add_argument("--print-samples", type=int, default=2,
+                    help="smoke 结束并排打印的样本条数")
     args = ap.parse_args()
-    if not args.mode and not args.report_only:
-        ap.error("--mode 或 --report-only 必须指定一个")
+    if not args.mode and not args.report_only and not args.zi and not args.zi_b:
+        ap.error("--mode / --report-only / --zi / --zi-b 必须指定一个")
 
     if args.report_only:
         OUT_ROOT.mkdir(parents=True, exist_ok=True)
         build_report(OUT_ROOT, smoke=False)
         return
+
+    if args.zi:
+        return run_zi(args)
+
+    if args.zi_b:
+        return run_zi_b(args)
 
     OUT_ROOT.mkdir(parents=True, exist_ok=True)
     t_start = time.perf_counter()

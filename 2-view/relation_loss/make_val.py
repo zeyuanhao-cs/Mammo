@@ -9,12 +9,12 @@ HERE = Path(__file__).resolve().parent
 DATA = HERE.parent / "data"
 
 # instruction 取训练文件第一条 (所有样本共用同一 instruction)
-with open(DATA / "train_llamafactory_os_sub.json", "r", encoding="utf-8") as f:
+with open(DATA / "llamafactory" / "train_llamafactory_os_sub.json", "r", encoding="utf-8") as f:
     train = json.load(f)
 instruction = train[0]["instruction"]
 assert all(t["instruction"] == instruction for t in train), "训练集 instruction 不一致"
 
-with open(DATA / "val_raw.json", "r", encoding="utf-8") as f:
+with open(DATA / "splits" / "val_raw.json", "r", encoding="utf-8") as f:
     val = json.load(f)
 
 out = []

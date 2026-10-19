@@ -29,6 +29,7 @@ THIS_DIR = Path(__file__).resolve().parent          # 2-view/scripts/ckpt_sweep
 SCRIPTS_DIR = THIS_DIR.parent                       # 2-view/scripts
 PROJ_DIR = SCRIPTS_DIR.parent                       # 2-view
 sys.path.insert(0, str(SCRIPTS_DIR))
+sys.path.insert(0, str(SCRIPTS_DIR / "vlm"))  # score_2view 已迁至 scripts/vlm
 sys.path.insert(0, str(SCRIPTS_DIR / "ablation"))
 
 import score_2view as S2V                           # noqa: E402
@@ -40,7 +41,7 @@ CKPTS = [  # (名字, adapter 路径) —— 按执行顺序
     ("300", f"{ADAPTER_ROOT}/checkpoint-300"),
     ("400", f"{ADAPTER_ROOT}/checkpoint-400"),
 ]
-VAL_DATA = str(PROJ_DIR / "data/val_raw.json")
+VAL_DATA = str(PROJ_DIR / "data/splits/val_raw.json")
 VAL_PREDS = str(PROJ_DIR / "outputs/predictions/predictions_qwen3.5-4b_os_sub_val_1600.jsonl")
 REF_SCORED = str(PROJ_DIR / "outputs/scoring/os_sub_val_with_probs.jsonl")
 OUT_ROOT = PROJ_DIR / "outputs" / "ckpt_sweep"

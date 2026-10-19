@@ -37,6 +37,7 @@ THIS_DIR = Path(__file__).resolve().parent          # 2-view/scripts/ablation
 SCRIPTS_DIR = THIS_DIR.parent                       # 2-view/scripts
 PROJ_DIR = SCRIPTS_DIR.parent                       # 2-view
 sys.path.insert(0, str(SCRIPTS_DIR))
+sys.path.insert(0, str(SCRIPTS_DIR / "vlm"))  # score_2view 已迁至 scripts/vlm
 
 import score_2view as S2V   # noqa: E402  (复用 load_instruction/extract_json_text/score_one)
 

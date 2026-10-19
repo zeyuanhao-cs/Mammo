@@ -1,592 +1,0 @@
-=== LoRA inference start: Sun Oct  4 17:42:32 NZDT 2026 ===
-[INFO|configuration_utils.py:778] 2026-10-04 17:42:55,413 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/config.json
-[INFO|configuration_utils.py:856] 2026-10-04 17:42:55,428 >> Model config Qwen3_5Config {
-  "architectures": [
-    "Qwen3_5ForConditionalGeneration"
-  ],
-  "image_token_id": 248056,
-  "model_type": "qwen3_5",
-  "text_config": {
-    "attention_bias": false,
-    "attention_dropout": 0.0,
-    "attn_output_gate": true,
-    "bos_token_id": null,
-    "dtype": "bfloat16",
-    "eos_token_id": 248044,
-    "full_attention_interval": 4,
-    "head_dim": 256,
-    "hidden_act": "silu",
-    "hidden_size": 2560,
-    "initializer_range": 0.02,
-    "intermediate_size": 9216,
-    "layer_types": [
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention"
-    ],
-    "linear_conv_kernel_dim": 4,
-    "linear_key_head_dim": 128,
-    "linear_num_key_heads": 16,
-    "linear_num_value_heads": 32,
-    "linear_value_head_dim": 128,
-    "mamba_ssm_dtype": "float32",
-    "max_position_embeddings": 262144,
-    "mlp_only_layers": [],
-    "model_type": "qwen3_5_text",
-    "mtp_num_hidden_layers": 1,
-    "mtp_use_dedicated_embeddings": false,
-    "num_attention_heads": 16,
-    "num_hidden_layers": 32,
-    "num_key_value_heads": 4,
-    "pad_token_id": null,
-    "partial_rotary_factor": 0.25,
-    "rms_norm_eps": 1e-06,
-    "rope_parameters": {
-      "mrope_interleaved": true,
-      "mrope_section": [
-        11,
-        11,
-        10
-      ],
-      "partial_rotary_factor": 0.25,
-      "rope_theta": 10000000,
-      "rope_type": "default"
-    },
-    "tie_word_embeddings": true,
-    "use_cache": true,
-    "vocab_size": 248320
-  },
-  "tie_word_embeddings": true,
-  "transformers_version": "5.8.0",
-  "video_token_id": 248057,
-  "vision_config": {
-    "deepstack_visual_indexes": [],
-    "depth": 24,
-    "hidden_act": "gelu_pytorch_tanh",
-    "hidden_size": 1024,
-    "in_channels": 3,
-    "initializer_range": 0.02,
-    "intermediate_size": 4096,
-    "model_type": "qwen3_5_vision",
-    "num_heads": 16,
-    "num_position_embeddings": 2304,
-    "out_hidden_size": 2560,
-    "patch_size": 16,
-    "spatial_merge_size": 2,
-    "temporal_patch_size": 2
-  },
-  "vision_end_token_id": 248054,
-  "vision_start_token_id": 248053
-}
-
-[INFO|image_processing_base.py:342] 2026-10-04 17:42:56,032 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/preprocessor_config.json
-[INFO|processing_utils.py:1122] 2026-10-04 17:42:56,052 >> loading configuration file None
-[INFO|image_processing_base.py:342] 2026-10-04 17:42:56,052 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/preprocessor_config.json
-[WARNING|logging.py:340] 2026-10-04 17:42:56,052 >> The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
-[INFO|image_processing_base.py:342] 2026-10-04 17:42:56,073 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/preprocessor_config.json
-[INFO|image_processing_base.py:385] 2026-10-04 17:42:56,073 >> Image processor Qwen2VLImageProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_processor_type": "Qwen2VLImageProcessor",
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "merge_size": 2,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "size": {
-    "longest_edge": 16777216,
-    "shortest_edge": 65536
-  },
-  "temporal_patch_size": 2
-}
-
-[INFO|configuration_utils.py:778] 2026-10-04 17:42:56,074 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/config.json
-[INFO|configuration_utils.py:856] 2026-10-04 17:42:56,081 >> Model config Qwen3_5Config {
-  "architectures": [
-    "Qwen3_5ForConditionalGeneration"
-  ],
-  "image_token_id": 248056,
-  "model_type": "qwen3_5",
-  "text_config": {
-    "attention_bias": false,
-    "attention_dropout": 0.0,
-    "attn_output_gate": true,
-    "bos_token_id": null,
-    "dtype": "bfloat16",
-    "eos_token_id": 248044,
-    "full_attention_interval": 4,
-    "head_dim": 256,
-    "hidden_act": "silu",
-    "hidden_size": 2560,
-    "initializer_range": 0.02,
-    "intermediate_size": 9216,
-    "layer_types": [
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention"
-    ],
-    "linear_conv_kernel_dim": 4,
-    "linear_key_head_dim": 128,
-    "linear_num_key_heads": 16,
-    "linear_num_value_heads": 32,
-    "linear_value_head_dim": 128,
-    "mamba_ssm_dtype": "float32",
-    "max_position_embeddings": 262144,
-    "mlp_only_layers": [],
-    "model_type": "qwen3_5_text",
-    "mtp_num_hidden_layers": 1,
-    "mtp_use_dedicated_embeddings": false,
-    "num_attention_heads": 16,
-    "num_hidden_layers": 32,
-    "num_key_value_heads": 4,
-    "pad_token_id": null,
-    "partial_rotary_factor": 0.25,
-    "rms_norm_eps": 1e-06,
-    "rope_parameters": {
-      "mrope_interleaved": true,
-      "mrope_section": [
-        11,
-        11,
-        10
-      ],
-      "partial_rotary_factor": 0.25,
-      "rope_theta": 10000000,
-      "rope_type": "default"
-    },
-    "tie_word_embeddings": true,
-    "use_cache": true,
-    "vocab_size": 248320
-  },
-  "tie_word_embeddings": true,
-  "transformers_version": "5.8.0",
-  "video_token_id": 248057,
-  "vision_config": {
-    "deepstack_visual_indexes": [],
-    "depth": 24,
-    "hidden_act": "gelu_pytorch_tanh",
-    "hidden_size": 1024,
-    "in_channels": 3,
-    "initializer_range": 0.02,
-    "intermediate_size": 4096,
-    "model_type": "qwen3_5_vision",
-    "num_heads": 16,
-    "num_position_embeddings": 2304,
-    "out_hidden_size": 2560,
-    "patch_size": 16,
-    "spatial_merge_size": 2,
-    "temporal_patch_size": 2
-  },
-  "vision_end_token_id": 248054,
-  "vision_start_token_id": 248053
-}
-
-[INFO|video_processing_utils.py:684] 2026-10-04 17:42:56,630 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/video_preprocessor_config.json
-[INFO|video_processing_utils.py:684] 2026-10-04 17:42:56,632 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/video_preprocessor_config.json
-[INFO|video_processing_utils.py:727] 2026-10-04 17:42:56,632 >> Video processor Qwen3VLVideoProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "do_sample_frames": true,
-  "fps": 2,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "max_frames": 768,
-  "merge_size": 2,
-  "min_frames": 4,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "return_metadata": false,
-  "size": {
-    "longest_edge": 25165824,
-    "shortest_edge": 4096
-  },
-  "temporal_patch_size": 2,
-  "video_processor_type": "Qwen3VLVideoProcessor"
-}
-
-[INFO|processing_utils.py:1199] 2026-10-04 17:42:56,633 >> Processor Qwen3VLProcessor:
-- image_processor: Qwen2VLImageProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_processor_type": "Qwen2VLImageProcessor",
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "merge_size": 2,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "size": {
-    "longest_edge": 16777216,
-    "shortest_edge": 65536
-  },
-  "temporal_patch_size": 2
-}
-
-- tokenizer: Qwen2Tokenizer(name_or_path='/nesi/project/massey04900/Mammography/model/Qwen3.5-4B', vocab_size=248044, model_max_length=262144, padding_side='right', truncation_side='right', special_tokens={'eos_token': '<|im_end|>', 'pad_token': '<|endoftext|>', 'audio_bos_token': '<|audio_start|>', 'audio_eos_token': '<|audio_end|>', 'audio_token': '<|audio_pad|>', 'image_token': '<|image_pad|>', 'video_token': '<|video_pad|>', 'vision_bos_token': '<|vision_start|>', 'vision_eos_token': '<|vision_end|>'}, added_tokens_decoder={
-	248044: AddedToken("<|endoftext|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248045: AddedToken("<|im_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248046: AddedToken("<|im_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248047: AddedToken("<|object_ref_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248048: AddedToken("<|object_ref_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248049: AddedToken("<|box_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248050: AddedToken("<|box_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248051: AddedToken("<|quad_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248052: AddedToken("<|quad_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248053: AddedToken("<|vision_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248054: AddedToken("<|vision_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248055: AddedToken("<|vision_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248056: AddedToken("<|image_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248057: AddedToken("<|video_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248058: AddedToken("<tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248059: AddedToken("</tool_call>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248060: AddedToken("<|fim_prefix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248061: AddedToken("<|fim_middle|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248062: AddedToken("<|fim_suffix|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248063: AddedToken("<|fim_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248064: AddedToken("<|repo_name|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248065: AddedToken("<|file_sep|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248066: AddedToken("<tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248067: AddedToken("</tool_response>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248068: AddedToken("<think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248069: AddedToken("</think>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=False),
-	248070: AddedToken("<|audio_start|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248071: AddedToken("<|audio_end|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248072: AddedToken("<tts_pad>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248073: AddedToken("<tts_text_bos>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248074: AddedToken("<tts_text_eod>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248075: AddedToken("<tts_text_bos_single>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-	248076: AddedToken("<|audio_pad|>", rstrip=False, lstrip=False, single_word=False, normalized=False, special=True),
-})
-- video_processor: Qwen3VLVideoProcessor {
-  "do_convert_rgb": true,
-  "do_normalize": true,
-  "do_rescale": true,
-  "do_resize": true,
-  "do_sample_frames": true,
-  "fps": 2,
-  "image_mean": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "image_std": [
-    0.5,
-    0.5,
-    0.5
-  ],
-  "max_frames": 768,
-  "merge_size": 2,
-  "min_frames": 4,
-  "patch_size": 16,
-  "resample": 3,
-  "rescale_factor": 0.00392156862745098,
-  "return_metadata": false,
-  "size": {
-    "longest_edge": 25165824,
-    "shortest_edge": 4096
-  },
-  "temporal_patch_size": 2,
-  "video_processor_type": "Qwen3VLVideoProcessor"
-}
-
-
-{
-  "image_processor": {
-    "do_convert_rgb": true,
-    "do_normalize": true,
-    "do_rescale": true,
-    "do_resize": true,
-    "image_mean": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "image_processor_type": "Qwen2VLImageProcessor",
-    "image_std": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "merge_size": 2,
-    "patch_size": 16,
-    "resample": 3,
-    "rescale_factor": 0.00392156862745098,
-    "size": {
-      "longest_edge": 16777216,
-      "shortest_edge": 65536
-    },
-    "temporal_patch_size": 2
-  },
-  "processor_class": "Qwen3VLProcessor",
-  "video_processor": {
-    "do_convert_rgb": true,
-    "do_normalize": true,
-    "do_rescale": true,
-    "do_resize": true,
-    "do_sample_frames": true,
-    "fps": 2,
-    "image_mean": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "image_std": [
-      0.5,
-      0.5,
-      0.5
-    ],
-    "max_frames": 768,
-    "merge_size": 2,
-    "min_frames": 4,
-    "patch_size": 16,
-    "resample": 3,
-    "rescale_factor": 0.00392156862745098,
-    "return_metadata": false,
-    "size": {
-      "longest_edge": 25165824,
-      "shortest_edge": 4096
-    },
-    "temporal_patch_size": 2,
-    "video_processor_type": "Qwen3VLVideoProcessor"
-  }
-}
-
-[cuda] device: NVIDIA A100-PCIE-40GB
-[torch] version: 2.14.1+cu130, cuda: 13.0
-[data] /nesi/project/massey04900/Mammography/test.json -> 前 500 条
-[data] instruction (1335 chars), 2 个 <image> 占位符
-[data] done=0 pending=500
-
-[model] loading: /nesi/project/massey04900/Mammography/model/Qwen3.5-4B + LoRA /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view
-[model] template=qwen3_5 dtype=bfloat16 flash_attn=sdpa thinking=False
-[WARNING|2026-10-04 17:42:56] llamafactory.data.template:149 >> You are using reasoning template. If the base model is NOT a reasoning model (i.e., it has a separate Instruct variant), please add `_nothink` suffix to disable thinking. For reasoning-only model families (e.g., Qwen3.6), the suffix is not needed. e.g., qwen3_vl_nothink
-[INFO|configuration_utils.py:778] 2026-10-04 17:42:56,689 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/config.json
-[INFO|configuration_utils.py:856] 2026-10-04 17:42:56,697 >> Model config Qwen3_5Config {
-  "architectures": [
-    "Qwen3_5ForConditionalGeneration"
-  ],
-  "image_token_id": 248056,
-  "model_type": "qwen3_5",
-  "text_config": {
-    "attention_bias": false,
-    "attention_dropout": 0.0,
-    "attn_output_gate": true,
-    "bos_token_id": null,
-    "dtype": "bfloat16",
-    "eos_token_id": 248044,
-    "full_attention_interval": 4,
-    "head_dim": 256,
-    "hidden_act": "silu",
-    "hidden_size": 2560,
-    "initializer_range": 0.02,
-    "intermediate_size": 9216,
-    "layer_types": [
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention",
-      "linear_attention",
-      "linear_attention",
-      "linear_attention",
-      "full_attention"
-    ],
-    "linear_conv_kernel_dim": 4,
-    "linear_key_head_dim": 128,
-    "linear_num_key_heads": 16,
-    "linear_num_value_heads": 32,
-    "linear_value_head_dim": 128,
-    "mamba_ssm_dtype": "float32",
-    "max_position_embeddings": 262144,
-    "mlp_only_layers": [],
-    "model_type": "qwen3_5_text",
-    "mtp_num_hidden_layers": 1,
-    "mtp_use_dedicated_embeddings": false,
-    "num_attention_heads": 16,
-    "num_hidden_layers": 32,
-    "num_key_value_heads": 4,
-    "pad_token_id": null,
-    "partial_rotary_factor": 0.25,
-    "rms_norm_eps": 1e-06,
-    "rope_parameters": {
-      "mrope_interleaved": true,
-      "mrope_section": [
-        11,
-        11,
-        10
-      ],
-      "partial_rotary_factor": 0.25,
-      "rope_theta": 10000000,
-      "rope_type": "default"
-    },
-    "tie_word_embeddings": true,
-    "use_cache": true,
-    "vocab_size": 248320
-  },
-  "tie_word_embeddings": true,
-  "transformers_version": "5.8.0",
-  "video_token_id": 248057,
-  "vision_config": {
-    "deepstack_visual_indexes": [],
-    "depth": 24,
-    "hidden_act": "gelu_pytorch_tanh",
-    "hidden_size": 1024,
-    "in_channels": 3,
-    "initializer_range": 0.02,
-    "intermediate_size": 4096,
-    "model_type": "qwen3_5_vision",
-    "num_heads": 16,
-    "num_position_embeddings": 2304,
-    "out_hidden_size": 2560,
-    "patch_size": 16,
-    "spatial_merge_size": 2,
-    "temporal_patch_size": 2
-  },
-  "vision_end_token_id": 248054,
-  "vision_start_token_id": 248053
-}
-
-[INFO|2026-10-04 17:42:56] llamafactory.model.model_utils.kv_cache:144 >> KV cache is enabled for faster generation.
-[INFO|modeling_utils.py:766] 2026-10-04 17:42:57,149 >> loading weights file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/model.safetensors.index.json
-[INFO|modeling_utils.py:852] 2026-10-04 17:42:57,163 >> Since the `dtype` attribute can't be found in model's config object, will use dtype=torch.bfloat16 as derived from model's weights
-[INFO|configuration_utils.py:1086] 2026-10-04 17:42:57,164 >> Generate config GenerationConfig {
-  "output_attentions": false,
-  "output_hidden_states": false,
-  "use_cache": true
-}
-
-[WARNING|logging.py:340] 2026-10-04 17:42:57,191 >> The fast path is not available because one of the required library is not installed. Falling back to torch implementation. To install follow https://github.com/fla-org/flash-linear-attention#installation and https://github.com/Dao-AILab/causal-conv1d
-[INFO|accelerate.py:285] 2026-10-04 17:42:57,248 >> We will use 90% of the memory on device 0 for storing the model, and 10% for the buffer to avoid OOM. You can set `max_memory` in to a higher value to use more memory (at your own risk).
-Loading weights:   0%|          | 0/723 [00:00<?, ?it/s]Loading weights:   0%|          | 1/723 [00:00<05:23,  2.23it/s]Loading weights:   2%|▏         | 17/723 [00:00<00:17, 40.21it/s]Loading weights:   4%|▍         | 30/723 [00:00<00:11, 62.65it/s]Loading weights:   6%|▌         | 41/723 [00:00<00:10, 66.83it/s]Loading weights:   8%|▊         | 59/723 [00:00<00:07, 92.65it/s]Loading weights:  10%|█         | 75/723 [00:01<00:06, 105.73it/s]Loading weights:  13%|█▎        | 92/723 [00:01<00:05, 114.88it/s]Loading weights:  16%|█▌        | 115/723 [00:01<00:04, 139.40it/s]Loading weights:  18%|█▊        | 133/723 [00:01<00:04, 144.61it/s]Loading weights:  21%|██        | 149/723 [00:01<00:04, 142.55it/s]Loading weights:  23%|██▎       | 168/723 [00:01<00:03, 150.09it/s]Loading weights:  26%|██▌       | 186/723 [00:01<00:03, 153.22it/s]Loading weights:  28%|██▊       | 205/723 [00:01<00:03, 151.36it/s]Loading weights:  31%|███       | 225/723 [00:01<00:03, 162.80it/s]Loading weights:  33%|███▎      | 242/723 [00:02<00:03, 158.64it/s]Loading weights:  36%|███▌      | 259/723 [00:02<00:03, 153.20it/s]Loading weights:  40%|███▉      | 287/723 [00:02<00:02, 176.88it/s]Loading weights:  42%|████▏     | 305/723 [00:02<00:02, 176.76it/s]Loading weights:  45%|████▍     | 323/723 [00:02<00:02, 173.27it/s]Loading weights:  47%|████▋     | 341/723 [00:02<00:02, 161.83it/s]Loading weights:  50%|████▉     | 358/723 [00:02<00:02, 156.55it/s]Loading weights:  52%|█████▏    | 374/723 [00:02<00:02, 156.27it/s]Loading weights:  54%|█████▍    | 390/723 [00:03<00:02, 144.48it/s]Loading weights:  56%|█████▌    | 406/723 [00:03<00:02, 144.54it/s]Loading weights:  58%|█████▊    | 421/723 [00:03<00:02, 138.18it/s]Loading weights:  64%|██████▍   | 466/723 [00:03<00:01, 214.98it/s]Loading weights:  78%|███████▊  | 566/723 [00:03<00:00, 417.25it/s]Loading weights:  93%|█████████▎| 674/723 [00:03<00:00, 593.82it/s]Loading weights: 100%|██████████| 723/723 [00:03<00:00, 199.99it/s]
-[INFO|utils.py:412] 2026-10-04 17:43:01,460 >> Generation config file not found, using a generation config created from the model config.
-[INFO|configuration_utils.py:1037] 2026-10-04 17:43:01,460 >> loading configuration file /nesi/project/massey04900/Mammography/model/Qwen3.5-4B/config.json
-[INFO|configuration_utils.py:1086] 2026-10-04 17:43:01,460 >> Generate config GenerationConfig {}
-
-[INFO|dynamic_module_utils.py:441] 2026-10-04 17:43:01,461 >> Could not locate the custom_generate/generate.py inside /nesi/project/massey04900/Mammography/model/Qwen3.5-4B.
-[INFO|2026-10-04 17:43:01] llamafactory.model.model_utils.attention:144 >> Using torch SDPA for faster training and inference.
-[INFO|2026-10-04 17:43:02] llamafactory.model.adapter:144 >> Merged 1 adapter(s).
-[INFO|2026-10-04 17:43:02] llamafactory.model.adapter:144 >> Loaded adapter(s): /nesi/project/massey04900/Mammography/model/Qwen3.5-4B-lora-2view
-[INFO|2026-10-04 17:43:02] llamafactory.model.loader:144 >> all params: 4,539,265,536
-[WARNING|2026-10-04 17:43:02] llamafactory.chat.hf_engine:155 >> There is no current event loop, creating a new one.
-[model] loaded in 7.4s
-2view_infer:   0%|          | 0/500 [00:00<?, ?case/s][WARNING|logging.py:340] 2026-10-04 17:43:06,858 >> Ignoring clean_up_tokenization_spaces=True for BPE tokenizer Qwen2Tokenizer. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
-2view_infer:   0%|          | 0/500 [00:04<?, ?case/s, avg=4.6, fail=0, sec=4.6]2view_infer:   0%|          | 1/500 [00:04<38:29,  4.63s/case, avg=4.6, fail=0, sec=4.6]2view_infer:   0%|          | 1/500 [00:07<38:29,  4.63s/case, avg=3.9, fail=0, sec=3.2]2view_infer:   0%|          | 2/500 [00:07<31:24,  3.78s/case, avg=3.9, fail=0, sec=3.2]2view_infer:   0%|          | 2/500 [00:10<31:24,  3.78s/case, avg=3.5, fail=0, sec=2.8]2view_infer:   1%|          | 3/500 [00:10<27:38,  3.34s/case, avg=3.5, fail=0, sec=2.8]2view_infer:   1%|          | 3/500 [00:13<27:38,  3.34s/case, avg=3.4, fail=0, sec=3.0]2view_infer:   1%|          | 4/500 [00:13<26:22,  3.19s/case, avg=3.4, fail=0, sec=3.0]2view_infer:   1%|          | 4/500 [00:16<26:22,  3.19s/case, avg=3.3, fail=0, sec=2.8]2view_infer:   1%|          | 5/500 [00:16<25:08,  3.05s/case, avg=3.3, fail=0, sec=2.8]2view_infer:   1%|          | 5/500 [00:19<25:08,  3.05s/case, avg=3.2, fail=0, sec=2.8]2view_infer:   1%|          | 6/500 [00:19<24:23,  2.96s/case, avg=3.2, fail=0, sec=2.8]2view_infer:   1%|          | 6/500 [00:21<24:23,  2.96s/case, avg=3.1, fail=0, sec=2.8]2view_infer:   1%|▏         | 7/500 [00:21<23:54,  2.91s/case, avg=3.1, fail=0, sec=2.8]2view_infer:   1%|▏         | 7/500 [00:24<23:54,  2.91s/case, avg=3.1, fail=0, sec=2.8]2view_infer:   2%|▏         | 8/500 [00:24<23:35,  2.88s/case, avg=3.1, fail=0, sec=2.8]2view_infer:   2%|▏         | 8/500 [00:27<23:35,  2.88s/case, avg=3.1, fail=0, sec=3.0]2view_infer:   2%|▏         | 9/500 [00:27<23:47,  2.91s/case, avg=3.1, fail=0, sec=3.0]2view_infer:   2%|▏         | 9/500 [00:30<23:47,  2.91s/case, avg=3.1, fail=0, sec=2.8]2view_infer:   2%|▏         | 10/500 [00:30<23:25,  2.87s/case, avg=3.1, fail=0, sec=2.8]2view_infer:   2%|▏         | 10/500 [00:33<23:25,  2.87s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   2%|▏         | 11/500 [00:33<23:11,  2.85s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   2%|▏         | 11/500 [00:36<23:11,  2.85s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   2%|▏         | 12/500 [00:36<22:59,  2.83s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   2%|▏         | 12/500 [00:38<22:59,  2.83s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   3%|▎         | 13/500 [00:38<22:51,  2.82s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   3%|▎         | 13/500 [00:41<22:51,  2.82s/case, avg=3.0, fail=0, sec=3.0]2view_infer:   3%|▎         | 14/500 [00:41<23:11,  2.86s/case, avg=3.0, fail=0, sec=3.0]2view_infer:   3%|▎         | 14/500 [00:44<23:11,  2.86s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   3%|▎         | 15/500 [00:44<22:57,  2.84s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   3%|▎         | 15/500 [00:47<22:57,  2.84s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   3%|▎         | 16/500 [00:47<22:49,  2.83s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   3%|▎         | 16/500 [00:50<22:49,  2.83s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   3%|▎         | 17/500 [00:50<22:42,  2.82s/case, avg=3.0, fail=0, sec=2.8]2view_infer:   3%|▎         | 17/500 [00:53<22:42,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▎         | 18/500 [00:53<22:35,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▎         | 18/500 [00:55<22:35,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▍         | 19/500 [00:55<22:28,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▍         | 19/500 [00:58<22:28,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▍         | 20/500 [00:58<22:24,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▍         | 20/500 [01:01<22:24,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▍         | 21/500 [01:01<22:19,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▍         | 21/500 [01:04<22:19,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▍         | 22/500 [01:04<22:15,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   4%|▍         | 22/500 [01:07<22:15,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▍         | 23/500 [01:07<22:11,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▍         | 23/500 [01:09<22:11,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▍         | 24/500 [01:09<22:07,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▍         | 24/500 [01:12<22:07,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▌         | 25/500 [01:12<22:02,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▌         | 25/500 [01:15<22:02,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▌         | 26/500 [01:15<21:59,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▌         | 26/500 [01:18<21:59,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▌         | 27/500 [01:18<21:56,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   5%|▌         | 27/500 [01:20<21:56,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▌         | 28/500 [01:20<21:53,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▌         | 28/500 [01:23<21:53,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▌         | 29/500 [01:23<21:49,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▌         | 29/500 [01:26<21:49,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▌         | 30/500 [01:26<21:45,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▌         | 30/500 [01:29<21:45,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▌         | 31/500 [01:29<21:42,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▌         | 31/500 [01:32<21:42,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▋         | 32/500 [01:32<21:40,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   6%|▋         | 32/500 [01:34<21:40,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   7%|▋         | 33/500 [01:34<21:39,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   7%|▋         | 33/500 [01:37<21:39,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   7%|▋         | 34/500 [01:37<21:36,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   7%|▋         | 34/500 [01:40<21:36,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   7%|▋         | 35/500 [01:40<21:33,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   7%|▋         | 35/500 [01:43<21:33,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   7%|▋         | 36/500 [01:43<21:30,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   7%|▋         | 36/500 [01:46<21:30,  2.78s/case, avg=2.9, fail=0, sec=3.0]2view_infer:   7%|▋         | 37/500 [01:46<22:02,  2.86s/case, avg=2.9, fail=0, sec=3.0]2view_infer:   7%|▋         | 37/500 [01:48<22:02,  2.86s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 38/500 [01:48<21:50,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 38/500 [01:51<21:50,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 39/500 [01:51<21:40,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 39/500 [01:54<21:40,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 40/500 [01:54<21:33,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 40/500 [01:57<21:33,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 41/500 [01:57<21:27,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 41/500 [02:00<21:27,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 42/500 [02:00<21:21,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   8%|▊         | 42/500 [02:02<21:21,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▊         | 43/500 [02:02<21:18,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▊         | 43/500 [02:05<21:18,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▉         | 44/500 [02:05<21:16,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▉         | 44/500 [02:08<21:16,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▉         | 45/500 [02:08<21:13,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▉         | 45/500 [02:11<21:13,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▉         | 46/500 [02:11<21:09,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▉         | 46/500 [02:14<21:09,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▉         | 47/500 [02:14<21:06,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:   9%|▉         | 47/500 [02:16<21:06,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  10%|▉         | 48/500 [02:16<21:05,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  10%|▉         | 48/500 [02:19<21:05,  2.80s/case, avg=2.9, fail=0, sec=3.0]2view_infer:  10%|▉         | 49/500 [02:19<21:30,  2.86s/case, avg=2.9, fail=0, sec=3.0]2view_infer:  10%|▉         | 49/500 [02:22<21:30,  2.86s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  10%|█         | 50/500 [02:22<21:19,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  10%|█         | 50/500 [02:25<21:19,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  10%|█         | 51/500 [02:25<21:10,  2.83s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  10%|█         | 51/500 [02:28<21:10,  2.83s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  10%|█         | 52/500 [02:28<21:03,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  10%|█         | 52/500 [02:31<21:03,  2.82s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  11%|█         | 53/500 [02:31<21:08,  2.84s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  11%|█         | 53/500 [02:34<21:08,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  11%|█         | 54/500 [02:34<21:05,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  11%|█         | 54/500 [02:36<21:05,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  11%|█         | 55/500 [02:36<20:56,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  11%|█         | 55/500 [02:39<20:56,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  11%|█         | 56/500 [02:39<20:50,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  11%|█         | 56/500 [02:42<20:50,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  11%|█▏        | 57/500 [02:42<20:47,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  11%|█▏        | 57/500 [02:45<20:47,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 58/500 [02:45<20:42,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 58/500 [02:48<20:42,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 59/500 [02:48<20:38,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 59/500 [02:50<20:38,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 60/500 [02:50<20:34,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 60/500 [02:53<20:34,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 61/500 [02:53<20:31,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 61/500 [02:56<20:31,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 62/500 [02:56<20:27,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  12%|█▏        | 62/500 [02:59<20:27,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  13%|█▎        | 63/500 [02:59<20:22,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  13%|█▎        | 63/500 [03:02<20:22,  2.80s/case, avg=2.8, fail=0, sec=3.2]2view_infer:  13%|█▎        | 64/500 [03:02<21:06,  2.90s/case, avg=2.8, fail=0, sec=3.2]2view_infer:  13%|█▎        | 64/500 [03:05<21:06,  2.90s/case, avg=2.9, fail=0, sec=3.3]2view_infer:  13%|█▎        | 65/500 [03:05<21:52,  3.02s/case, avg=2.9, fail=0, sec=3.3]2view_infer:  13%|█▎        | 65/500 [03:08<21:52,  3.02s/case, avg=2.9, fail=0, sec=3.3]2view_infer:  13%|█▎        | 66/500 [03:08<22:25,  3.10s/case, avg=2.9, fail=0, sec=3.3]2view_infer:  13%|█▎        | 66/500 [03:12<22:25,  3.10s/case, avg=2.9, fail=0, sec=3.2]2view_infer:  13%|█▎        | 67/500 [03:12<22:37,  3.14s/case, avg=2.9, fail=0, sec=3.2]2view_infer:  13%|█▎        | 67/500 [03:15<22:37,  3.14s/case, avg=2.9, fail=0, sec=3.0]2view_infer:  14%|█▎        | 68/500 [03:15<22:23,  3.11s/case, avg=2.9, fail=0, sec=3.0]2view_infer:  14%|█▎        | 68/500 [03:18<22:23,  3.11s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  14%|█▍        | 69/500 [03:18<21:50,  3.04s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  14%|█▍        | 69/500 [03:21<21:50,  3.04s/case, avg=2.9, fail=0, sec=3.0]2view_infer:  14%|█▍        | 70/500 [03:21<21:43,  3.03s/case, avg=2.9, fail=0, sec=3.0]2view_infer:  14%|█▍        | 70/500 [03:24<21:43,  3.03s/case, avg=2.9, fail=0, sec=3.3]2view_infer:  14%|█▍        | 71/500 [03:24<22:11,  3.10s/case, avg=2.9, fail=0, sec=3.3]2view_infer:  14%|█▍        | 71/500 [03:27<22:11,  3.10s/case, avg=2.9, fail=0, sec=3.3]2view_infer:  14%|█▍        | 72/500 [03:27<22:32,  3.16s/case, avg=2.9, fail=0, sec=3.3]2view_infer:  14%|█▍        | 72/500 [03:30<22:32,  3.16s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  15%|█▍        | 73/500 [03:30<22:25,  3.15s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  15%|█▍        | 73/500 [03:33<22:25,  3.15s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  15%|█▍        | 74/500 [03:33<21:38,  3.05s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  15%|█▍        | 74/500 [03:36<21:38,  3.05s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  15%|█▌        | 75/500 [03:36<21:03,  2.97s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  15%|█▌        | 75/500 [03:39<21:03,  2.97s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  15%|█▌        | 76/500 [03:39<20:35,  2.91s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  15%|█▌        | 76/500 [03:41<20:35,  2.91s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  15%|█▌        | 77/500 [03:41<20:15,  2.87s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  15%|█▌        | 77/500 [03:44<20:15,  2.87s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  16%|█▌        | 78/500 [03:44<20:17,  2.89s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  16%|█▌        | 78/500 [03:47<20:17,  2.89s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  16%|█▌        | 79/500 [03:47<20:04,  2.86s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  16%|█▌        | 79/500 [03:50<20:04,  2.86s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  16%|█▌        | 80/500 [03:50<20:29,  2.93s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  16%|█▌        | 80/500 [03:53<20:29,  2.93s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  16%|█▌        | 81/500 [03:53<20:28,  2.93s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  16%|█▌        | 81/500 [03:56<20:28,  2.93s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  16%|█▋        | 82/500 [03:56<20:06,  2.89s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  16%|█▋        | 82/500 [03:59<20:06,  2.89s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  17%|█▋        | 83/500 [03:59<19:51,  2.86s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  17%|█▋        | 83/500 [04:02<19:51,  2.86s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  17%|█▋        | 84/500 [04:02<19:38,  2.83s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  17%|█▋        | 84/500 [04:04<19:38,  2.83s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  17%|█▋        | 85/500 [04:04<19:30,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  17%|█▋        | 85/500 [04:07<19:30,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  17%|█▋        | 86/500 [04:07<19:22,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  17%|█▋        | 86/500 [04:10<19:22,  2.81s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  17%|█▋        | 87/500 [04:10<19:29,  2.83s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  17%|█▋        | 87/500 [04:13<19:29,  2.83s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 88/500 [04:13<19:22,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 88/500 [04:16<19:22,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 89/500 [04:16<19:17,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 89/500 [04:18<19:17,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 90/500 [04:18<19:10,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 90/500 [04:21<19:10,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 91/500 [04:21<19:05,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 91/500 [04:24<19:05,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 92/500 [04:24<19:00,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  18%|█▊        | 92/500 [04:27<19:00,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  19%|█▊        | 93/500 [04:27<18:57,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  19%|█▊        | 93/500 [04:30<18:57,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  19%|█▉        | 94/500 [04:30<18:53,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  19%|█▉        | 94/500 [04:33<18:53,  2.79s/case, avg=2.9, fail=0, sec=3.2]2view_infer:  19%|█▉        | 95/500 [04:33<19:39,  2.91s/case, avg=2.9, fail=0, sec=3.2]2view_infer:  19%|█▉        | 95/500 [04:36<19:39,  2.91s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  19%|█▉        | 96/500 [04:36<20:01,  2.97s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  19%|█▉        | 96/500 [04:39<20:01,  2.97s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  19%|█▉        | 97/500 [04:39<19:36,  2.92s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  19%|█▉        | 97/500 [04:42<19:36,  2.92s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  20%|█▉        | 98/500 [04:42<19:55,  2.97s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  20%|█▉        | 98/500 [04:45<19:55,  2.97s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  20%|█▉        | 99/500 [04:45<19:30,  2.92s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  20%|█▉        | 99/500 [04:47<19:30,  2.92s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  20%|██        | 100/500 [04:47<19:14,  2.89s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  20%|██        | 100/500 [04:50<19:14,  2.89s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  20%|██        | 101/500 [04:50<19:09,  2.88s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  20%|██        | 101/500 [04:53<19:09,  2.88s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  20%|██        | 102/500 [04:53<18:58,  2.86s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  20%|██        | 102/500 [04:56<18:58,  2.86s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  21%|██        | 103/500 [04:56<18:49,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  21%|██        | 103/500 [04:59<18:49,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  21%|██        | 104/500 [04:59<18:41,  2.83s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  21%|██        | 104/500 [05:01<18:41,  2.83s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  21%|██        | 105/500 [05:01<18:32,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  21%|██        | 105/500 [05:04<18:32,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  21%|██        | 106/500 [05:04<18:26,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  21%|██        | 106/500 [05:07<18:26,  2.81s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  21%|██▏       | 107/500 [05:07<18:38,  2.85s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  21%|██▏       | 107/500 [05:10<18:38,  2.85s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 108/500 [05:10<18:31,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 108/500 [05:13<18:31,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 109/500 [05:13<18:22,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 109/500 [05:16<18:22,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 110/500 [05:16<18:14,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 110/500 [05:18<18:14,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 111/500 [05:18<18:08,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 111/500 [05:21<18:08,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 112/500 [05:21<18:04,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  22%|██▏       | 112/500 [05:24<18:04,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  23%|██▎       | 113/500 [05:24<18:00,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  23%|██▎       | 113/500 [05:27<18:00,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  23%|██▎       | 114/500 [05:27<17:56,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  23%|██▎       | 114/500 [05:29<17:56,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  23%|██▎       | 115/500 [05:29<17:52,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  23%|██▎       | 115/500 [05:33<17:52,  2.79s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  23%|██▎       | 116/500 [05:33<18:29,  2.89s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  23%|██▎       | 116/500 [05:35<18:29,  2.89s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  23%|██▎       | 117/500 [05:35<18:15,  2.86s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  23%|██▎       | 117/500 [05:38<18:15,  2.86s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▎       | 118/500 [05:38<18:04,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▎       | 118/500 [05:41<18:04,  2.84s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▍       | 119/500 [05:41<17:54,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▍       | 119/500 [05:44<17:54,  2.82s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▍       | 120/500 [05:44<17:48,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▍       | 120/500 [05:46<17:48,  2.81s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▍       | 121/500 [05:46<17:41,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▍       | 121/500 [05:49<17:41,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▍       | 122/500 [05:49<17:36,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  24%|██▍       | 122/500 [05:52<17:36,  2.80s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▍       | 123/500 [05:52<17:33,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▍       | 123/500 [05:55<17:33,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▍       | 124/500 [05:55<17:29,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▍       | 124/500 [05:58<17:29,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▌       | 125/500 [05:58<17:24,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▌       | 125/500 [06:00<17:24,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▌       | 126/500 [06:00<17:18,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▌       | 126/500 [06:03<17:18,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▌       | 127/500 [06:03<17:15,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  25%|██▌       | 127/500 [06:06<17:15,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▌       | 128/500 [06:06<17:13,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▌       | 128/500 [06:09<17:13,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▌       | 129/500 [06:09<17:12,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▌       | 129/500 [06:12<17:12,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▌       | 130/500 [06:12<17:10,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▌       | 130/500 [06:14<17:10,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▌       | 131/500 [06:14<17:08,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▌       | 131/500 [06:17<17:08,  2.79s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▋       | 132/500 [06:17<17:03,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  26%|██▋       | 132/500 [06:20<17:03,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  27%|██▋       | 133/500 [06:20<17:01,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  27%|██▋       | 133/500 [06:23<17:01,  2.78s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  27%|██▋       | 134/500 [06:23<16:55,  2.77s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  27%|██▋       | 134/500 [06:26<16:55,  2.77s/case, avg=2.9, fail=0, sec=3.0]2view_infer:  27%|██▋       | 135/500 [06:26<17:16,  2.84s/case, avg=2.9, fail=0, sec=3.0]2view_infer:  27%|██▋       | 135/500 [06:29<17:16,  2.84s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  27%|██▋       | 136/500 [06:29<17:38,  2.91s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  27%|██▋       | 136/500 [06:32<17:38,  2.91s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  27%|██▋       | 137/500 [06:32<17:55,  2.96s/case, avg=2.9, fail=0, sec=3.1]2view_infer:  27%|██▋       | 137/500 [06:34<17:55,  2.96s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  28%|██▊       | 138/500 [06:34<17:28,  2.90s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  28%|██▊       | 138/500 [06:37<17:28,  2.90s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  28%|██▊       | 139/500 [06:37<17:10,  2.85s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  28%|██▊       | 139/500 [06:40<17:10,  2.85s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  28%|██▊       | 140/500 [06:40<16:56,  2.82s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  28%|██▊       | 140/500 [06:43<16:56,  2.82s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  28%|██▊       | 141/500 [06:43<16:44,  2.80s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  28%|██▊       | 141/500 [06:46<16:44,  2.80s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  28%|██▊       | 142/500 [06:46<16:52,  2.83s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  28%|██▊       | 142/500 [06:48<16:52,  2.83s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  29%|██▊       | 143/500 [06:48<16:52,  2.84s/case, avg=2.9, fail=0, sec=2.9]2view_infer:  29%|██▊       | 143/500 [06:51<16:52,  2.84s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  29%|██▉       | 144/500 [06:51<16:40,  2.81s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  29%|██▉       | 144/500 [06:54<16:40,  2.81s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  29%|██▉       | 145/500 [06:54<16:30,  2.79s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  29%|██▉       | 145/500 [06:57<16:30,  2.79s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  29%|██▉       | 146/500 [06:57<16:23,  2.78s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  29%|██▉       | 146/500 [06:59<16:23,  2.78s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  29%|██▉       | 147/500 [06:59<16:16,  2.77s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  29%|██▉       | 147/500 [07:02<16:16,  2.77s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|██▉       | 148/500 [07:02<16:11,  2.76s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|██▉       | 148/500 [07:05<16:11,  2.76s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|██▉       | 149/500 [07:05<16:06,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|██▉       | 149/500 [07:08<16:06,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|███       | 150/500 [07:08<16:03,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|███       | 150/500 [07:10<16:03,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|███       | 151/500 [07:10<16:00,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|███       | 151/500 [07:13<16:00,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|███       | 152/500 [07:13<15:56,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  30%|███       | 152/500 [07:16<15:56,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  31%|███       | 153/500 [07:16<15:53,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  31%|███       | 153/500 [07:19<15:53,  2.75s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  31%|███       | 154/500 [07:19<15:51,  2.75s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  31%|███       | 154/500 [07:21<15:51,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  31%|███       | 155/500 [07:21<15:48,  2.75s/case, avg=2.9, fail=0, sec=2.7]2view_infer:  31%|███       | 155/500 [07:24<15:48,  2.75s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  31%|███       | 156/500 [07:24<15:46,  2.75s/case, avg=2.9, fail=0, sec=2.8]2view_infer:  31%|███       | 156/500 [07:27<15:46,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  31%|███▏      | 157/500 [07:27<15:42,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  31%|███▏      | 157/500 [07:30<15:42,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  32%|███▏      | 158/500 [07:30<15:41,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  32%|███▏      | 158/500 [07:32<15:41,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  32%|███▏      | 159/500 [07:32<15:38,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  32%|███▏      | 159/500 [07:35<15:38,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  32%|███▏      | 160/500 [07:35<15:39,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  32%|███▏      | 160/500 [07:38<15:39,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  32%|███▏      | 161/500 [07:38<15:37,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  32%|███▏      | 161/500 [07:41<15:37,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  32%|███▏      | 162/500 [07:41<15:36,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  32%|███▏      | 162/500 [07:44<15:36,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  33%|███▎      | 163/500 [07:44<15:31,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  33%|███▎      | 163/500 [07:46<15:31,  2.76s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  33%|███▎      | 164/500 [07:46<15:37,  2.79s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  33%|███▎      | 164/500 [07:49<15:37,  2.79s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  33%|███▎      | 165/500 [07:49<16:03,  2.88s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  33%|███▎      | 165/500 [07:52<16:03,  2.88s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  33%|███▎      | 166/500 [07:52<15:47,  2.84s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  33%|███▎      | 166/500 [07:55<15:47,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  33%|███▎      | 167/500 [07:55<15:36,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  33%|███▎      | 167/500 [07:58<15:36,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  34%|███▎      | 168/500 [07:58<15:29,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  34%|███▎      | 168/500 [08:00<15:29,  2.80s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  34%|███▍      | 169/500 [08:00<15:19,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  34%|███▍      | 169/500 [08:03<15:19,  2.78s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  34%|███▍      | 170/500 [08:03<15:27,  2.81s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  34%|███▍      | 170/500 [08:06<15:27,  2.81s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  34%|███▍      | 171/500 [08:06<15:18,  2.79s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  34%|███▍      | 171/500 [08:09<15:18,  2.79s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  34%|███▍      | 172/500 [08:09<15:11,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  34%|███▍      | 172/500 [08:12<15:11,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  35%|███▍      | 173/500 [08:12<15:05,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  35%|███▍      | 173/500 [08:14<15:05,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  35%|███▍      | 174/500 [08:14<15:06,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  35%|███▍      | 174/500 [08:17<15:06,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  35%|███▌      | 175/500 [08:17<15:03,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  35%|███▌      | 175/500 [08:20<15:03,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  35%|███▌      | 176/500 [08:20<14:58,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  35%|███▌      | 176/500 [08:23<14:58,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  35%|███▌      | 177/500 [08:23<14:53,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  35%|███▌      | 177/500 [08:25<14:53,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▌      | 178/500 [08:25<14:52,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▌      | 178/500 [08:28<14:52,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▌      | 179/500 [08:28<14:48,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▌      | 179/500 [08:31<14:48,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▌      | 180/500 [08:31<14:51,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▌      | 180/500 [08:34<14:51,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▌      | 181/500 [08:34<14:45,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▌      | 181/500 [08:37<14:45,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▋      | 182/500 [08:37<14:41,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  36%|███▋      | 182/500 [08:39<14:41,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  37%|███▋      | 183/500 [08:39<14:37,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  37%|███▋      | 183/500 [08:42<14:37,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  37%|███▋      | 184/500 [08:42<14:36,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  37%|███▋      | 184/500 [08:45<14:36,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  37%|███▋      | 185/500 [08:45<14:31,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  37%|███▋      | 185/500 [08:48<14:31,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  37%|███▋      | 186/500 [08:48<14:27,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  37%|███▋      | 186/500 [08:50<14:27,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  37%|███▋      | 187/500 [08:50<14:23,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  37%|███▋      | 187/500 [08:53<14:23,  2.76s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  38%|███▊      | 188/500 [08:53<14:35,  2.80s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  38%|███▊      | 188/500 [08:56<14:35,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  38%|███▊      | 189/500 [08:56<14:29,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  38%|███▊      | 189/500 [08:59<14:29,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  38%|███▊      | 190/500 [08:59<14:23,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  38%|███▊      | 190/500 [09:02<14:23,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  38%|███▊      | 191/500 [09:02<14:17,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  38%|███▊      | 191/500 [09:04<14:17,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  38%|███▊      | 192/500 [09:04<14:13,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  38%|███▊      | 192/500 [09:07<14:13,  2.77s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  39%|███▊      | 193/500 [09:07<14:23,  2.81s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  39%|███▊      | 193/500 [09:10<14:23,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  39%|███▉      | 194/500 [09:10<14:19,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  39%|███▉      | 194/500 [09:13<14:19,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  39%|███▉      | 195/500 [09:13<14:12,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  39%|███▉      | 195/500 [09:16<14:12,  2.80s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  39%|███▉      | 196/500 [09:16<14:24,  2.84s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  39%|███▉      | 196/500 [09:19<14:24,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  39%|███▉      | 197/500 [09:19<14:21,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  39%|███▉      | 197/500 [09:21<14:21,  2.84s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  40%|███▉      | 198/500 [09:21<14:09,  2.81s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  40%|███▉      | 198/500 [09:24<14:09,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  40%|███▉      | 199/500 [09:24<14:06,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  40%|███▉      | 199/500 [09:27<14:06,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  40%|████      | 200/500 [09:27<13:59,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  40%|████      | 200/500 [09:30<13:59,  2.80s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  40%|████      | 201/500 [09:30<13:51,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  40%|████      | 201/500 [09:32<13:51,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  40%|████      | 202/500 [09:32<13:47,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  40%|████      | 202/500 [09:35<13:47,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  41%|████      | 203/500 [09:35<13:44,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  41%|████      | 203/500 [09:38<13:44,  2.78s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  41%|████      | 204/500 [09:38<13:53,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  41%|████      | 204/500 [09:41<13:53,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  41%|████      | 205/500 [09:41<13:56,  2.83s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  41%|████      | 205/500 [09:44<13:56,  2.83s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  41%|████      | 206/500 [09:44<14:09,  2.89s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  41%|████      | 206/500 [09:47<14:09,  2.89s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  41%|████▏     | 207/500 [09:47<14:22,  2.94s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  41%|████▏     | 207/500 [09:50<14:22,  2.94s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  42%|████▏     | 208/500 [09:50<14:14,  2.93s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  42%|████▏     | 208/500 [09:53<14:14,  2.93s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  42%|████▏     | 209/500 [09:53<14:07,  2.91s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  42%|████▏     | 209/500 [09:56<14:07,  2.91s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  42%|████▏     | 210/500 [09:56<14:01,  2.90s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  42%|████▏     | 210/500 [09:59<14:01,  2.90s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  42%|████▏     | 211/500 [09:59<13:51,  2.88s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  42%|████▏     | 211/500 [10:01<13:51,  2.88s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  42%|████▏     | 212/500 [10:01<13:44,  2.86s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  42%|████▏     | 212/500 [10:04<13:44,  2.86s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  43%|████▎     | 213/500 [10:04<13:38,  2.85s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  43%|████▎     | 213/500 [10:07<13:38,  2.85s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  43%|████▎     | 214/500 [10:07<13:27,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  43%|████▎     | 214/500 [10:10<13:27,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  43%|████▎     | 215/500 [10:10<13:18,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  43%|████▎     | 215/500 [10:12<13:18,  2.80s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  43%|████▎     | 216/500 [10:12<13:10,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  43%|████▎     | 216/500 [10:15<13:10,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  43%|████▎     | 217/500 [10:15<13:04,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  43%|████▎     | 217/500 [10:18<13:04,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  44%|████▎     | 218/500 [10:18<12:59,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  44%|████▎     | 218/500 [10:21<12:59,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  44%|████▍     | 219/500 [10:21<12:55,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  44%|████▍     | 219/500 [10:23<12:55,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  44%|████▍     | 220/500 [10:23<12:51,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  44%|████▍     | 220/500 [10:26<12:51,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  44%|████▍     | 221/500 [10:26<12:47,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  44%|████▍     | 221/500 [10:29<12:47,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  44%|████▍     | 222/500 [10:29<12:44,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  44%|████▍     | 222/500 [10:32<12:44,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  45%|████▍     | 223/500 [10:32<12:42,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  45%|████▍     | 223/500 [10:34<12:42,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  45%|████▍     | 224/500 [10:34<12:40,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  45%|████▍     | 224/500 [10:37<12:40,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  45%|████▌     | 225/500 [10:37<12:36,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  45%|████▌     | 225/500 [10:40<12:36,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  45%|████▌     | 226/500 [10:40<12:36,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  45%|████▌     | 226/500 [10:43<12:36,  2.76s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  45%|████▌     | 227/500 [10:43<12:41,  2.79s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  45%|████▌     | 227/500 [10:46<12:41,  2.79s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  46%|████▌     | 228/500 [10:46<12:53,  2.84s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  46%|████▌     | 228/500 [10:49<12:53,  2.84s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  46%|████▌     | 229/500 [10:49<12:42,  2.81s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  46%|████▌     | 229/500 [10:51<12:42,  2.81s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  46%|████▌     | 230/500 [10:51<12:49,  2.85s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  46%|████▌     | 230/500 [10:54<12:49,  2.85s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  46%|████▌     | 231/500 [10:54<12:45,  2.85s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  46%|████▌     | 231/500 [10:57<12:45,  2.85s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  46%|████▋     | 232/500 [10:57<12:35,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  46%|████▋     | 232/500 [11:00<12:35,  2.82s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  47%|████▋     | 233/500 [11:00<12:26,  2.79s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  47%|████▋     | 233/500 [11:03<12:26,  2.79s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  47%|████▋     | 234/500 [11:03<12:29,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  47%|████▋     | 234/500 [11:06<12:29,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  47%|████▋     | 235/500 [11:06<12:36,  2.86s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  47%|████▋     | 235/500 [11:08<12:36,  2.86s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  47%|████▋     | 236/500 [11:08<12:25,  2.82s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  47%|████▋     | 236/500 [11:11<12:25,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  47%|████▋     | 237/500 [11:11<12:30,  2.85s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  47%|████▋     | 237/500 [11:14<12:30,  2.85s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 238/500 [11:14<12:22,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 238/500 [11:17<12:22,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 239/500 [11:17<12:13,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 239/500 [11:20<12:13,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 240/500 [11:20<12:06,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 240/500 [11:22<12:06,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 241/500 [11:22<12:00,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 241/500 [11:25<12:00,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 242/500 [11:25<11:55,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  48%|████▊     | 242/500 [11:28<11:55,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  49%|████▊     | 243/500 [11:28<11:51,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  49%|████▊     | 243/500 [11:31<11:51,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  49%|████▉     | 244/500 [11:31<11:46,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  49%|████▉     | 244/500 [11:33<11:46,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  49%|████▉     | 245/500 [11:33<11:49,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  49%|████▉     | 245/500 [11:36<11:49,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  49%|████▉     | 246/500 [11:36<11:44,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  49%|████▉     | 246/500 [11:39<11:44,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  49%|████▉     | 247/500 [11:39<11:39,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  49%|████▉     | 247/500 [11:42<11:39,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  50%|████▉     | 248/500 [11:42<11:35,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  50%|████▉     | 248/500 [11:44<11:35,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  50%|████▉     | 249/500 [11:44<11:33,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  50%|████▉     | 249/500 [11:47<11:33,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  50%|█████     | 250/500 [11:47<11:30,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  50%|█████     | 250/500 [11:50<11:30,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  50%|█████     | 251/500 [11:50<11:27,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  50%|█████     | 251/500 [11:53<11:27,  2.76s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  50%|█████     | 252/500 [11:53<11:31,  2.79s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  50%|█████     | 252/500 [11:56<11:31,  2.79s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  51%|█████     | 253/500 [11:56<11:25,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  51%|█████     | 253/500 [11:58<11:25,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  51%|█████     | 254/500 [11:58<11:21,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  51%|█████     | 254/500 [12:01<11:21,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  51%|█████     | 255/500 [12:01<11:16,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  51%|█████     | 255/500 [12:04<11:16,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  51%|█████     | 256/500 [12:04<11:12,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  51%|█████     | 256/500 [12:07<11:12,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  51%|█████▏    | 257/500 [12:07<11:09,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  51%|█████▏    | 257/500 [12:09<11:09,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  52%|█████▏    | 258/500 [12:09<11:06,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  52%|█████▏    | 258/500 [12:12<11:06,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  52%|█████▏    | 259/500 [12:12<11:03,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  52%|█████▏    | 259/500 [12:15<11:03,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  52%|█████▏    | 260/500 [12:15<11:00,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  52%|█████▏    | 260/500 [12:18<11:00,  2.75s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  52%|█████▏    | 261/500 [12:18<11:05,  2.79s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  52%|█████▏    | 261/500 [12:21<11:05,  2.79s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  52%|█████▏    | 262/500 [12:21<11:11,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  52%|█████▏    | 262/500 [12:23<11:11,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  53%|█████▎    | 263/500 [12:23<11:03,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  53%|█████▎    | 263/500 [12:26<11:03,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  53%|█████▎    | 264/500 [12:26<11:01,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  53%|█████▎    | 264/500 [12:29<11:01,  2.80s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  53%|█████▎    | 265/500 [12:29<10:54,  2.79s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  53%|█████▎    | 265/500 [12:32<10:54,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  53%|█████▎    | 266/500 [12:32<10:52,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  53%|█████▎    | 266/500 [12:34<10:52,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  53%|█████▎    | 267/500 [12:34<10:47,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  53%|█████▎    | 267/500 [12:37<10:47,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  54%|█████▎    | 268/500 [12:37<10:42,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  54%|█████▎    | 268/500 [12:40<10:42,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  54%|█████▍    | 269/500 [12:40<10:38,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  54%|█████▍    | 269/500 [12:43<10:38,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  54%|█████▍    | 270/500 [12:43<10:34,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  54%|█████▍    | 270/500 [12:45<10:34,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  54%|█████▍    | 271/500 [12:45<10:30,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  54%|█████▍    | 271/500 [12:48<10:30,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  54%|█████▍    | 272/500 [12:48<10:27,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  54%|█████▍    | 272/500 [12:51<10:27,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  55%|█████▍    | 273/500 [12:51<10:24,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  55%|█████▍    | 273/500 [12:54<10:24,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  55%|█████▍    | 274/500 [12:54<10:21,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  55%|█████▍    | 274/500 [12:56<10:21,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  55%|█████▌    | 275/500 [12:56<10:18,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  55%|█████▌    | 275/500 [12:59<10:18,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  55%|█████▌    | 276/500 [12:59<10:16,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  55%|█████▌    | 276/500 [13:02<10:16,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  55%|█████▌    | 277/500 [13:02<10:13,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  55%|█████▌    | 277/500 [13:05<10:13,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  56%|█████▌    | 278/500 [13:05<10:11,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  56%|█████▌    | 278/500 [13:07<10:11,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  56%|█████▌    | 279/500 [13:07<10:08,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  56%|█████▌    | 279/500 [13:10<10:08,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  56%|█████▌    | 280/500 [13:10<10:11,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  56%|█████▌    | 280/500 [13:13<10:11,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  56%|█████▌    | 281/500 [13:13<10:06,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  56%|█████▌    | 281/500 [13:16<10:06,  2.77s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  56%|█████▋    | 282/500 [13:16<10:16,  2.83s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  56%|█████▋    | 282/500 [13:19<10:16,  2.83s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  57%|█████▋    | 283/500 [13:19<10:22,  2.87s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  57%|█████▋    | 283/500 [13:22<10:22,  2.87s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  57%|█████▋    | 284/500 [13:22<10:12,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  57%|█████▋    | 284/500 [13:24<10:12,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  57%|█████▋    | 285/500 [13:24<10:04,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  57%|█████▋    | 285/500 [13:27<10:04,  2.81s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  57%|█████▋    | 286/500 [13:27<10:10,  2.85s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  57%|█████▋    | 286/500 [13:30<10:10,  2.85s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  57%|█████▋    | 287/500 [13:30<10:00,  2.82s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  57%|█████▋    | 287/500 [13:33<10:00,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  58%|█████▊    | 288/500 [13:33<09:54,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  58%|█████▊    | 288/500 [13:36<09:54,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  58%|█████▊    | 289/500 [13:36<09:48,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  58%|█████▊    | 289/500 [13:38<09:48,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  58%|█████▊    | 290/500 [13:38<09:46,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  58%|█████▊    | 290/500 [13:41<09:46,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  58%|█████▊    | 291/500 [13:41<09:45,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  58%|█████▊    | 291/500 [13:44<09:45,  2.80s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  58%|█████▊    | 292/500 [13:44<09:56,  2.87s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  58%|█████▊    | 292/500 [13:47<09:56,  2.87s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▊    | 293/500 [13:47<09:46,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▊    | 293/500 [13:50<09:46,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▉    | 294/500 [13:50<09:39,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▉    | 294/500 [13:53<09:39,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▉    | 295/500 [13:53<09:32,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▉    | 295/500 [13:55<09:32,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▉    | 296/500 [13:55<09:33,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▉    | 296/500 [13:58<09:33,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▉    | 297/500 [13:58<09:27,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  59%|█████▉    | 297/500 [14:01<09:27,  2.79s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  60%|█████▉    | 298/500 [14:01<09:39,  2.87s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  60%|█████▉    | 298/500 [14:04<09:39,  2.87s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  60%|█████▉    | 299/500 [14:04<09:44,  2.91s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  60%|█████▉    | 299/500 [14:07<09:44,  2.91s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  60%|██████    | 300/500 [14:07<09:34,  2.87s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  60%|██████    | 300/500 [14:10<09:34,  2.87s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  60%|██████    | 301/500 [14:10<09:24,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  60%|██████    | 301/500 [14:13<09:24,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  60%|██████    | 302/500 [14:13<09:17,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  60%|██████    | 302/500 [14:16<09:17,  2.82s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  61%|██████    | 303/500 [14:16<09:26,  2.88s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  61%|██████    | 303/500 [14:19<09:26,  2.88s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  61%|██████    | 304/500 [14:19<09:31,  2.92s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  61%|██████    | 304/500 [14:21<09:31,  2.92s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  61%|██████    | 305/500 [14:21<09:22,  2.88s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  61%|██████    | 305/500 [14:24<09:22,  2.88s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  61%|██████    | 306/500 [14:24<09:29,  2.93s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  61%|██████    | 306/500 [14:27<09:29,  2.93s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  61%|██████▏   | 307/500 [14:27<09:15,  2.88s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  61%|██████▏   | 307/500 [14:30<09:15,  2.88s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  62%|██████▏   | 308/500 [14:30<09:04,  2.83s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  62%|██████▏   | 308/500 [14:33<09:04,  2.83s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  62%|██████▏   | 309/500 [14:33<08:56,  2.81s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  62%|██████▏   | 309/500 [14:36<08:56,  2.81s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  62%|██████▏   | 310/500 [14:36<09:03,  2.86s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  62%|██████▏   | 310/500 [14:38<09:03,  2.86s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  62%|██████▏   | 311/500 [14:38<08:54,  2.83s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  62%|██████▏   | 311/500 [14:41<08:54,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  62%|██████▏   | 312/500 [14:41<08:47,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  62%|██████▏   | 312/500 [14:44<08:47,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  63%|██████▎   | 313/500 [14:44<08:42,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  63%|██████▎   | 313/500 [14:47<08:42,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  63%|██████▎   | 314/500 [14:47<08:37,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  63%|██████▎   | 314/500 [14:49<08:37,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  63%|██████▎   | 315/500 [14:49<08:33,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  63%|██████▎   | 315/500 [14:52<08:33,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  63%|██████▎   | 316/500 [14:52<08:28,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  63%|██████▎   | 316/500 [14:55<08:28,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  63%|██████▎   | 317/500 [14:55<08:25,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  63%|██████▎   | 317/500 [14:58<08:25,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  64%|██████▎   | 318/500 [14:58<08:22,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  64%|██████▎   | 318/500 [15:01<08:22,  2.76s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  64%|██████▍   | 319/500 [15:01<08:33,  2.84s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  64%|██████▍   | 319/500 [15:03<08:33,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  64%|██████▍   | 320/500 [15:03<08:26,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  64%|██████▍   | 320/500 [15:06<08:26,  2.81s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  64%|██████▍   | 321/500 [15:06<08:33,  2.87s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  64%|██████▍   | 321/500 [15:09<08:33,  2.87s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  64%|██████▍   | 322/500 [15:09<08:24,  2.83s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  64%|██████▍   | 322/500 [15:12<08:24,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  65%|██████▍   | 323/500 [15:12<08:16,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  65%|██████▍   | 323/500 [15:15<08:16,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  65%|██████▍   | 324/500 [15:15<08:11,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  65%|██████▍   | 324/500 [15:18<08:11,  2.79s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  65%|██████▌   | 325/500 [15:18<08:12,  2.81s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  65%|██████▌   | 325/500 [15:20<08:12,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  65%|██████▌   | 326/500 [15:20<08:06,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  65%|██████▌   | 326/500 [15:23<08:06,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  65%|██████▌   | 327/500 [15:23<08:03,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  65%|██████▌   | 327/500 [15:26<08:03,  2.80s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  66%|██████▌   | 328/500 [15:26<08:12,  2.86s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  66%|██████▌   | 328/500 [15:29<08:12,  2.86s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  66%|██████▌   | 329/500 [15:29<08:06,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  66%|██████▌   | 329/500 [15:32<08:06,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  66%|██████▌   | 330/500 [15:32<07:59,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  66%|██████▌   | 330/500 [15:35<07:59,  2.82s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  66%|██████▌   | 331/500 [15:35<08:07,  2.88s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  66%|██████▌   | 331/500 [15:38<08:07,  2.88s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  66%|██████▋   | 332/500 [15:38<08:11,  2.92s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  66%|██████▋   | 332/500 [15:41<08:11,  2.92s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 333/500 [15:41<08:00,  2.88s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 333/500 [15:43<08:00,  2.88s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 334/500 [15:43<07:51,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 334/500 [15:46<07:51,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 335/500 [15:46<07:44,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 335/500 [15:49<07:44,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 336/500 [15:49<07:38,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 336/500 [15:52<07:38,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 337/500 [15:52<07:34,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  67%|██████▋   | 337/500 [15:54<07:34,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  68%|██████▊   | 338/500 [15:54<07:29,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  68%|██████▊   | 338/500 [15:57<07:29,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  68%|██████▊   | 339/500 [15:57<07:25,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  68%|██████▊   | 339/500 [16:00<07:25,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  68%|██████▊   | 340/500 [16:00<07:21,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  68%|██████▊   | 340/500 [16:03<07:21,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  68%|██████▊   | 341/500 [16:03<07:18,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  68%|██████▊   | 341/500 [16:05<07:18,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  68%|██████▊   | 342/500 [16:05<07:15,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  68%|██████▊   | 342/500 [16:08<07:15,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  69%|██████▊   | 343/500 [16:08<07:12,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  69%|██████▊   | 343/500 [16:11<07:12,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  69%|██████▉   | 344/500 [16:11<07:12,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  69%|██████▉   | 344/500 [16:14<07:12,  2.77s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  69%|██████▉   | 345/500 [16:14<07:16,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  69%|██████▉   | 345/500 [16:17<07:16,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  69%|██████▉   | 346/500 [16:17<07:11,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  69%|██████▉   | 346/500 [16:19<07:11,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  69%|██████▉   | 347/500 [16:19<07:06,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  69%|██████▉   | 347/500 [16:22<07:06,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  70%|██████▉   | 348/500 [16:22<07:02,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  70%|██████▉   | 348/500 [16:25<07:02,  2.78s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  70%|██████▉   | 349/500 [16:25<07:11,  2.86s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  70%|██████▉   | 349/500 [16:28<07:11,  2.86s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  70%|███████   | 350/500 [16:28<07:05,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  70%|███████   | 350/500 [16:31<07:05,  2.84s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  70%|███████   | 351/500 [16:31<06:58,  2.81s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  70%|███████   | 351/500 [16:34<06:58,  2.81s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  70%|███████   | 352/500 [16:34<07:03,  2.86s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  70%|███████   | 352/500 [16:37<07:03,  2.86s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  71%|███████   | 353/500 [16:37<07:09,  2.92s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  71%|███████   | 353/500 [16:40<07:09,  2.92s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  71%|███████   | 354/500 [16:40<07:01,  2.89s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  71%|███████   | 354/500 [16:42<07:01,  2.89s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  71%|███████   | 355/500 [16:42<06:54,  2.86s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  71%|███████   | 355/500 [16:45<06:54,  2.86s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  71%|███████   | 356/500 [16:45<06:48,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  71%|███████   | 356/500 [16:48<06:48,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  71%|███████▏  | 357/500 [16:48<06:43,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  71%|███████▏  | 357/500 [16:51<06:43,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  72%|███████▏  | 358/500 [16:51<06:39,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  72%|███████▏  | 358/500 [16:54<06:39,  2.82s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  72%|███████▏  | 359/500 [16:54<06:48,  2.90s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  72%|███████▏  | 359/500 [16:57<06:48,  2.90s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  72%|███████▏  | 360/500 [16:57<06:52,  2.95s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  72%|███████▏  | 360/500 [17:00<06:52,  2.95s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  72%|███████▏  | 361/500 [17:00<06:45,  2.92s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  72%|███████▏  | 361/500 [17:02<06:45,  2.92s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  72%|███████▏  | 362/500 [17:02<06:37,  2.88s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  72%|███████▏  | 362/500 [17:06<06:37,  2.88s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  73%|███████▎  | 363/500 [17:06<06:45,  2.96s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  73%|███████▎  | 363/500 [17:09<06:45,  2.96s/case, avg=2.8, fail=0, sec=3.2]2view_infer:  73%|███████▎  | 364/500 [17:09<06:51,  3.03s/case, avg=2.8, fail=0, sec=3.2]2view_infer:  73%|███████▎  | 364/500 [17:12<06:51,  3.03s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  73%|███████▎  | 365/500 [17:12<06:38,  2.95s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  73%|███████▎  | 365/500 [17:14<06:38,  2.95s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  73%|███████▎  | 366/500 [17:14<06:28,  2.90s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  73%|███████▎  | 366/500 [17:17<06:28,  2.90s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  73%|███████▎  | 367/500 [17:17<06:21,  2.87s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  73%|███████▎  | 367/500 [17:20<06:21,  2.87s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▎  | 368/500 [17:20<06:14,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▎  | 368/500 [17:23<06:14,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▍  | 369/500 [17:23<06:09,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▍  | 369/500 [17:25<06:09,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▍  | 370/500 [17:25<06:05,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▍  | 370/500 [17:28<06:05,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▍  | 371/500 [17:28<06:00,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▍  | 371/500 [17:31<06:00,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▍  | 372/500 [17:31<05:57,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  74%|███████▍  | 372/500 [17:34<05:57,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▍  | 373/500 [17:34<05:53,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▍  | 373/500 [17:37<05:53,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▍  | 374/500 [17:37<05:50,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▍  | 374/500 [17:39<05:50,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▌  | 375/500 [17:39<05:47,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▌  | 375/500 [17:42<05:47,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▌  | 376/500 [17:42<05:44,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▌  | 376/500 [17:45<05:44,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▌  | 377/500 [17:45<05:42,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  75%|███████▌  | 377/500 [17:48<05:42,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▌  | 378/500 [17:48<05:39,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▌  | 378/500 [17:50<05:39,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▌  | 379/500 [17:50<05:36,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▌  | 379/500 [17:53<05:36,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▌  | 380/500 [17:53<05:33,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▌  | 380/500 [17:56<05:33,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▌  | 381/500 [17:56<05:31,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▌  | 381/500 [17:59<05:31,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▋  | 382/500 [17:59<05:28,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  76%|███████▋  | 382/500 [18:02<05:28,  2.78s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  77%|███████▋  | 383/500 [18:02<05:32,  2.84s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  77%|███████▋  | 383/500 [18:05<05:32,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  77%|███████▋  | 384/500 [18:05<05:27,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  77%|███████▋  | 384/500 [18:07<05:27,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  77%|███████▋  | 385/500 [18:07<05:23,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  77%|███████▋  | 385/500 [18:10<05:23,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  77%|███████▋  | 386/500 [18:10<05:19,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  77%|███████▋  | 386/500 [18:13<05:19,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  77%|███████▋  | 387/500 [18:13<05:16,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  77%|███████▋  | 387/500 [18:16<05:16,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 388/500 [18:16<05:13,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 388/500 [18:19<05:13,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 389/500 [18:19<05:10,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 389/500 [18:21<05:10,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 390/500 [18:21<05:07,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 390/500 [18:24<05:07,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 391/500 [18:24<05:04,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 391/500 [18:27<05:04,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 392/500 [18:27<05:01,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  78%|███████▊  | 392/500 [18:30<05:01,  2.79s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  79%|███████▊  | 393/500 [18:30<05:06,  2.86s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  79%|███████▊  | 393/500 [18:33<05:06,  2.86s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  79%|███████▉  | 394/500 [18:33<05:01,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  79%|███████▉  | 394/500 [18:36<05:01,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  79%|███████▉  | 395/500 [18:36<04:56,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  79%|███████▉  | 395/500 [18:38<04:56,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  79%|███████▉  | 396/500 [18:38<04:52,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  79%|███████▉  | 396/500 [18:41<04:52,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  79%|███████▉  | 397/500 [18:41<04:49,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  79%|███████▉  | 397/500 [18:44<04:49,  2.81s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  80%|███████▉  | 398/500 [18:44<04:54,  2.89s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  80%|███████▉  | 398/500 [18:47<04:54,  2.89s/case, avg=2.8, fail=0, sec=3.2]2view_infer:  80%|███████▉  | 399/500 [18:47<05:00,  2.97s/case, avg=2.8, fail=0, sec=3.2]2view_infer:  80%|███████▉  | 399/500 [18:51<05:00,  2.97s/case, avg=2.8, fail=0, sec=3.3]2view_infer:  80%|████████  | 400/500 [18:51<05:05,  3.06s/case, avg=2.8, fail=0, sec=3.3]2view_infer:  80%|████████  | 400/500 [18:54<05:05,  3.06s/case, avg=2.8, fail=0, sec=3.2]2view_infer:  80%|████████  | 401/500 [18:54<05:07,  3.11s/case, avg=2.8, fail=0, sec=3.2]2view_infer:  80%|████████  | 401/500 [18:57<05:07,  3.11s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  80%|████████  | 402/500 [18:57<04:57,  3.04s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  80%|████████  | 402/500 [18:59<04:57,  3.04s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████  | 403/500 [18:59<04:46,  2.96s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████  | 403/500 [19:02<04:46,  2.96s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████  | 404/500 [19:02<04:38,  2.90s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████  | 404/500 [19:05<04:38,  2.90s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████  | 405/500 [19:05<04:32,  2.87s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████  | 405/500 [19:08<04:32,  2.87s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████  | 406/500 [19:08<04:26,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████  | 406/500 [19:11<04:26,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████▏ | 407/500 [19:11<04:22,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  81%|████████▏ | 407/500 [19:13<04:22,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 408/500 [19:13<04:18,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 408/500 [19:16<04:18,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 409/500 [19:16<04:15,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 409/500 [19:19<04:15,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 410/500 [19:19<04:12,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 410/500 [19:22<04:12,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 411/500 [19:22<04:09,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 411/500 [19:25<04:09,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 412/500 [19:25<04:06,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  82%|████████▏ | 412/500 [19:27<04:06,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 413/500 [19:27<04:02,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 413/500 [19:30<04:02,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 414/500 [19:30<03:59,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 414/500 [19:33<03:59,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 415/500 [19:33<03:56,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 415/500 [19:36<03:56,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 416/500 [19:36<03:53,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 416/500 [19:38<03:53,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 417/500 [19:38<03:50,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  83%|████████▎ | 417/500 [19:41<03:50,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▎ | 418/500 [19:41<03:48,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▎ | 418/500 [19:44<03:48,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▍ | 419/500 [19:44<03:45,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▍ | 419/500 [19:47<03:45,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▍ | 420/500 [19:47<03:42,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▍ | 420/500 [19:50<03:42,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▍ | 421/500 [19:50<03:39,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▍ | 421/500 [19:52<03:39,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▍ | 422/500 [19:52<03:37,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  84%|████████▍ | 422/500 [19:55<03:37,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▍ | 423/500 [19:55<03:34,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▍ | 423/500 [19:58<03:34,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▍ | 424/500 [19:58<03:31,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▍ | 424/500 [20:01<03:31,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▌ | 425/500 [20:01<03:28,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▌ | 425/500 [20:04<03:28,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▌ | 426/500 [20:04<03:26,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▌ | 426/500 [20:06<03:26,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▌ | 427/500 [20:06<03:24,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  85%|████████▌ | 427/500 [20:09<03:24,  2.81s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▌ | 428/500 [20:09<03:21,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▌ | 428/500 [20:12<03:21,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▌ | 429/500 [20:12<03:18,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▌ | 429/500 [20:15<03:18,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▌ | 430/500 [20:15<03:15,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▌ | 430/500 [20:17<03:15,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▌ | 431/500 [20:17<03:12,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▌ | 431/500 [20:20<03:12,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▋ | 432/500 [20:20<03:09,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  86%|████████▋ | 432/500 [20:23<03:09,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 433/500 [20:23<03:06,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 433/500 [20:26<03:06,  2.78s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 434/500 [20:26<03:03,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 434/500 [20:29<03:03,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 435/500 [20:29<03:00,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 435/500 [20:31<03:00,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 436/500 [20:31<02:57,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 436/500 [20:34<02:57,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 437/500 [20:34<02:54,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  87%|████████▋ | 437/500 [20:37<02:54,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 438/500 [20:37<02:51,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 438/500 [20:40<02:51,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 439/500 [20:40<02:48,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 439/500 [20:42<02:48,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 440/500 [20:42<02:46,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 440/500 [20:45<02:46,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 441/500 [20:45<02:43,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 441/500 [20:48<02:43,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 442/500 [20:48<02:40,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  88%|████████▊ | 442/500 [20:51<02:40,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▊ | 443/500 [20:51<02:38,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▊ | 443/500 [20:53<02:38,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▉ | 444/500 [20:53<02:35,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▉ | 444/500 [20:56<02:35,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▉ | 445/500 [20:56<02:32,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▉ | 445/500 [20:59<02:32,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▉ | 446/500 [20:59<02:29,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▉ | 446/500 [21:02<02:29,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▉ | 447/500 [21:02<02:26,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  89%|████████▉ | 447/500 [21:05<02:26,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  90%|████████▉ | 448/500 [21:05<02:23,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  90%|████████▉ | 448/500 [21:08<02:23,  2.77s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  90%|████████▉ | 449/500 [21:08<02:25,  2.85s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  90%|████████▉ | 449/500 [21:11<02:25,  2.85s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  90%|█████████ | 450/500 [21:11<02:24,  2.89s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  90%|█████████ | 450/500 [21:14<02:24,  2.89s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  90%|█████████ | 451/500 [21:14<02:23,  2.93s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  90%|█████████ | 451/500 [21:17<02:23,  2.93s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  90%|█████████ | 452/500 [21:17<02:22,  2.97s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  90%|█████████ | 452/500 [21:20<02:22,  2.97s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  91%|█████████ | 453/500 [21:20<02:20,  2.98s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  91%|█████████ | 453/500 [21:22<02:20,  2.98s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  91%|█████████ | 454/500 [21:22<02:14,  2.93s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  91%|█████████ | 454/500 [21:25<02:14,  2.93s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  91%|█████████ | 455/500 [21:25<02:09,  2.88s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  91%|█████████ | 455/500 [21:28<02:09,  2.88s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  91%|█████████ | 456/500 [21:28<02:08,  2.92s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  91%|█████████ | 456/500 [21:31<02:08,  2.92s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  91%|█████████▏| 457/500 [21:31<02:04,  2.88s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  91%|█████████▏| 457/500 [21:34<02:04,  2.88s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  92%|█████████▏| 458/500 [21:34<01:59,  2.85s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  92%|█████████▏| 458/500 [21:37<01:59,  2.85s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  92%|█████████▏| 459/500 [21:37<01:56,  2.84s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  92%|█████████▏| 459/500 [21:40<01:56,  2.84s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  92%|█████████▏| 460/500 [21:40<01:55,  2.90s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  92%|█████████▏| 460/500 [21:43<01:55,  2.90s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  92%|█████████▏| 461/500 [21:43<01:54,  2.95s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  92%|█████████▏| 461/500 [21:46<01:54,  2.95s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  92%|█████████▏| 462/500 [21:46<01:53,  2.98s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  92%|█████████▏| 462/500 [21:49<01:53,  2.98s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  93%|█████████▎| 463/500 [21:49<01:49,  2.95s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  93%|█████████▎| 463/500 [21:52<01:49,  2.95s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  93%|█████████▎| 464/500 [21:52<01:47,  2.98s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  93%|█████████▎| 464/500 [21:55<01:47,  2.98s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  93%|█████████▎| 465/500 [21:55<01:44,  2.99s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  93%|█████████▎| 465/500 [21:58<01:44,  2.99s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  93%|█████████▎| 466/500 [21:58<01:41,  2.99s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  93%|█████████▎| 466/500 [22:01<01:41,  2.99s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  93%|█████████▎| 467/500 [22:01<01:36,  2.93s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  93%|█████████▎| 467/500 [22:04<01:36,  2.93s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  94%|█████████▎| 468/500 [22:04<01:35,  2.98s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  94%|█████████▎| 468/500 [22:06<01:35,  2.98s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  94%|█████████▍| 469/500 [22:06<01:31,  2.95s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  94%|█████████▍| 469/500 [22:09<01:31,  2.95s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  94%|█████████▍| 470/500 [22:09<01:26,  2.89s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  94%|█████████▍| 470/500 [22:12<01:26,  2.89s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  94%|█████████▍| 471/500 [22:12<01:23,  2.89s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  94%|█████████▍| 471/500 [22:15<01:23,  2.89s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  94%|█████████▍| 472/500 [22:15<01:19,  2.85s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  94%|█████████▍| 472/500 [22:18<01:19,  2.85s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  95%|█████████▍| 473/500 [22:18<01:17,  2.85s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  95%|█████████▍| 473/500 [22:20<01:17,  2.85s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  95%|█████████▍| 474/500 [22:20<01:13,  2.82s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  95%|█████████▍| 474/500 [22:23<01:13,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  95%|█████████▌| 475/500 [22:23<01:10,  2.83s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  95%|█████████▌| 475/500 [22:26<01:10,  2.83s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  95%|█████████▌| 476/500 [22:26<01:07,  2.80s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  95%|█████████▌| 476/500 [22:29<01:07,  2.80s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  95%|█████████▌| 477/500 [22:29<01:04,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  95%|█████████▌| 477/500 [22:32<01:04,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  96%|█████████▌| 478/500 [22:32<01:02,  2.84s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  96%|█████████▌| 478/500 [22:35<01:02,  2.84s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  96%|█████████▌| 479/500 [22:35<00:59,  2.82s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  96%|█████████▌| 479/500 [22:38<00:59,  2.82s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  96%|█████████▌| 480/500 [22:38<00:57,  2.85s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  96%|█████████▌| 480/500 [22:40<00:57,  2.85s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  96%|█████████▌| 481/500 [22:40<00:53,  2.82s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  96%|█████████▌| 481/500 [22:43<00:53,  2.82s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  96%|█████████▋| 482/500 [22:43<00:50,  2.80s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  96%|█████████▋| 482/500 [22:46<00:50,  2.80s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  97%|█████████▋| 483/500 [22:46<00:47,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  97%|█████████▋| 483/500 [22:49<00:47,  2.78s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  97%|█████████▋| 484/500 [22:49<00:44,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  97%|█████████▋| 484/500 [22:51<00:44,  2.77s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  97%|█████████▋| 485/500 [22:51<00:41,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  97%|█████████▋| 485/500 [22:54<00:41,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  97%|█████████▋| 486/500 [22:54<00:38,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  97%|█████████▋| 486/500 [22:57<00:38,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  97%|█████████▋| 487/500 [22:57<00:35,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  97%|█████████▋| 487/500 [23:00<00:35,  2.76s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  98%|█████████▊| 488/500 [23:00<00:33,  2.75s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  98%|█████████▊| 488/500 [23:02<00:33,  2.75s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  98%|█████████▊| 489/500 [23:02<00:30,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  98%|█████████▊| 489/500 [23:05<00:30,  2.77s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  98%|█████████▊| 490/500 [23:05<00:27,  2.76s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  98%|█████████▊| 490/500 [23:08<00:27,  2.76s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  98%|█████████▊| 491/500 [23:08<00:25,  2.85s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  98%|█████████▊| 491/500 [23:11<00:25,  2.85s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  98%|█████████▊| 492/500 [23:11<00:22,  2.85s/case, avg=2.8, fail=0, sec=2.9]2view_infer:  98%|█████████▊| 492/500 [23:14<00:22,  2.85s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  99%|█████████▊| 493/500 [23:14<00:19,  2.82s/case, avg=2.8, fail=0, sec=2.7]2view_infer:  99%|█████████▊| 493/500 [23:16<00:19,  2.82s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  99%|█████████▉| 494/500 [23:16<00:16,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  99%|█████████▉| 494/500 [23:19<00:16,  2.80s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  99%|█████████▉| 495/500 [23:19<00:13,  2.79s/case, avg=2.8, fail=0, sec=2.8]2view_infer:  99%|█████████▉| 495/500 [23:22<00:13,  2.79s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  99%|█████████▉| 496/500 [23:22<00:11,  2.88s/case, avg=2.8, fail=0, sec=3.1]2view_infer:  99%|█████████▉| 496/500 [23:25<00:11,  2.88s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  99%|█████████▉| 497/500 [23:25<00:08,  2.92s/case, avg=2.8, fail=0, sec=3.0]2view_infer:  99%|█████████▉| 497/500 [23:28<00:08,  2.92s/case, avg=2.8, fail=0, sec=2.9]2view_infer: 100%|█████████▉| 498/500 [23:28<00:05,  2.93s/case, avg=2.8, fail=0, sec=2.9]2view_infer: 100%|█████████▉| 498/500 [23:31<00:05,  2.93s/case, avg=2.8, fail=0, sec=2.9]2view_infer: 100%|█████████▉| 499/500 [23:31<00:02,  2.91s/case, avg=2.8, fail=0, sec=2.9]2view_infer: 100%|█████████▉| 499/500 [23:34<00:02,  2.91s/case, avg=2.8, fail=0, sec=3.0]2view_infer: 100%|██████████| 500/500 [23:34<00:00,  2.94s/case, avg=2.8, fail=0, sec=3.0]2view_infer: 100%|██████████| 500/500 [23:34<00:00,  2.83s/case, avg=2.8, fail=0, sec=3.0]
-
-==================== SUMMARY ====================
-new=500 parse_fail=0 avg=2.83s/case
-TOTAL inference time: 23.6 min (0.39 h)
-Output: /home/zhao/Mammography/Mammo/2-view/outputs/predictions_qwen3.5-4b_lora_500_500.jsonl
-=== INFER_OK: Sun Oct  4 18:06:38 NZDT 2026 ===
-=== pipeline end: Sun Oct  4 18:06:38 NZDT 2026 ===
