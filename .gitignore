@@ -184,3 +184,6 @@ predictions_score.json
 
 # VinDr inference outputs (generated results/logs)
 vindr_infer/outputs/
+/2-view/outputs/vision_baseline/repeat_os_density/last.pt
+/2-view/outputs/vision_baseline/repeat_os_density/last.pt
+*.pt

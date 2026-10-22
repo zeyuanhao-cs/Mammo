@@ -1,0 +1,94 @@
+== TABLE1 ==
+model,field,precision,recall,F1,AUC,bACC
+qwen_unfrozen_1ep,BI-RADS,0.5516,0.3991,0.4262,0.8040,0.3991
+qwen_unfrozen_1ep,Density,0.5484,0.5191,0.5318,0.9361,0.5191
+qwen_unfrozen_1ep,Findings_mean,0.2961,0.2166,0.2495,0.8056,0.6043
+qwen_unfrozen_3ep,BI-RADS,0.5964,0.4947,0.5187,0.8495,0.4947
+qwen_unfrozen_3ep,Density,0.7024,0.5789,0.6058,0.9442,0.5789
+qwen_unfrozen_3ep,Findings_mean,0.3339,0.2507,0.2863,0.8589,0.6222
+efficientnet_b2,BI-RADS,0.4856,0.4520,0.4522,0.8228,0.4520
+efficientnet_b2,Density,0.6535,0.5805,0.6116,0.9394,0.5805
+efficientnet_b2,Findings_mean,0.3408,0.2027,0.2540,0.7764,0.5990
+
+== TABLE2 ==
+model,field,class,support,n_pred,TP,FP,FN,TN,precision,recall,F1,AUC_ovr,bACC
+qwen_unfrozen_1ep,BI-RADS,1,1341,1704,1326,378,15,,0.7782,0.9888,0.8709,0.8373,
+qwen_unfrozen_1ep,BI-RADS,2,467,192,159,33,308,,0.8281,0.3405,0.4825,0.7633,
+qwen_unfrozen_1ep,BI-RADS,3,93,15,6,9,87,,0.4000,0.0645,0.1111,0.7140,
+qwen_unfrozen_1ep,BI-RADS,4,76,72,16,56,60,,0.2222,0.2105,0.2162,0.7642,
+qwen_unfrozen_1ep,BI-RADS,5,23,17,9,8,14,,0.5294,0.3913,0.4500,0.9411,
+qwen_unfrozen_1ep,Density,A,10,0,0,0,10,,0.0000,0.0000,0.0000,0.9826,
+qwen_unfrozen_1ep,Density,B,190,182,116,66,74,,0.6374,0.6105,0.6237,0.9526,
+qwen_unfrozen_1ep,Density,C,1530,1600,1404,196,126,,0.8775,0.9176,0.8971,0.8785,
+qwen_unfrozen_1ep,Density,D,270,218,148,70,122,,0.6789,0.5481,0.6066,0.9308,
+qwen_unfrozen_1ep,Findings,mass,119,98,48,50,71,1831,0.4898,0.4034,0.4424,0.8323,0.6884
+qwen_unfrozen_1ep,Findings,suspicious_calcification,54,36,25,11,29,1935,0.6944,0.4630,0.5556,0.9527,0.7287
+qwen_unfrozen_1ep,Findings,asymmetry,49,0,0,0,49,1951,0.0000,0.0000,0.0000,0.7496,0.5000
+qwen_unfrozen_1ep,Findings,architectural_distortion,13,0,0,0,13,1987,0.0000,0.0000,0.0000,0.6879,0.5000
+qwen_unfrozen_3ep,BI-RADS,1,1341,1609,1307,302,34,,0.8123,0.9746,0.8861,0.8714,
+qwen_unfrozen_3ep,BI-RADS,2,467,297,230,67,237,,0.7744,0.4925,0.6021,0.8321,
+qwen_unfrozen_3ep,BI-RADS,3,93,33,13,20,80,,0.3939,0.1398,0.2063,0.7485,
+qwen_unfrozen_3ep,BI-RADS,4,76,36,13,23,63,,0.3611,0.1711,0.2321,0.8192,
+qwen_unfrozen_3ep,BI-RADS,5,23,25,16,9,7,,0.6400,0.6957,0.6667,0.9761,
+qwen_unfrozen_3ep,Density,A,10,2,1,1,9,,0.5000,0.1000,0.1667,0.9867,
+qwen_unfrozen_3ep,Density,B,190,158,119,39,71,,0.7532,0.6263,0.6839,0.9643,
+qwen_unfrozen_3ep,Density,C,1530,1565,1406,159,124,,0.8984,0.9190,0.9086,0.8911,
+qwen_unfrozen_3ep,Density,D,270,275,181,94,89,,0.6582,0.6704,0.6642,0.9349,
+qwen_unfrozen_3ep,Findings,mass,119,88,51,37,68,1844,0.5795,0.4286,0.4928,0.8732,0.7045
+qwen_unfrozen_3ep,Findings,suspicious_calcification,54,41,31,10,23,1936,0.7561,0.5741,0.6526,0.9599,0.7845
+qwen_unfrozen_3ep,Findings,asymmetry,49,0,0,0,49,1951,0.0000,0.0000,0.0000,0.8006,0.5000
+qwen_unfrozen_3ep,Findings,architectural_distortion,13,1,0,1,13,1986,0.0000,0.0000,0.0000,0.8017,0.4997
+efficientnet_b2,BI-RADS,1,1341,1667,1303,364,38,,0.7816,0.9717,0.8664,0.8182,
+efficientnet_b2,BI-RADS,2,467,224,176,48,291,,0.7857,0.3769,0.5094,0.7944,
+efficientnet_b2,BI-RADS,3,93,2,0,2,93,,0.0000,0.0000,0.0000,0.7135,
+efficientnet_b2,BI-RADS,4,76,83,23,60,53,,0.2771,0.3026,0.2893,0.7986,
+efficientnet_b2,BI-RADS,5,23,24,14,10,9,,0.5833,0.6087,0.5957,0.9891,
+efficientnet_b2,Density,A,10,7,2,5,8,,0.2857,0.2000,0.2353,0.9799,
+efficientnet_b2,Density,B,190,164,116,48,74,,0.7073,0.6105,0.6554,0.9576,
+efficientnet_b2,Density,C,1530,1618,1434,184,96,,0.8863,0.9373,0.9111,0.8882,
+efficientnet_b2,Density,D,270,211,155,56,115,,0.7346,0.5741,0.6445,0.9319,
+efficientnet_b2,Findings,mass,119,65,37,28,82,1853,0.5692,0.3109,0.4022,0.7942,0.6480
+efficientnet_b2,Findings,suspicious_calcification,54,34,27,7,27,1939,0.7941,0.5000,0.6136,0.9367,0.7482
+efficientnet_b2,Findings,asymmetry,49,1,0,1,49,1950,0.0000,0.0000,0.0000,0.7144,0.4997
+efficientnet_b2,Findings,architectural_distortion,13,0,0,0,13,1987,0.0000,0.0000,0.0000,0.6602,0.5000
+
+== TABLE3 ==
+model_vs,field,class,delta_AUC,CI_low,CI_high
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,BI-RADS,macro,+0.0455 *,0.0343,0.0579
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Density,macro,+0.0081 *,0.0034,0.0130
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Findings,mean,+0.0532 *,0.0247,0.0847
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,BI-RADS,1,+0.0342 *,0.0211,0.0466
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,BI-RADS,2,+0.0688 *,0.0442,0.0938
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,BI-RADS,3,+0.0346 *,0.0051,0.0654
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,BI-RADS,4,+0.0550 *,0.0267,0.0877
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,BI-RADS,5,+0.0349 *,0.0093,0.0681
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Density,A,+0.0041,-0.0037,0.0132
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Density,B,+0.0117 *,0.0066,0.0173
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Density,C,+0.0126 *,0.0022,0.0233
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Density,D,+0.0042,-0.0013,0.0099
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Findings,mass,+0.0409 *,0.0187,0.0660
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Findings,suspicious_calcification,+0.0072,-0.0038,0.0199
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Findings,asymmetry,+0.0510,-0.0082,0.1024
+qwen_unfrozen_3ep vs qwen_unfrozen_1ep,Findings,architectural_distortion,+0.1138 *,0.0304,0.2246
+qwen_unfrozen_3ep vs efficientnet_b2,BI-RADS,macro,+0.0267 *,0.0061,0.0468
+qwen_unfrozen_3ep vs efficientnet_b2,Density,macro,+0.0048,-0.0034,0.0134
+qwen_unfrozen_3ep vs efficientnet_b2,Findings,mean,+0.0825 *,0.0364,0.1281
+qwen_unfrozen_3ep vs efficientnet_b2,BI-RADS,1,+0.0532 *,0.0342,0.0721
+qwen_unfrozen_3ep vs efficientnet_b2,BI-RADS,2,+0.0377 *,0.0127,0.0640
+qwen_unfrozen_3ep vs efficientnet_b2,BI-RADS,3,+0.0350,-0.0312,0.1030
+qwen_unfrozen_3ep vs efficientnet_b2,BI-RADS,4,+0.0206,-0.0265,0.0680
+qwen_unfrozen_3ep vs efficientnet_b2,BI-RADS,5,-0.0131,-0.0578,0.0137
+qwen_unfrozen_3ep vs efficientnet_b2,Density,A,+0.0067,-0.0047,0.0245
+qwen_unfrozen_3ep vs efficientnet_b2,Density,B,+0.0066,-0.0015,0.0147
+qwen_unfrozen_3ep vs efficientnet_b2,Density,C,+0.0029,-0.0125,0.0186
+qwen_unfrozen_3ep vs efficientnet_b2,Density,D,+0.0030,-0.0085,0.0142
+qwen_unfrozen_3ep vs efficientnet_b2,Findings,mass,+0.0790 *,0.0382,0.1180
+qwen_unfrozen_3ep vs efficientnet_b2,Findings,suspicious_calcification,+0.0232,-0.0006,0.0483
+qwen_unfrozen_3ep vs efficientnet_b2,Findings,asymmetry,+0.0862 *,0.0072,0.1737
+qwen_unfrozen_3ep vs efficientnet_b2,Findings,architectural_distortion,+0.1414,-0.0236,0.2973
+
+== TABLE4 ==
+model,lesion_gt,detected
+qwen_unfrozen_1ep,192,65
+qwen_unfrozen_3ep,192,69
+efficientnet_b2,192,62
