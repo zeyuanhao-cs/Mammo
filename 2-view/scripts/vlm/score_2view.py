@@ -112,6 +112,10 @@ def main():
     parser.add_argument("--data", type=str, default=str(DATA_FILE), help="数据 json (id/images/output), 默认官方 test.json")
     parser.add_argument("--model-path", type=str, default=MODEL_PATH, help="基座模型路径 (本地复跑时覆盖)")
     parser.add_argument("--prompt-file", type=str, default=str(PROMPT_FILE), help="prompt.txt 路径 (本地复跑时覆盖)")
+    parser.add_argument("--image-max-pixels", type=int, default=IMAGE_MAX_PIXELS,
+                        help=f"视觉最长边像素预算, 默认 {IMAGE_MAX_PIXELS}; 1386240=原生")
+    parser.add_argument("--image-min-pixels", type=int, default=IMAGE_MIN_PIXELS,
+                        help=f"视觉最短边像素预算, 默认 {IMAGE_MIN_PIXELS}")
     args = parser.parse_args()
 
     assert torch.cuda.is_available(), "CUDA unavailable"
@@ -155,8 +159,8 @@ def main():
         trust_remote_code=True,
         infer_backend="huggingface",
         infer_dtype=INFER_DTYPE,
-        image_max_pixels=IMAGE_MAX_PIXELS,
-        image_min_pixels=IMAGE_MIN_PIXELS,
+        image_max_pixels=args.image_max_pixels,
+        image_min_pixels=args.image_min_pixels,
         enable_thinking=False,
         flash_attn="sdpa",
         adapter_name_or_path=args.adapter,

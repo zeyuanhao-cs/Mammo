@@ -48,5 +48,15 @@
       "response": "output",
       "images": "images"
     }
+  },
+  "vindr_2view_train_os_sub_density_local": {
+    "file_name": "llamafactory/train_llamafactory_os_sub_density_local.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "images": "images"
+    }
   }
 }

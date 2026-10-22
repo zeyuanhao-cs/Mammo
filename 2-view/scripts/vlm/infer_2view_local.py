@@ -163,6 +163,11 @@ def main():
     parser.add_argument("--data", type=str, default=str(DATA_FILE), help="数据文件路径")
     parser.add_argument("--prompt-file", type=str, default=str(PROMPT_FILE),
                         help="prompt 文件路径 (默认 dataset_build/prompt.txt)")
+    parser.add_argument("--image-max-pixels", type=int, default=IMAGE_MAX_PIXELS,
+                        help=f"视觉最长边像素预算, 默认 {IMAGE_MAX_PIXELS} (786432=训练分辨率); "
+                             "1386240=912x1520 原生分辨率")
+    parser.add_argument("--image-min-pixels", type=int, default=IMAGE_MIN_PIXELS,
+                        help=f"视觉最短边像素预算, 默认 {IMAGE_MIN_PIXELS} (512*512)")
     args = parser.parse_args()
 
     model_path = MODELS[args.model]["path"]
@@ -194,8 +199,8 @@ def main():
         trust_remote_code=True,
         infer_backend="huggingface",
         infer_dtype=INFER_DTYPE,
-        image_max_pixels=IMAGE_MAX_PIXELS,
-        image_min_pixels=IMAGE_MIN_PIXELS,
+        image_max_pixels=args.image_max_pixels,
+        image_min_pixels=args.image_min_pixels,
         enable_thinking=enable_thinking,
         flash_attn="sdpa",
     )
@@ -214,8 +219,8 @@ def main():
                 "template": template,
                 "samples": len(records),
                 "max_new_tokens": args.max_new_tokens,
-                "image_max_pixels": IMAGE_MAX_PIXELS,
-                "image_min_pixels": IMAGE_MIN_PIXELS,
+                "image_max_pixels": args.image_max_pixels,
+                "image_min_pixels": args.image_min_pixels,
                 "enable_thinking": False,
                 "do_sample": False,
                 "infer_dtype": INFER_DTYPE,
