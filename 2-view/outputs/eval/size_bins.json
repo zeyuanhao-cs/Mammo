@@ -1,0 +1,788 @@
+{
+ "metric": "max(lesion_bbox_area) / image_area  (finding_birads>=3 boxes only)",
+ "thresholds": {
+  "t1": 0.0040359533706496205,
+  "t2": 0.012400074810524813
+ },
+ "thresholds_pct": {
+  "t1": 0.40359533706496203,
+  "t2": 1.2400074810524813
+ },
+ "counts": {
+  "small": 64,
+  "medium": 64,
+  "large": 64
+ },
+ "n": 192,
+ "zero_ratio_cases": 0,
+ "per_breast": {
+  "014d843f13a9d86fec945664e2541fe6_R": {
+   "ratio": 0.002094584088734552,
+   "bin": "small"
+  },
+  "02c9621d5af7d0485e20c071f605678c_R": {
+   "ratio": 0.0015384107973557609,
+   "bin": "small"
+  },
+  "02dba952e4ef2cf35613761a64bbc751_R": {
+   "ratio": 0.012392633705547305,
+   "bin": "medium"
+  },
+  "043febde473009753d404fe89a41c395_R": {
+   "ratio": 0.002552016633187576,
+   "bin": "small"
+  },
+  "07889ee9b57d18e83cfd940b160965b6_R": {
+   "ratio": 0.005094708736099992,
+   "bin": "medium"
+  },
+  "07a0dbae70b94afb01313eeeeaaef9ac_R": {
+   "ratio": 0.0017751982747839276,
+   "bin": "small"
+  },
+  "0910d9262da2398810b2f2bc32b77088_L": {
+   "ratio": 0.013725005826452388,
+   "bin": "large"
+  },
+  "0928a31ce88182b08f89a6aa72354037_L": {
+   "ratio": 0.0049933452801654895,
+   "bin": "medium"
+  },
+  "0baef459a10e51c65302ddb63012c147_R": {
+   "ratio": 0.010743124475148415,
+   "bin": "medium"
+  },
+  "0d8fc33c55f2f6af87ee3bd16614e208_R": {
+   "ratio": 0.00233161370798731,
+   "bin": "small"
+  },
+  "0f19f51df3ae39481f0a88d5b17b8499_R": {
+   "ratio": 0.045429285759965944,
+   "bin": "large"
+  },
+  "0fab8097f55f21d4bfa7667250122312_L": {
+   "ratio": 0.027069533915879008,
+   "bin": "large"
+  },
+  "100d1197bd368737356f1da7fc270ae4_R": {
+   "ratio": 0.0016875129562492189,
+   "bin": "small"
+  },
+  "115666dcca5a3ecb52368efc61da2578_L": {
+   "ratio": 0.027754027628051136,
+   "bin": "large"
+  },
+  "1289de4c6d2a9439311af675dd610158_L": {
+   "ratio": 0.03429153600317983,
+   "bin": "large"
+  },
+  "145927026debdaedb04126ab0f182f4e_R": {
+   "ratio": 0.075791810629966,
+   "bin": "large"
+  },
+  "14a63118d94643a3d65b32039a20b351_L": {
+   "ratio": 0.0020552731381414738,
+   "bin": "small"
+  },
+  "1661e2bdcd39e86c666fec4bdf182791_L": {
+   "ratio": 0.002191423146023535,
+   "bin": "small"
+  },
+  "1734a10c08f2565315493df00a2fd134_L": {
+   "ratio": 0.003938030889553387,
+   "bin": "small"
+  },
+  "18249f2f393ec3a4e59d4f3e9e7c6d1d_R": {
+   "ratio": 0.011993244334669664,
+   "bin": "medium"
+  },
+  "1860e56f068c2e2ccb2017de6e6f8eb8_L": {
+   "ratio": 0.00715576481522163,
+   "bin": "medium"
+  },
+  "1a6eb4bb66e7e5a47d9191e0aa13930e_L": {
+   "ratio": 0.0006540918717362295,
+   "bin": "small"
+  },
+  "1c41d5f075f0291af7f33545704df750_R": {
+   "ratio": 0.002023444749345817,
+   "bin": "small"
+  },
+  "1e23350a1da64abd78dc27a56f966186_R": {
+   "ratio": 0.003831811771056726,
+   "bin": "small"
+  },
+  "1e2b0ce2c5a93c643834c98803e6ac2d_L": {
+   "ratio": 0.00666715423758135,
+   "bin": "medium"
+  },
+  "1fe77db1e47d9133c2bc799fc2e3c4ba_L": {
+   "ratio": 0.006434965536736832,
+   "bin": "medium"
+  },
+  "2035c27f797e5b80a104640985636167_R": {
+   "ratio": 0.2763583177775279,
+   "bin": "large"
+  },
+  "20457a9245229489ee5c67af773d4240_L": {
+   "ratio": 0.011311306135319308,
+   "bin": "medium"
+  },
+  "20bd4110f46e0a2579a554743f51f173_R": {
+   "ratio": 0.0034795703358084405,
+   "bin": "small"
+  },
+  "215b14f6ff626394a625de6158e928c0_L": {
+   "ratio": 0.00402697161620377,
+   "bin": "small"
+  },
+  "21fddc967eb5a31695a60d4bb075df7a_R": {
+   "ratio": 0.0013845596566231723,
+   "bin": "small"
+  },
+  "24f98ac8cc135d3c62c5415b235534de_L": {
+   "ratio": 0.0003449556152600951,
+   "bin": "small"
+  },
+  "25f7d988de28237bbf10273129097c9c_R": {
+   "ratio": 0.014421617958601871,
+   "bin": "large"
+  },
+  "26571f2d2c8cc89e30059d05b4cabb1a_L": {
+   "ratio": 0.0155695098567835,
+   "bin": "large"
+  },
+  "268bbbd1932753cedf8846fe716c669b_L": {
+   "ratio": 0.013457307433992394,
+   "bin": "large"
+  },
+  "27d4dc70d6f73554e4ead70f01867167_R": {
+   "ratio": 0.006590073088322324,
+   "bin": "medium"
+  },
+  "27de4919323355abc9dc92603fdb5df2_L": {
+   "ratio": 0.0013316334735622398,
+   "bin": "small"
+  },
+  "28605b2b2337d1a4aae65900df2a36ae_R": {
+   "ratio": 0.04637202398730382,
+   "bin": "large"
+  },
+  "29bfec1e3b5a67751abc3dbf46df3e62_L": {
+   "ratio": 0.02704459126647079,
+   "bin": "large"
+  },
+  "2b48f13688211af161ca5880d9fcaec3_R": {
+   "ratio": 0.01434978029762809,
+   "bin": "large"
+  },
+  "2c90542f6f10926cde501ebd8de7c3c3_R": {
+   "ratio": 0.0016046234804358123,
+   "bin": "small"
+  },
+  "2cae5c9d4a922766fd01dd69a004ea5c_L": {
+   "ratio": 0.014511946476928292,
+   "bin": "large"
+  },
+  "2df4404b9c286ec49851d4261faec924_R": {
+   "ratio": 0.0026039078840438467,
+   "bin": "small"
+  },
+  "2e1f57baf6e3e742404c401b0999cadb_R": {
+   "ratio": 0.012901980282972611,
+   "bin": "large"
+  },
+  "2fe156e5ce59814559b0a9f01de006df_L": {
+   "ratio": 0.018301292528138956,
+   "bin": "large"
+  },
+  "30531093985dd9b3d909c3866c46e443_L": {
+   "ratio": 0.019392147928152453,
+   "bin": "large"
+  },
+  "31937d26eec6ebdceb4c4d676fd06018_R": {
+   "ratio": 0.04094188577780628,
+   "bin": "large"
+  },
+  "31fa226bc9f87e0a2cb2de6dddbc2270_L": {
+   "ratio": 0.001769688182571918,
+   "bin": "small"
+  },
+  "3b9d3e9aa2fcdefd74d4cbfb496694b4_R": {
+   "ratio": 0.016756863199637595,
+   "bin": "large"
+  },
+  "3f77a67d63af8d57a4119efa6fe298c6_R": {
+   "ratio": 0.04851402530935812,
+   "bin": "large"
+  },
+  "4141898a609bbcdf7fa4e9b49188514e_R": {
+   "ratio": 0.005432379259165774,
+   "bin": "medium"
+  },
+  "4199129f94749397e0d71d2bd5a01d19_L": {
+   "ratio": 0.06696890821212936,
+   "bin": "large"
+  },
+  "439e1f994fe010feb04b891db651ae55_R": {
+   "ratio": 0.002372063849206609,
+   "bin": "small"
+  },
+  "443af8de1a0d47fe93e88ee1e4dfac8e_R": {
+   "ratio": 0.0028958612251785425,
+   "bin": "small"
+  },
+  "4598a7b538afcbf6d6f0d71fb654dacd_L": {
+   "ratio": 0.0007716067337744446,
+   "bin": "small"
+  },
+  "46ab23ec866810a4212c33db471153a2_R": {
+   "ratio": 0.029961254038497077,
+   "bin": "large"
+  },
+  "48975fff28d21f8a852624749fcc7411_R": {
+   "ratio": 0.002273648547201382,
+   "bin": "small"
+  },
+  "4ccad6b7e7b7a4e492b0fd56b5bef883_L": {
+   "ratio": 0.050671583041916296,
+   "bin": "large"
+  },
+  "4dab957b2babcf264a088bc7802261c4_R": {
+   "ratio": 0.026881338945498306,
+   "bin": "large"
+  },
+  "4e6f6c5e70433a176643f635747a328d_L": {
+   "ratio": 0.0010705034201270469,
+   "bin": "small"
+  },
+  "4fc011ee4b49040648fdd2d3dcf883c3_R": {
+   "ratio": 0.0016378166008160712,
+   "bin": "small"
+  },
+  "5214f4386efcea56014510f1068da2a0_R": {
+   "ratio": 0.009766695473497363,
+   "bin": "medium"
+  },
+  "540ab71b28752c3e279be9bad638df79_L": {
+   "ratio": 0.010215958012026564,
+   "bin": "medium"
+  },
+  "543d36c1e4f0957fddd46c3078f21c93_R": {
+   "ratio": 0.005334674580124011,
+   "bin": "medium"
+  },
+  "55d4e23fef777c307e27b9661c0da578_L": {
+   "ratio": 0.00970624648732891,
+   "bin": "medium"
+  },
+  "5683854eafabc34f6d854000d2ac6c2d_L": {
+   "ratio": 0.006974399525373067,
+   "bin": "medium"
+  },
+  "5864ac95d2f1bcf325d36cbe8609297c_L": {
+   "ratio": 0.0026959010050939263,
+   "bin": "small"
+  },
+  "5988446083ab88daccc8fc5c6c679474_R": {
+   "ratio": 0.0012993604512963812,
+   "bin": "small"
+  },
+  "5babce4b963ba18124477ce11d284ac6_L": {
+   "ratio": 0.029927764934460456,
+   "bin": "large"
+  },
+  "5bf7f3c05f93f02085789af720be64d6_R": {
+   "ratio": 0.005585032625040246,
+   "bin": "medium"
+  },
+  "5c9d7863e0c50cdb8e8f7bf5cf1c91b3_L": {
+   "ratio": 0.0004186890125523578,
+   "bin": "small"
+  },
+  "5f97a8ee0bc7b1ffb941035bc5291db8_L": {
+   "ratio": 0.027878978053897042,
+   "bin": "large"
+  },
+  "5fb086552ff0566a7ba0fba65d5c4823_L": {
+   "ratio": 0.007526624293783392,
+   "bin": "medium"
+  },
+  "64072568aca98d15b344eddde9ddf8be_L": {
+   "ratio": 0.0019597530687857144,
+   "bin": "small"
+  },
+  "658602d790b802fb079fe5d2eba494dd_R": {
+   "ratio": 0.0037711483299016583,
+   "bin": "small"
+  },
+  "65b8c8d3af382a51b3c8465be1f6f06e_L": {
+   "ratio": 0.007407840582067119,
+   "bin": "medium"
+  },
+  "66235fe8968ef266cf15b08cfaa4a40e_L": {
+   "ratio": 0.0009497020356323134,
+   "bin": "small"
+  },
+  "6691601fba2d3233547361585c21fdde_L": {
+   "ratio": 0.02252800596152902,
+   "bin": "large"
+  },
+  "68107a7fd1e370b88e161f37cff1c2d7_R": {
+   "ratio": 0.01725907752422187,
+   "bin": "large"
+  },
+  "6adbb464cba25c728e2d6c29ee9ee1bc_L": {
+   "ratio": 0.005073833572961939,
+   "bin": "medium"
+  },
+  "6d75446a6406fc669f3464543b8f7893_L": {
+   "ratio": 0.011512389594534775,
+   "bin": "medium"
+  },
+  "6db648c3e684230add2cb3189b3e7f82_R": {
+   "ratio": 0.001567415125041629,
+   "bin": "small"
+  },
+  "6e79c21e0593c8c459ef609b99dbfb70_L": {
+   "ratio": 0.006006942830854117,
+   "bin": "medium"
+  },
+  "6e79c21e0593c8c459ef609b99dbfb70_R": {
+   "ratio": 0.0049802710060977496,
+   "bin": "medium"
+  },
+  "73ddabe812dadcc6ece2c48a246f72f5_L": {
+   "ratio": 0.006241080553264653,
+   "bin": "medium"
+  },
+  "751ef8517c9221362d71e6326f622904_R": {
+   "ratio": 0.006763710630043506,
+   "bin": "medium"
+  },
+  "75b2eef816fe608734977d1ffb16eae9_R": {
+   "ratio": 0.001770850413714463,
+   "bin": "small"
+  },
+  "775b952222e22629c94c0fa606118ab6_L": {
+   "ratio": 0.01739575479447144,
+   "bin": "large"
+  },
+  "77d2b897870fd48aacdc9b2bbad1ef52_L": {
+   "ratio": 0.03833020401020518,
+   "bin": "large"
+  },
+  "7923de65390f4cfe6fb047515f9474f0_R": {
+   "ratio": 0.0011987026546672326,
+   "bin": "small"
+  },
+  "792610d6c4044d3a4e2cfdbc5b494768_R": {
+   "ratio": 0.010181423178890748,
+   "bin": "medium"
+  },
+  "7b17b1d061b038ceee40c3811341b2fc_R": {
+   "ratio": 0.0018907877018690508,
+   "bin": "small"
+  },
+  "7bb82359496060cc5af7fd939e760ff5_L": {
+   "ratio": 0.0015285563724847036,
+   "bin": "small"
+  },
+  "7c49a0d284532fa3e537ac87991c9608_L": {
+   "ratio": 0.0008393193640009699,
+   "bin": "small"
+  },
+  "7e2b960ea67fee7c4e487c331179b47e_L": {
+   "ratio": 0.00980057378184995,
+   "bin": "medium"
+  },
+  "7eab495d8ae42610e89e53788db3e019_R": {
+   "ratio": 0.044355701686780644,
+   "bin": "large"
+  },
+  "7f0eb50793a773fb4bddaeff7e3c7c14_L": {
+   "ratio": 0.009934731082703756,
+   "bin": "medium"
+  },
+  "805d72b89d7f73058bf420ef26caaff4_L": {
+   "ratio": 0.0024953089877593126,
+   "bin": "small"
+  },
+  "8138169c67834e4e979fa17f38a826ad_R": {
+   "ratio": 0.004882487161801854,
+   "bin": "medium"
+  },
+  "81885e37a9a42bd351516b83bc3f6d66_L": {
+   "ratio": 0.024275065099005063,
+   "bin": "large"
+  },
+  "833dc428ac55ef017ea9d238cc9a841b_L": {
+   "ratio": 0.00589752481735287,
+   "bin": "medium"
+  },
+  "840a2797a18347d1917cfa2872be1460_L": {
+   "ratio": 0.006077461311435718,
+   "bin": "medium"
+  },
+  "866f5f71f7cecc04d6353c3758c292e3_L": {
+   "ratio": 0.0077161015433729815,
+   "bin": "medium"
+  },
+  "891ff1343a54c212f973f1b83ec4952c_L": {
+   "ratio": 0.001298309747495853,
+   "bin": "small"
+  },
+  "8caa9e54b30e54edbdcbc771e7386fd7_R": {
+   "ratio": 0.05673206556604638,
+   "bin": "large"
+  },
+  "8dd986e8174fc84c2a984e66a416ff9f_R": {
+   "ratio": 0.04978413092089539,
+   "bin": "large"
+  },
+  "8e1fe4584f868271dce3e84e59b65388_L": {
+   "ratio": 0.017293416564324045,
+   "bin": "large"
+  },
+  "8e30fe5fbe424206c9f57ce26f80f6c2_R": {
+   "ratio": 0.0053988706696725414,
+   "bin": "medium"
+  },
+  "8f447c29a7aa0c5aa2b8e8a852b01560_L": {
+   "ratio": 0.002739254088895131,
+   "bin": "small"
+  },
+  "90bdb495b39d53271b2ccf97cde90bac_R": {
+   "ratio": 0.003140355927226793,
+   "bin": "small"
+  },
+  "91489fc5a74d1452737d06d7113837f4_L": {
+   "ratio": 0.007221855887130878,
+   "bin": "medium"
+  },
+  "91489fc5a74d1452737d06d7113837f4_R": {
+   "ratio": 0.002949388105948751,
+   "bin": "small"
+  },
+  "917a4de3b1f921f1c9fa98b7a61d749d_L": {
+   "ratio": 0.010556234369897447,
+   "bin": "medium"
+  },
+  "93514476602890f55d1758d1f3e1a9b5_L": {
+   "ratio": 0.009140971179690267,
+   "bin": "medium"
+  },
+  "93514476602890f55d1758d1f3e1a9b5_R": {
+   "ratio": 0.07984306061168929,
+   "bin": "large"
+  },
+  "937f8b7c688c373cff168ea6529a4731_R": {
+   "ratio": 0.0338843545820579,
+   "bin": "large"
+  },
+  "944072b1af80b5038a0434d689012b12_R": {
+   "ratio": 0.00847365069030492,
+   "bin": "medium"
+  },
+  "94522717c9827bb41fe0814a514ae68b_R": {
+   "ratio": 0.0041450488318063574,
+   "bin": "medium"
+  },
+  "948bf68244fa6c00dc9963dcd62cd14c_L": {
+   "ratio": 0.00039128713105341073,
+   "bin": "small"
+  },
+  "968f72a200354163e45343aeeead090d_R": {
+   "ratio": 0.0035876040364032687,
+   "bin": "small"
+  },
+  "9a6f70ccba8034a3d658f88677e4b553_L": {
+   "ratio": 0.004789270734137529,
+   "bin": "medium"
+  },
+  "9bb21300e3a92937024437cacc180158_R": {
+   "ratio": 0.05391741779543682,
+   "bin": "large"
+  },
+  "9d70df5a83f33ec2d4c1f9eed8151f6e_R": {
+   "ratio": 0.0039682752017273625,
+   "bin": "small"
+  },
+  "9e0ecb745ae8218f6a30fe4c0bf441e2_L": {
+   "ratio": 0.009624842284774204,
+   "bin": "medium"
+  },
+  "9fe8e9aef78ad365197d8f6ee0fdb932_R": {
+   "ratio": 0.0063571500003412485,
+   "bin": "medium"
+  },
+  "a1f8c1d32ac2da1967b3c6b3ee34616e_L": {
+   "ratio": 0.0028694845017406593,
+   "bin": "small"
+  },
+  "a3efa110e27ffa4d5b2636e388a5c700_L": {
+   "ratio": 0.06493356206422421,
+   "bin": "large"
+  },
+  "a4046f021f9de4265a5c01ae953b9f09_L": {
+   "ratio": 0.009926259622323694,
+   "bin": "medium"
+  },
+  "a4e90efc3a2dc8260b51e7f0121ccde3_R": {
+   "ratio": 0.005398445208887933,
+   "bin": "medium"
+  },
+  "a532d84e9df16bef3a9b4f86acfe722a_R": {
+   "ratio": 0.0031099500182461518,
+   "bin": "small"
+  },
+  "a739f537d66fb48c49eca89a0991088f_R": {
+   "ratio": 0.0007562278808994553,
+   "bin": "small"
+  },
+  "a7dddf85e78c65bac3143d86d3d2d977_L": {
+   "ratio": 0.09302477653634053,
+   "bin": "large"
+  },
+  "a9e5db3e9452823f5753c401087c9544_L": {
+   "ratio": 0.012528224778242572,
+   "bin": "large"
+  },
+  "aa8149ec929a0194c2b8871de84e8dc8_L": {
+   "ratio": 0.002542927291434558,
+   "bin": "small"
+  },
+  "ad721e26365b1555dd539aed6123a851_R": {
+   "ratio": 0.005783923478177061,
+   "bin": "medium"
+  },
+  "adc826bd02d1fb01f0d0dc6f9bc1ed52_L": {
+   "ratio": 0.002471487079019377,
+   "bin": "small"
+  },
+  "ae38a60e17f0f0c0f48db63680d0f619_L": {
+   "ratio": 0.00508499095227891,
+   "bin": "medium"
+  },
+  "afa8d58b60cf82ce642d5c917fb6c8af_R": {
+   "ratio": 0.0023238301675426796,
+   "bin": "small"
+  },
+  "b0edd960e3f8b68ebf6debae183a7caf_L": {
+   "ratio": 0.0027998434158452807,
+   "bin": "small"
+  },
+  "b2979c0f7fa4edae4a174b0747e0ab37_L": {
+   "ratio": 0.02163541238294384,
+   "bin": "large"
+  },
+  "b365dbf9c6878c12650cac3bf8095e59_L": {
+   "ratio": 0.007824837349646544,
+   "bin": "medium"
+  },
+  "b4ed83d02fa675475155a5551f92fd1f_L": {
+   "ratio": 0.018364495437026285,
+   "bin": "large"
+  },
+  "b4ed83d02fa675475155a5551f92fd1f_R": {
+   "ratio": 0.025813454123706947,
+   "bin": "large"
+  },
+  "b57b97020df361371ae1877080433275_L": {
+   "ratio": 0.042702095214683704,
+   "bin": "large"
+  },
+  "b8acac150be7f949f78dc631a3851f8b_R": {
+   "ratio": 0.012414957020479829,
+   "bin": "large"
+  },
+  "baaa3be716640961a62abcf61bed245e_L": {
+   "ratio": 0.008224374187959354,
+   "bin": "medium"
+  },
+  "bcab78ee9a90e5cfd4c5fb59771bbfca_R": {
+   "ratio": 0.0064341259655532525,
+   "bin": "medium"
+  },
+  "beb4eb26bfa74853d4b49172855eefe9_L": {
+   "ratio": 0.00413158453374066,
+   "bin": "medium"
+  },
+  "c58988888abc33489a6c845a77d7793e_L": {
+   "ratio": 0.00303549026966845,
+   "bin": "small"
+  },
+  "c659e0e01ed8e0ba6dc0adf5418eeaa9_R": {
+   "ratio": 0.15227508673076182,
+   "bin": "large"
+  },
+  "c79e16f69c355bad0291d281d674f53b_R": {
+   "ratio": 0.029021487073109045,
+   "bin": "large"
+  },
+  "c7d2c1b81ca7fd149b1590a6e29394a9_L": {
+   "ratio": 0.004750016723092073,
+   "bin": "medium"
+  },
+  "cbefbe019b185313c639fe5f8fac024a_L": {
+   "ratio": 0.02028558549487898,
+   "bin": "large"
+  },
+  "cc608bc4a299b3346c04379958797c1e_L": {
+   "ratio": 0.006287720198302212,
+   "bin": "medium"
+  },
+  "cf399797f9211774fdb1470bf4ba5600_R": {
+   "ratio": 0.019534860283893226,
+   "bin": "large"
+  },
+  "d0389f18021cd6e9294eef7d553039b3_R": {
+   "ratio": 0.005222651496267512,
+   "bin": "medium"
+  },
+  "d101ecbe883dcfadae08720d3742ee34_L": {
+   "ratio": 0.0025640457010318056,
+   "bin": "small"
+  },
+  "d1808200af6ccda3be8abce5c9b4980f_L": {
+   "ratio": 0.006185699864347504,
+   "bin": "medium"
+  },
+  "d35b1a4107f0d52e18acdd7a9360ca85_R": {
+   "ratio": 0.019131023146618353,
+   "bin": "large"
+  },
+  "d51872cb860414480dbedb3733e70724_R": {
+   "ratio": 0.004040444247872546,
+   "bin": "medium"
+  },
+  "d540a38fcac9ff0136535fb45fa45dda_L": {
+   "ratio": 0.006216542218017268,
+   "bin": "medium"
+  },
+  "d90bbc67c79e9aac98f848e33d61f10a_L": {
+   "ratio": 0.11437437933616958,
+   "bin": "large"
+  },
+  "d9d54d68fc1c66ad5ee8481bafcd55da_R": {
+   "ratio": 0.02045910793375467,
+   "bin": "large"
+  },
+  "db3c5cf7336cc061ad5679d2209c2386_R": {
+   "ratio": 0.00955683882421338,
+   "bin": "medium"
+  },
+  "dd1959e485eccb3a17f29d7020fe3b23_L": {
+   "ratio": 0.0029212875610140645,
+   "bin": "small"
+  },
+  "de585e55834681c650d1f34ff21c2139_R": {
+   "ratio": 0.029750240012638957,
+   "bin": "large"
+  },
+  "de627023c9a8f2ca7b998d4f1380fad1_L": {
+   "ratio": 0.022372263963999675,
+   "bin": "large"
+  },
+  "dec442c750151a175272b8ef0007cf09_R": {
+   "ratio": 0.006686087202867772,
+   "bin": "medium"
+  },
+  "e22442ff5a7632d5fc91d2715319b448_L": {
+   "ratio": 0.0016518692174189813,
+   "bin": "small"
+  },
+  "e3ea477f6b1f7347c184f55cb7c336b4_R": {
+   "ratio": 0.0009460682115510258,
+   "bin": "small"
+  },
+  "e49d8e95ce75cfec372ac63495490225_L": {
+   "ratio": 0.024527333276105092,
+   "bin": "large"
+  },
+  "e668b1bed3d1501af1c88ef1ecd85a8c_R": {
+   "ratio": 0.011150144980106701,
+   "bin": "medium"
+  },
+  "e6f4f71e543f75cb1dd94388467a1ce2_L": {
+   "ratio": 0.00036280366626917446,
+   "bin": "small"
+  },
+  "e9be27a62325bea2255d3327274567cc_L": {
+   "ratio": 0.005122955211552262,
+   "bin": "medium"
+  },
+  "ea75b79a86ae33661802cc9f2ee5d938_R": {
+   "ratio": 0.0031714478222727317,
+   "bin": "small"
+  },
+  "eb6f53ebf42ab3aa19d5e7cc362195c4_R": {
+   "ratio": 0.01186696615709262,
+   "bin": "medium"
+  },
+  "ec755916f14c0855c7c0a9a5e5c5cf4a_L": {
+   "ratio": 0.009557475100967838,
+   "bin": "medium"
+  },
+  "ee117236523dbd94ef212e6b12eaca61_L": {
+   "ratio": 0.004836892729723324,
+   "bin": "medium"
+  },
+  "eff31eb110bc0a5d76f2db4c240dfd14_L": {
+   "ratio": 0.0004113992210137125,
+   "bin": "small"
+  },
+  "f0677aad26731481bcc723bd3222c035_L": {
+   "ratio": 0.02702057861502975,
+   "bin": "large"
+  },
+  "f16980e8b518373d4748c94ad31207ce_R": {
+   "ratio": 0.027618983533097427,
+   "bin": "large"
+  },
+  "f5c548e47e4ac764243e9b068b2d6e5e_R": {
+   "ratio": 0.013154199603849262,
+   "bin": "large"
+  },
+  "f6648f91c1486446d8ad32cdd928d977_L": {
+   "ratio": 0.031976874325905305,
+   "bin": "large"
+  },
+  "f6648f91c1486446d8ad32cdd928d977_R": {
+   "ratio": 0.003443937683234415,
+   "bin": "small"
+  },
+  "f6bb2ab2292bd155fcbc905a6e208b26_L": {
+   "ratio": 0.017005803212210516,
+   "bin": "large"
+  },
+  "f7189d58dd1053d7603348360f013070_L": {
+   "ratio": 0.01021010374835484,
+   "bin": "medium"
+  },
+  "f773364cb25ff6d46f85fcdbb0984ee7_R": {
+   "ratio": 0.0005829957359267258,
+   "bin": "small"
+  },
+  "f835161458fa1ff5535b925a26eaad55_L": {
+   "ratio": 0.001964002679404478,
+   "bin": "small"
+  },
+  "f9b9d3c214c10fa252823cd4aaab269e_R": {
+   "ratio": 0.03103727207421785,
+   "bin": "large"
+  },
+  "fbfb4853334d90ff774ef326b8ac107b_L": {
+   "ratio": 0.023121732547704592,
+   "bin": "large"
+  },
+  "fc45fd8203dadd8899344e52935ff069_L": {
+   "ratio": 0.004866386300865766,
+   "bin": "medium"
+  },
+  "fe97163790007e5539f8da8181f4374b_R": {
+   "ratio": 0.044733725983497084,
+   "bin": "large"
+  }
+ }
+}
