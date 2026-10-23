@@ -7,6 +7,8 @@ CFG=$PROJ/configs/train_lora_2view_os_sub_vt_ep2_local.yaml
 OUT=/home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-os-sub-vt-ep2
 LOG=$PROJ/logs/vlm/ep2_chain.log
 
+export PATH=/home/z/zhao/Mammography/miniconda3/envs/mammo/bin:$PATH
+LLAMAFACTORY_CLI=/home/z/zhao/Mammography/miniconda3/envs/mammo/bin/llamafactory-cli
 cd "$PROJ" || exit 1
 mkdir -p logs/vlm
 ts() { date +"%H:%M:%S"; }
@@ -15,7 +17,7 @@ echo "[$(ts)] === EP2 CHAIN START (train only) ===" | tee -a "$LOG"
 rc=0
 if [ ! -f "$OUT/adapter_model.safetensors" ]; then
   echo "[$(ts)] training ep2 (2 epochs, 786432)" | tee -a "$LOG"
-  llamafactory-cli train "$CFG" 2>&1 | tee -a "$LOG"
+  "$LLAMAFACTORY_CLI" train "$CFG" 2>&1 | tee -a "$LOG"
   rc=${PIPESTATUS[0]}
 else
   echo "[$(ts)] skip training (adapter exists)" | tee -a "$LOG"

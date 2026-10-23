@@ -1,0 +1,12 @@
+time=17:46:43
+TRAIN_RC=0
+PEAK_GPU_SMI_MIB=22108
+PEAK_ALLOCATED_GIB=19.087
+PEAK_RESERVED_GIB=21.102
+last_train_logs:
+{'loss': '0.04272', 'grad_norm': '0.4662', 'learning_rate': '3.013e-06', 'epoch': '0.04103'}
+{'loss': '0.04279', 'grad_norm': '0.4221', 'learning_rate': '1.355e-06', 'epoch': '0.04331'}
+{'loss': '0.02411', 'grad_norm': '0.241', 'learning_rate': '3.41e-07', 'epoch': '0.04559'}
+STATUS=PASS
+removed /home/z/zhao/Mammography/model/_memtest_native: ok
+EP2_STARTED=17:46:43
