@@ -1,0 +1,87 @@
++ cd /home/zhao/Mammography/Mammo
++ module purge
++ '[' -z '' ']'
++ case "$-" in
++ __lmod_sh_dbg=x
++ '[' -n x ']'
++ set +x
+Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) NeSI/zen3
+Shell debugging restarted
++ unset __lmod_sh_dbg
++ return 0
++ module load NeSI
++ '[' -z '' ']'
++ case "$-" in
++ __lmod_sh_dbg=x
++ '[' -n x ']'
++ set +x
+Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output
+Shell debugging restarted
++ unset __lmod_sh_dbg
++ return 0
++ module load Python/3.14.4-foss-2026
++ '[' -z '' ']'
++ case "$-" in
++ __lmod_sh_dbg=x
++ '[' -n x ']'
++ set +x
+Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output
+Shell debugging restarted
++ unset __lmod_sh_dbg
++ return 0
++ source /nesi/project/massey04900/Mammography/venv/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ case "$(uname)" in
++++ uname
+++ export VIRTUAL_ENV=/nesi/project/massey04900/Mammography/venv
+++ VIRTUAL_ENV=/nesi/project/massey04900/Mammography/venv
+++ _OLD_VIRTUAL_PATH=/home/zhao/.local/Python-3.14-foss-2026/bin:/opt/nesi/zen3/Python/3.14.4-foss-2026/bin:/opt/nesi/zen3/SuiteSparse/7.12.2-gfbf-2026/bin:/opt/nesi/zen3/METIS/5.1.0-GCC-15.2.0/bin:/opt/nesi/zen3/netCDF/4.9.3-gompi-2026/bin:/opt/nesi/zen3/HDF5/1.14.6-gompi-2026/bin:/opt/nesi/zen3/FFTW/3.3.10-GCC-15.2.0/bin:/opt/nesi/zen3/FlexiBLAS/3.5.0-GCC-15.2.0/bin:/opt/nesi/zen3/OpenMPI/5.0.10-GCC-15.2.0/bin:/opt/nesi/zen3/UCC/1.7.0-GCCcore-15.2.0/bin:/opt/nesi/zen3/UCX/1.20.0-GCCcore-15.2.0/bin:/opt/nesi/zen3/binutils/2.45-GCCcore-15.2.0/bin:/opt/nesi/zen3/GCCcore/15.2.0/bin:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/modules/ai-agent/bin:/home/zhao/.trae-cn/plugins/trae-remote-official/lark/1.0.5/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/bin/lib:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/node_modules/@vscode/ripgrep/bin:/opt/nesi/bin
+++ PATH=/nesi/project/massey04900/Mammography/venv/bin:/home/zhao/.local/Python-3.14-foss-2026/bin:/opt/nesi/zen3/Python/3.14.4-foss-2026/bin:/opt/nesi/zen3/SuiteSparse/7.12.2-gfbf-2026/bin:/opt/nesi/zen3/METIS/5.1.0-GCC-15.2.0/bin:/opt/nesi/zen3/netCDF/4.9.3-gompi-2026/bin:/opt/nesi/zen3/HDF5/1.14.6-gompi-2026/bin:/opt/nesi/zen3/FFTW/3.3.10-GCC-15.2.0/bin:/opt/nesi/zen3/FlexiBLAS/3.5.0-GCC-15.2.0/bin:/opt/nesi/zen3/OpenMPI/5.0.10-GCC-15.2.0/bin:/opt/nesi/zen3/UCC/1.7.0-GCCcore-15.2.0/bin:/opt/nesi/zen3/UCX/1.20.0-GCCcore-15.2.0/bin:/opt/nesi/zen3/binutils/2.45-GCCcore-15.2.0/bin:/opt/nesi/zen3/GCCcore/15.2.0/bin:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/modules/ai-agent/bin:/home/zhao/.trae-cn/plugins/trae-remote-official/lark/1.0.5/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/bin/lib:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/node_modules/@vscode/ripgrep/bin:/opt/nesi/bin
+++ export PATH
+++ VIRTUAL_ENV_PROMPT=venv
+++ export VIRTUAL_ENV_PROMPT
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='(venv) '
+++ export PS1
+++ hash -r
++ LOGDIR=/home/zhao/Mammography/Mammo/2-view/logs
++ OUT=/home/zhao/Mammography/Mammo/2-view/outputs/patch_zoom
++ mkdir -p /home/zhao/Mammography/Mammo/2-view/logs /home/zhao/Mammography/Mammo/2-view/outputs/patch_zoom
++ LOG=/home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_all_10100167.log
++ tee -a /home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_all_10100167.log
+++ hostname
+++ date
++ echo '=== node: g06.hpc.nesi.org.nz start: Fri Oct 23 00:41:15 NZDT 2026 ==='
+=== node: g06.hpc.nesi.org.nz start: Fri Oct 23 00:41:15 NZDT 2026 ===
++ nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
++ tee -a /home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_all_10100167.log
+NVIDIA H100 NVL, 95830 MiB
++ python -u 2-view/scripts/patch_zoom/run_all.py --out /home/zhao/Mammography/Mammo/2-view/outputs/patch_zoom --model-root /nesi/project/massey04900/Mammography/model --logdir /home/zhao/Mammography/Mammo/2-view/logs --gate-min 105 --budget-min 112 --smoke-n 16 --epochs 2.0 --stages all
++ tee -a /home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_all_10100167.log
+[00:41:15] --- smoke x1: 20 steps + 16 patches infer
+[00:44:54]     s/step=0.0035467281432878172 infer_wall=0.0s load=0.0s rc=(1,-1)
+[00:44:54] --- smoke x2: 20 steps + 16 patches infer
+[00:47:59]     s/step=0.0011687294741886095 infer_wall=0.0s load=0.0s rc=(1,-1)
+[00:47:59] --- smoke x074: 20 steps + 16 patches infer
+[00:50:49]     s/step=0.0011655690891077567 infer_wall=0.0s load=0.0s rc=(1,-1)
+[00:50:49] === projection: 0.0 min (gate 105 min) pass=False
+[00:50:49] !!! 冒烟失败的尺度: ['x1', 'x2', 'x074'], 不开始正式训练
++ rc=2
++ tee -a /home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_all_10100167.log
+++ date
++ echo '=== driver rc=2 end: Fri Oct 23 00:50:49 NZDT 2026 ==='
+=== driver rc=2 end: Fri Oct 23 00:50:49 NZDT 2026 ===
++ exit 2

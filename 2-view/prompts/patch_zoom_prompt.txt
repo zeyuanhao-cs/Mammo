@@ -1,0 +1,12 @@
+<image>
+You are an expert breast imaging assistant.
+
+Below is ONE 224x224 local patch cropped from a mammogram. The patch may
+contain a lesion, or may show normal breast tissue.
+
+Mark 1 only for suspicious findings that are visible in this patch and
+warrant follow-up; do not mark clearly benign findings.
+
+Return ONLY this JSON, with integer 0/1 values and no other text:
+{"mass": <0|1>, "suspicious_calcification": <0|1>,
+ "asymmetry": <0|1>, "architectural_distortion": <0|1>}

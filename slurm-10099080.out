@@ -1,0 +1,104 @@
++ cd /home/zhao/Mammography/Mammo
++ module purge
++ '[' -z '' ']'
++ case "$-" in
++ __lmod_sh_dbg=x
++ '[' -n x ']'
++ set +x
+Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) NeSI/zen3
+Shell debugging restarted
++ unset __lmod_sh_dbg
++ return 0
++ module load NeSI
++ '[' -z '' ']'
++ case "$-" in
++ __lmod_sh_dbg=x
++ '[' -n x ']'
++ set +x
+Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output
+Shell debugging restarted
++ unset __lmod_sh_dbg
++ return 0
++ module load Python/3.14.4-foss-2026
++ '[' -z '' ']'
++ case "$-" in
++ __lmod_sh_dbg=x
++ '[' -n x ']'
++ set +x
+Shell debugging temporarily silenced: export LMOD_SH_DBG_ON=1 for Lmod's output
+Shell debugging restarted
++ unset __lmod_sh_dbg
++ return 0
++ source /nesi/project/massey04900/Mammography/venv/bin/activate
+++ deactivate nondestructive
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ unset VIRTUAL_ENV_PROMPT
+++ '[' '!' nondestructive = nondestructive ']'
+++ case "$(uname)" in
++++ uname
+++ export VIRTUAL_ENV=/nesi/project/massey04900/Mammography/venv
+++ VIRTUAL_ENV=/nesi/project/massey04900/Mammography/venv
+++ _OLD_VIRTUAL_PATH=/home/zhao/.local/Python-3.14-foss-2026/bin:/opt/nesi/zen3/Python/3.14.4-foss-2026/bin:/opt/nesi/zen3/SuiteSparse/7.12.2-gfbf-2026/bin:/opt/nesi/zen3/METIS/5.1.0-GCC-15.2.0/bin:/opt/nesi/zen3/netCDF/4.9.3-gompi-2026/bin:/opt/nesi/zen3/HDF5/1.14.6-gompi-2026/bin:/opt/nesi/zen3/FFTW/3.3.10-GCC-15.2.0/bin:/opt/nesi/zen3/FlexiBLAS/3.5.0-GCC-15.2.0/bin:/opt/nesi/zen3/OpenMPI/5.0.10-GCC-15.2.0/bin:/opt/nesi/zen3/UCC/1.7.0-GCCcore-15.2.0/bin:/opt/nesi/zen3/UCX/1.20.0-GCCcore-15.2.0/bin:/opt/nesi/zen3/binutils/2.45-GCCcore-15.2.0/bin:/opt/nesi/zen3/GCCcore/15.2.0/bin:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/modules/ai-agent/bin:/home/zhao/.trae-cn/plugins/trae-remote-official/lark/1.0.5/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/bin/lib:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/node_modules/@vscode/ripgrep/bin:/opt/nesi/bin
+++ PATH=/nesi/project/massey04900/Mammography/venv/bin:/home/zhao/.local/Python-3.14-foss-2026/bin:/opt/nesi/zen3/Python/3.14.4-foss-2026/bin:/opt/nesi/zen3/SuiteSparse/7.12.2-gfbf-2026/bin:/opt/nesi/zen3/METIS/5.1.0-GCC-15.2.0/bin:/opt/nesi/zen3/netCDF/4.9.3-gompi-2026/bin:/opt/nesi/zen3/HDF5/1.14.6-gompi-2026/bin:/opt/nesi/zen3/FFTW/3.3.10-GCC-15.2.0/bin:/opt/nesi/zen3/FlexiBLAS/3.5.0-GCC-15.2.0/bin:/opt/nesi/zen3/OpenMPI/5.0.10-GCC-15.2.0/bin:/opt/nesi/zen3/UCC/1.7.0-GCCcore-15.2.0/bin:/opt/nesi/zen3/UCX/1.20.0-GCCcore-15.2.0/bin:/opt/nesi/zen3/binutils/2.45-GCCcore-15.2.0/bin:/opt/nesi/zen3/GCCcore/15.2.0/bin:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/modules/ai-agent/bin:/home/zhao/.trae-cn/plugins/trae-remote-official/lark/1.0.5/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/bin/lib:/home/zhao/.trae-cn-server/bin/stable-871bca3bb55e7a37af74c1eef2a9696f29aa7b26-debian10/node_modules/@vscode/ripgrep/bin:/opt/nesi/bin
+++ export PATH
+++ VIRTUAL_ENV_PROMPT=venv
+++ export VIRTUAL_ENV_PROMPT
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ PS1='(venv) '
+++ export PS1
+++ hash -r
++ LOGDIR=/home/zhao/Mammography/Mammo/2-view/logs
++ mkdir -p /home/zhao/Mammography/Mammo/2-view/logs
++ LOG=/home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_smoke_10099080.log
++ TMP=/nesi/project/massey04900/Mammography/model/patch_zoom_smoke_10099080
++ tee -a /home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_smoke_10099080.log
+++ hostname
++ echo '=== node: g06.hpc.nesi.org.nz ==='
+=== node: g06.hpc.nesi.org.nz ===
++ nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
++ tee -a /home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_smoke_10099080.log
+NVIDIA H100 NVL, 95830 MiB
++ python -
++ tee -a /home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_smoke_10099080.log
+[pkg] flash-linear-attention==0.3.2
+[pkg] fla-core==0.3.2
+[pkg] causal-conv1d==1.7.0
+[causal_conv1d] imported; cuda available: True
++ run_one x074 25600
++ local scale=x074 budget=25600
++ local yml=/tmp/pz_smoke_x074.yaml
++ sed -e 's#^image_max_pixels:.*#image_max_pixels: 25600#' -e 's#^image_min_pixels:.*#image_min_pixels: 25600#' -e 's#^output_dir:.*#output_dir: /nesi/project/massey04900/Mammography/model/patch_zoom_smoke_10099080/x074#' -e 's#^logging_steps:.*#logging_steps: 1#' 2-view/configs/patch_zoom_x074.yaml
++ echo 'max_steps: 20'
++ echo 'save_steps: 10000'
++ echo '=== smoke x074 (budget=25600) ==='
++ tee -a /home/zhao/Mammography/Mammo/2-view/logs/patch_zoom_smoke_10099080.log
+=== smoke x074 (budget=25600) ===
++ MON=340128
++ llamafactory-cli train /tmp/pz_smoke_x074.yaml
++ SCALE=x074
++ python -u -c '
+import os, subprocess, time
+scale = os.environ["SCALE"]
+peak = 0
+while True:
+    out = subprocess.run(["nvidia-smi", "--query-gpu=memory.used",
+                          "--format=csv,noheader,nounits"],
+                         capture_output=True, text=True).stdout.strip()
+    try:
+        peak = max(peak, int(out.splitlines()[0]))
+    except Exception:
+        pass
+    open("/tmp/pz_peak_%s.txt" % scale, "w").write(str(peak))
+    time.sleep(3)
+'
+[2026-10-22T10:21:23.795] error: *** JOB 10099080 ON g06 CANCELLED AT 2026-10-22T10:21:23 DUE to SIGNAL Terminated ***
