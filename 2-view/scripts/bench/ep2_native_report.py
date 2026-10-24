@@ -42,7 +42,12 @@ def load(path):
 def argmax_probs(r, kind):
     p = r["p_" + kind]
     keys = sorted(p, key=lambda k: int(k) if str(k).isdigit() else k)
-    return max(keys, key=lambda k: p[k])
+    v = max(keys, key=lambda k: p[k])
+    return int(v) if str(v).isdigit() else v
+
+
+def auc_finding(recs, k):
+    return C.auc([r["gt_findings"][k] for r in recs], [r["p_findings"][k] for r in recs])
 
 
 def birads_ge3_score(r):
@@ -155,8 +160,8 @@ def main():
         if name not in data:
             continue
         for k in FIND:
-            (p, r_, f_, _), (tp, fp, fn) = f1_greedy(data[name], k)
-            lines.append(f"| {name} | {k} | {f6(M[name]['findings_auc'] if k else None)} | "
+            (p, r_, f_), (tp, fp, fn) = f1_greedy(data[name], k)
+            lines.append(f"| {name} | {k} | {f6(auc_finding(data[name], k))} | "
                          f"{f6(p)} | {f6(r_)} | {f6(f_)} | {tp}/{fp}/{fn} |")
     lines.append("")
 

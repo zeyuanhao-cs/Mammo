@@ -113,14 +113,26 @@ def forward_birads(model, tokenizer, processor, layer0, mm_kwargs, prompt_ids, t
 
         handle = layer0.register_forward_pre_hook(hook)
 
+    # position_ids 修复（同 soft_decode.rope_prefill）：多图 prefill 必须显式传
+    # text arange + get_rope_index 视觉位置，否则与 b8(generate) 管线 rope 不一致
+    # （实测概率差可达 0.148）。
+    B, L = ids_t.shape
+    text_pos = torch.arange(L, device=ids_t.device).view(1, -1).expand(B, -1)
+    grid, mtti = kw.get("image_grid_thw"), kw.get("mm_token_type_ids")
+    if mtti is not None and grid is not None:
+        vis_pos, _ = model.model.get_rope_index(ids_t, mtti, grid, None, attention_mask=attn)
+    else:
+        vis_pos = text_pos.unsqueeze(0).expand(3, -1, -1)
+    pos4 = torch.cat([text_pos.unsqueeze(0), vis_pos], dim=0)
+
     try:
         with torch.inference_mode():
             try:
-                out = model(input_ids=ids_t, attention_mask=attn, use_cache=False,
-                            logits_to_keep=K, **kw)
+                out = model(input_ids=ids_t, attention_mask=attn, position_ids=pos4,
+                            use_cache=False, logits_to_keep=K, **kw)
             except TypeError:
-                out = model(input_ids=ids_t, attention_mask=attn, use_cache=False,
-                            num_logits_to_keep=K, **kw)
+                out = model(input_ids=ids_t, attention_mask=attn, position_ids=pos4,
+                            use_cache=False, num_logits_to_keep=K, **kw)
     finally:
         if handle is not None:
             handle.remove()

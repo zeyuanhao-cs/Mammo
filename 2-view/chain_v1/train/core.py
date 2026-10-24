@@ -39,6 +39,7 @@ class SoftKDConfig:
     no_kd: bool = False       # lam = 0
     no_soft: bool = False     # 关闭第 2 次前向（纯 SFT 基线）
     soft_mode: str = "logit_mlp"   # linear | logit_mlp
+    soft_gate: str = "none"    # none | uncert（delta *= 4p(1-p)）
     id0: int = ID0
     id1: int = ID1
     birads_ids: Sequence[int] = field(default_factory=lambda: tuple(BIRADS_IDS))
@@ -236,7 +237,7 @@ def soft_kd_loss(
             from .soft_mixer import base_id_from_p
             base_id = base_id_from_p(p[b, j], cfg.id0, cfg.id1)   # 模型自己的判断，不用 GT
             vectors.append(soft_vector(mixer, emb_w, p[b, j], j, base_id, cfg.id0, cfg.id1,
-                                       emb_w.dtype, cfg.soft_mode))
+                                       emb_w.dtype, cfg.soft_mode, gate=cfg.soft_gate))
 
     fused = box.get("e")
     used_reuse = False

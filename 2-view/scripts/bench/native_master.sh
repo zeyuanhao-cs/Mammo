@@ -70,7 +70,7 @@ if ! grep -q "^tokenized_path:" "$CFG"; then
   "$PY" - <<PYEOF
 p = "$CFG"
 s = open(p, encoding="utf-8").read()
-s = s.replace("### dataset", "### dataset\ntokenized_path: $TOK   # 原分辨率专用缓存（每视角 token 数与 786432 不同，不能共用）")
+s = s.replace("### output", "tokenized_path: $TOK   # 原分辨率专用缓存（每视角 token 数与 786432 不同，不能共用）\n\n### output")
 open(p, "w", encoding="utf-8").write(s)
 PYEOF
   say "已写入 tokenized_path=$TOK"

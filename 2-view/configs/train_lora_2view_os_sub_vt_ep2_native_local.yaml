@@ -8,7 +8,7 @@
 # ep2-native 变体 (基于 train_lora_2view_os_sub_vt_ep2_local.yaml):
 #   image_max_pixels 786432 -> 1386240 (912x1520 原生)
 #   output_dir -> ...-vt-ep2-native
-#   save_strategy: steps / save_steps: 200 / save_total_limit: 2 (崩溃续训)
+#   save_strategy: steps / save_steps: 100 / save_total_limit: 2 (崩溃续训)
 #
 # 运行: llamafactory-cli train 2-view/configs/train_lora_2view_os_sub_vt_ep2_local.yaml
 # =============================================================================
@@ -34,6 +34,7 @@ lora_target: all
 freeze_vision_tower: false  # 解冻视觉塔: visual.blocks 纳入 LoRA 目标
 
 ### dataset
+tokenized_path: /home/z/zhao/Mammography/Mammo/2-view/data/tokenized/ep2_native   # 原分辨率专用缓存（每视角 token 数与 786432 不同，不能共用）
 dataset: vindr_2view_train_os_sub_local
 template: qwen3_5_nothink
 cutoff_len: 4096
@@ -48,7 +49,7 @@ output_dir: /home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-os-sub-vt-ep2-n
 # 也可显式指定: resume_from_checkpoint: /home/z/zhao/Mammography/model/Qwen3.5-4B-lora-2view-os-sub-vt-ep2/checkpoint-200
 logging_steps: 10
 save_strategy: steps   # 崩溃续训用
-save_steps: 200
+save_steps: 100
 save_total_limit: 2
 plot_loss: true
 overwrite_output_dir: false  # 必须 false, 否则自动续训分支被跳过

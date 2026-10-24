@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import sys
 from pathlib import Path
@@ -29,7 +30,7 @@ from llamafactory.chat import ChatModel  # noqa: E402
 from chain_v1.train.core import SoftKDConfig  # noqa: E402
 from chain_v1.train.data import SoftKDDataset, build_inputs, to_tensors  # noqa: E402
 from chain_v1.train.trainer import SoftKDTrainer  # noqa: E402
-from chain_v1.train.soft_mixer import SoftMixer, load_soft_mixer, save_soft_mixer  # noqa: E402
+from chain_v1.train.soft_mixer import SoftMixer, load_soft_mixer, save_soft_mixer, soft_vector  # noqa: E402
 
 
 class SoftCollator:
@@ -48,9 +49,21 @@ class SoftCollator:
 
 
 def lora_targets(model, freeze_vision_tower=False):
-    """与 LLaMA-Factory 完全一致的目标模块集合（lora_target: all + freeze_vision_tower）。"""
+    """与 LLaMA-Factory 完全一致的目标模块集合（lora_target: all + freeze_vision_tower）。
+
+    修 bug：原先只返回 find_all_linear_modules 的裸后缀名，PEFT 按后缀匹配会把
+    visual.patch_embed.proj（Conv3D）与 visual.merger.linear_fc1/fc2 也包上 LoRA
+    （LLaMA-Factory 训练的 checkpoint 里没有它们，导致 --init-adapter 键不匹配、
+    且与原训练结构不一致）。现补上 LLaMA-Factory 同款 patch_target_modules：
+    展开为完整模块路径并排除 lora_conflict_keys。
+    """
     from llamafactory.model.model_utils.misc import find_all_linear_modules
-    return find_all_linear_modules(model, freeze_vision_tower)
+    from llamafactory.model.model_utils.visual import COMPOSITE_MODELS, patch_target_modules
+    names = find_all_linear_modules(model, freeze_vision_tower)
+    fake_ft = SimpleNamespace(freeze_vision_tower=freeze_vision_tower,
+                              freeze_multi_modal_projector=True,   # LLaMA-Factory 默认 True（merger 不挂 LoRA）
+                              freeze_language_model=False)
+    return patch_target_modules(model, fake_ft, names)
 
 
 def latest_checkpoint(outdir: str):
@@ -84,7 +97,7 @@ def main():
     ap.add_argument("--bs", type=int, default=1)
     ap.add_argument("--grad-accum", type=int, default=16)
     ap.add_argument("--lr", type=float, default=5e-5)
-    ap.add_argument("--logging-steps", type=int, default=10)
+    ap.add_argument("--logging-steps", type=int, default=1)  # 逐步日志（B0 起，2026-10-24 改）
     ap.add_argument("--save-steps", type=int, default=200)
     ap.add_argument("--lora-rank", type=int, default=8)
     ap.add_argument("--lora-alpha", type=int, default=16)
@@ -97,6 +110,11 @@ def main():
     ap.add_argument("--soft-mode", choices=["linear", "logit_mlp"], default="logit_mlp",
                     help="软证据注入方式：logit_mlp(主方案) / linear(对照)")
     ap.add_argument("--soft-mixer-init", default="", help="可选：从 soft_mixer.pt 恢复 mixer 权重")
+    ap.add_argument("--soft-gate", choices=["none", "uncert"], default="none",
+                    help="软注入门控：none=现有行为；uncert=delta×4p(1-p)（随 mixer 保存，推理自动生效）")
+    ap.add_argument("--init-adapter", default="",
+                    help="只加载已有 LoRA adapter 权重到新建的 LoRA（不改 optimizer/step 计数），"
+                         "用于从已训模型接着训新 run（区别于 --resume）")
     ap.add_argument("--no-reuse-embeds", action="store_true",
                     help="关闭第 2 次前向复用融合嵌入（会重跑视觉塔，仅用于对照）")
     ap.add_argument("--mixer-init", choices=["zero", "small"], default="small",
@@ -138,6 +156,21 @@ def main():
           f"{','.join(sorted(targets))}")
     model = build_lora(model, args.lora_rank, args.lora_alpha, args.lora_dropout, targets)
 
+    if args.init_adapter:
+        from peft import set_peft_model_state_dict
+        from safetensors.torch import load_file
+        sd = load_file(os.path.join(args.init_adapter, "adapter_model.safetensors"))
+        res = set_peft_model_state_dict(model, sd, adapter_name="default")
+        # missing_keys 里绝大多数是主干权重（checkpoint 本就不含），只有含 lora_ 的才算没加载上
+        lora_missing = [k for k in (res.missing_keys or []) if "lora_" in k] if res is not None else []
+        n_unexpected = len(res.unexpected_keys) if res is not None else -1
+        print(f"[init-adapter] 从 {args.init_adapter} 加载 {len(sd)} 个张量 "
+              f"(lora_missing={len(lora_missing)}, unexpected={n_unexpected})", flush=True)
+        if lora_missing:
+            raise SystemExit(f"[init-adapter] LoRA 键未覆盖: {lora_missing[:5]} … 共 {len(lora_missing)}")
+        if n_unexpected > 0:
+            raise SystemExit(f"[init-adapter] checkpoint 有 {n_unexpected} 个未匹配键")
+
     ds = SoftKDDataset(args.data, tokenizer, template, limit=args.limit)
     collator = SoftCollator(model, tokenizer, template, processor)
 
@@ -169,15 +202,44 @@ def main():
             tc = getattr(model.config, "text_config", None)
             hidden = getattr(tc, "hidden_size", None) if tc is not None else None
         assert hidden, "无法从 config 读取 hidden_size"
+        # 修 bug：mixer 初始化原先未固定随机种子，同 seed 42 的两次 run mixer 不同；
+        # 现在创建前固定 seed（在 TrainingArguments 之后、Trainer set_seed 之前）。
+        torch.manual_seed(args.seed)
         mixer = SoftMixer(int(hidden), 64, 4, init=args.mixer_init)
         if args.soft_mixer_init:
             mixer.load_state_dict(load_soft_mixer(args.soft_mixer_init).state_dict())
+        mixer.gate = args.soft_gate     # 随 mixer 保存；推理端自动读取
         print(f"[mixer] logit_mlp: hidden={hidden}, d_hidden=64, n_types=4, init={args.mixer_init}, "
-              f"params={sum(p.numel() for p in mixer.parameters())}")
+              f"gate={mixer.gate}, params={sum(p.numel() for p in mixer.parameters())}")
+        # 前置检查：软向量偏移范数 / 对应 token 嵌入范数（计划 ≈1%）。
+        # 修 bug：N(0,1e-3) 的 small init 实测偏移 ≈21%（远超计划的 1%）——初始化未按计划实现。
+        # 现按 p=0.5 中性点实测比值校准 fc2.weight，使偏移 ≈1%，并打印校准前后比值。
+        mixer.to(model.device)
+        emb = model.get_input_embeddings().weight
+
+        def _ratios():
+            rs = []
+            with torch.no_grad():
+                for pv in (0.1, 0.3, 0.5, 0.7, 0.9):
+                    base_e = emb[16].float() if pv > 0.5 else emb[15].float()
+                    vec = soft_vector(mixer, emb, pv, 0, 16 if pv > 0.5 else 15,
+                                      dtype=torch.float32, mode="logit_mlp")
+                    rs.append(((vec - base_e).norm() / base_e.norm()).item())
+            return sorted(rs)
+
+        rs0 = _ratios()
+        scale = 0.01 / max(rs0[2], 1e-9)
+        with torch.no_grad():
+            mixer.fc2.weight.mul_(scale)
+        rs1 = _ratios()
+        print(f"[mixer-scale] 校准前 ||delta||/||E[base]|| = {['%.4f' % r for r in rs0]} "
+              f"median={rs0[2]:.4f}；按计划 1% 校准（×{scale:.4f}）后 = "
+              f"{['%.4f' % r for r in rs1]} median={rs1[2]:.4f}", flush=True)
 
     soft_cfg = SoftKDConfig(alpha=args.alpha, lam=args.lam, rho_max=args.rho_max,
                             rho_warmup_frac=args.rho_warmup_frac, detach_p=args.detach_p,
-                            no_kd=args.no_kd, no_soft=args.no_soft, soft_mode=args.soft_mode)
+                            no_kd=args.no_kd, no_soft=args.no_soft, soft_mode=args.soft_mode,
+                            soft_gate=args.soft_gate)
     trainer = SoftKDTrainer(model=model, args=targs, train_dataset=ds, data_collator=collator,
                             soft_cfg=soft_cfg, soft_mixer=mixer,
                             reuse_embeds=not args.no_reuse_embeds, processing_class=tokenizer)
@@ -337,6 +399,16 @@ def main():
     if resume:
         print(f"[resume] 从 {resume} 续训")
     trainer.train(resume_from_checkpoint=resume)
+
+    # 训练结束：把最终产物放到 output_dir 根（与 LLaMA-Factory 行为一致），便于评测直接引用
+    trainer.save_model(args.output_dir)
+    if mixer is not None:
+        save_soft_mixer(mixer, args.output_dir)
+    (Path(args.output_dir) / "trainer_state.json").write_text(
+        json.dumps({"global_step": int(trainer.state.global_step),
+                    "max_steps": int(trainer.state.max_steps)}),
+        encoding="utf-8")
+    print(f"[done] global_step={trainer.state.global_step} -> {args.output_dir}", flush=True)
 
 
 if __name__ == "__main__":

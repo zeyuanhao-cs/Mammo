@@ -29,6 +29,7 @@ def base_id_from_p(p, id0=15, id1=16) -> int:
 class SoftMixer(nn.Module):
     def __init__(self, hidden_size: int, d_hidden: int = 64, n_types: int = 4, init: str = "small"):
         super().__init__()
+        self.gate = "none"     # none | uncert（随 mixer 一起保存/加载，推理自动生效）
         self.fc1 = nn.Linear(2, d_hidden)
         self.act = nn.GELU()
         self.fc2 = nn.Linear(d_hidden, hidden_size)
@@ -46,7 +47,7 @@ class SoftMixer(nn.Module):
 
 
 def soft_vector(mixer, emb_w, p, type_idx, base_id, id0=15, id1=16, dtype=torch.float32,
-                mode=SoftMode.LOGIT_MLP):
+                mode=SoftMode.LOGIT_MLP, gate=None):
     """构造该位置要写入的 hidden state（= 输入嵌入）。
 
     p       : tensor（允许梯度）或 float，P("1")
@@ -61,9 +62,16 @@ def soft_vector(mixer, emb_w, p, type_idx, base_id, id0=15, id1=16, dtype=torch.
 
     if mixer is None:
         raise ValueError("soft_mode=logit_mlp 需要传入 mixer")
-    mdt = mixer.fc1.weight.dtype
-    feat = torch.stack([torch.log(p), torch.log1p(-p)]).to(mdt)
+    fw = mixer.fc1.weight
+    # 修 bug：feat 原先只转 dtype 不转 device——mixer 在 GPU 而 p 是 CPU 标量张量时
+    # （soft-decode 推理路径 p 由 float 构造）会 device 不匹配报错。
+    feat = torch.stack([torch.log(p), torch.log1p(-p)]).to(device=fw.device, dtype=fw.dtype)
     delta = mixer(feat, int(type_idx))
+    # 不确定性门控：soft = E[base] + u·MLP(...)，u = 4p(1-p)（p=0.5 时 u=1，与不加开关一致）
+    g = mixer.gate if gate is None else gate
+    if g == "uncert":
+        u = (4.0 * p * (1.0 - p)).to(device=delta.device, dtype=delta.dtype)
+        delta = delta * u
     return emb_w[int(base_id)].to(delta.dtype) + delta
 
 
@@ -75,12 +83,14 @@ def save_soft_mixer(mixer, out_dir: str, name: str = "soft_mixer.pt"):
     torch.save({"state_dict": mixer.state_dict(),
                 "hidden_size": mixer.fc2.out_features,
                 "d_hidden": mixer.fc1.out_features,
-                "n_types": mixer.type_emb.shape[0]}, path)
+                "n_types": mixer.type_emb.shape[0],
+                "soft_gate": getattr(mixer, "gate", "none")}, path)
     return path
 
 
 def load_soft_mixer(path: str, device="cpu", dtype=torch.float32):
     blob = torch.load(path, map_location="cpu")
     mixer = SoftMixer(blob["hidden_size"], blob.get("d_hidden", 64), blob.get("n_types", 4))
+    mixer.gate = blob.get("soft_gate", "none")   # 推理自动继承训练时的门控设置
     mixer.load_state_dict(blob["state_dict"])
     return mixer.to(device=device, dtype=dtype).eval()

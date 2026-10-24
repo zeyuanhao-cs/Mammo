@@ -35,16 +35,19 @@ def main():
     if bad:
         fail(f"出现 expandable/driver 错误：{bad[-1][:160]}")
 
-    # 2) 续跑
+    # 2) 续跑（LLaMA-Factory 续跑时 tqdm 会从 0 重计，所以看 trainer 的显式提示）
     blocks = txt.split("***** Running training *****")
     if len(blocks) < 3:
         fail(f"只检测到 {len(blocks)-1} 次 training 块（期望 2 次：首跑 + 续跑）")
     second = blocks[-1]
-    steps = [int(m) for m in re.findall(r"(\d+)/10 \[", second)]
-    if not steps:
-        fail("续跑后没有 step 进度行")
-    if steps[0] <= 5:
-        fail(f"续跑首步是 {steps[0]}，说明没从 checkpoint-5 接着跑")
+    resumed = ("Resuming training from checkpoint" in second) or ("Resuming training from" in txt)
+    if not resumed:
+        fail("日志里没有 'Resuming training from checkpoint'，说明没从 checkpoint-5 续训")
+    if "global step 5" not in txt:
+        fail("日志里没有 'global step 5'，续跑起点不是第 5 步")
+    reached = ("10/10" in txt) or ("checkpoint-10" in txt)
+    if not reached:
+        fail("续跑后没有到第 10 步（既无 10/10 也无 checkpoint-10）")
     losses = [float(m) for m in re.findall(r"'loss': '([0-9.]+)'", txt)]
     if len(losses) < 4:
         fail(f"loss 记录过少（{len(losses)} 条）")
@@ -70,7 +73,7 @@ def main():
     if n_json < 16:
         fail(f"只有 {n_json}/16 条 prediction_json 非空")
 
-    print(f"PASS: expandable=0, 续跑首步={steps[0]}, loss 条数={len(losses)}, "
+    print(f"PASS: expandable=0, 续跑=global step 5 起, 到达 10/10, loss 条数={len(losses)}, "
           f"probs={n_ok}/16, json={n_json}/16")
     sys.exit(0)
 

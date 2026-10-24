@@ -1,6 +1,0 @@
-val,batch=8,rc=1 (fallback)
-val,batch=4,rc=1 (fallback)
-val,batch=2,rc=1 (fallback)
-test,batch=8,rc=1 (fallback)
-test,batch=4,rc=1 (fallback)
-test,batch=2,rc=1 (fallback)

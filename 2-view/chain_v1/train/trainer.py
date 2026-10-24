@@ -22,6 +22,7 @@ class SoftKDTrainer(Trainer):
         self.reuse_embeds = reuse_embeds
         self.soft_cfg = (soft_cfg or SoftKDConfig()).resolved()
         self._mb = 0   # micro-batch 计数（用于每优化步只记一次日志）
+        self._acc = None  # 梯度累积窗口内的日志累加器（仅日志用）
 
     # ---- 辅助 ----
     def _total_steps(self) -> int:
@@ -94,13 +95,28 @@ class SoftKDTrainer(Trainer):
             extra_metrics=metrics,
         )
 
-        # 训练日志（grad accumulation 内只在最后一个 micro-batch 记一次）
+        # ---- 训练日志（只影响日志，不改训练逻辑）----
+        # ce1/ce2/kl/mean_p 取梯度累积窗口内的平均；n_second = 窗口内实际跑了第二遍
+        # （软注入）的 micro-batch 数（use_second 由 rho 逐 micro-batch 伯努利采样）。
         self._mb += 1
         accum = max(1, int(self.args.gradient_accumulation_steps))
-        if step % max(1, int(self.args.logging_steps)) == 0 and self._mb % accum == 0:
-            p = parts["p"].detach()
-            log = {"rho": rho, "low_p_ratio": self._low_p_ratio(p, gt_findings)}
-            log.update({k: v for k, v in metrics.items() if isinstance(v, float)})
-            self.log(log)
+        if self._acc is None:
+            self._acc = {"n": 0, "n2": 0, "ce1": 0.0, "ce2": 0.0, "kl": 0.0, "mean_p": 0.0}
+        a = self._acc
+        a["n"] += 1
+        a["n2"] += int(bool(use_second))
+        for k in ("ce1", "ce2", "kl", "mean_p"):
+            if k in metrics:
+                a[k] += float(metrics[k])
+        if self._mb % accum == 0:
+            if step % max(1, int(self.args.logging_steps)) == 0:
+                n = max(1, a["n"])
+                log = {"rho": rho,
+                       "low_p_ratio": self._low_p_ratio(parts["p"].detach(), gt_findings),
+                       "ce1": a["ce1"] / n, "ce2": a["ce2"] / n, "kl": a["kl"] / n,
+                       "mean_p": a["mean_p"] / n,
+                       "n_second": a["n2"], "n_micro": a["n"]}
+                self.log(log)
+            self._acc = None
 
         return (loss, None) if return_outputs else loss

@@ -187,3 +187,18 @@ vindr_infer/outputs/
 /2-view/outputs/vision_baseline/repeat_os_density/last.pt
 /2-view/outputs/vision_baseline/repeat_os_density/last.pt
 *.pt
+
+# 大权重文件不入库（已移到 /home/z/zhao/Mammography/model/vision_baseline/）
+*.pt
+*.pth
+
+# VinDr 标注与由患者图像生成的图片，不入库
+2-view/occlusion_shared/*.csv
+2-view/outputs/eval/occlusion_3ep/occluded/
+2-view/outputs/eval/occlusion_3ep/check/
+size_check/_crops/
+2-view/data/tokenized/
+2-view/occlusion_shared/occlusion_manifest.json
+2-view/occlusion_shared/*.zip
+2-view/chain_v1/logs/
+2-view/logs/
