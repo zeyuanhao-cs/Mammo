@@ -1,0 +1,25 @@
+{
+ "n_compared": 192,
+ "pred_birads_agreement": 1.0,
+ "pred_birads_disagreement": 0.0,
+ "max_sign_p_max_abs_diff": 0.0,
+ "max_sign_p_median_abs_diff": 0.0,
+ "p_birads_ge3_max_abs_diff": 0.0,
+ "p_birads_ge3_median_abs_diff": 0.0,
+ "thresholds": {
+  "disagreement": 0.02,
+  "median_abs_diff": 0.01
+ },
+ "consistent": true,
+ "diagnosis": {
+  "n_disagree": 0,
+  "disagreements": [],
+  "median_margin_all": 0.6351,
+  "median_margin_disagree": null,
+  "n_abs_dmaxsign_gt_0_2": 0,
+  "n_abs_diff_p45_gt_0_1": 0,
+  "max_abs_diff_p_birads_45": 0.0
+ },
+ "baseline_file": "/home/z/zhao/Mammography/Mammo/2-view/outputs/scoring/vt-ep3-e3_test_b8_with_probs.jsonl",
+ "note": "Δ 基准仍用本次重跑的 orig; 本文件只用于流程一致性核对"
+}

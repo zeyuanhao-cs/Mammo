@@ -1,0 +1,470 @@
+# 第 1 步(本地): 坐标与框清单
+
+- 坐标空间: `vindr_detection_v1_folds.csv` 的 `resized_*` 已是 912x1520 PNG 像素坐标
+- 192 个 GT BI-RADS>=3 乳房, 共 424 个 finding_birads>=3 框 (CC 203 / MLO 221)
+- 框越界被裁剪: 14 个; 缺 PNG: 0 个
+- finding_birads 取值分布 (test split): {'BI-RADS 3': 187, 'BI-RADS 4': 192, 'BI-RADS 5': 50, '': 3666}
+- 两个视角都没有框的乳房: 0
+- **只有一个视角有框的乳房: 30**
+
+| id | CC 框数 | MLO 框数 |
+|---|---|---|
+| 02dba952e4ef2cf35613761a64bbc751_R | 0 | 1 |
+| 043febde473009753d404fe89a41c395_R | 1 | 0 |
+| 07889ee9b57d18e83cfd940b160965b6_R | 0 | 1 |
+| 0fab8097f55f21d4bfa7667250122312_L | 2 | 0 |
+| 1c41d5f075f0291af7f33545704df750_R | 0 | 1 |
+| 25f7d988de28237bbf10273129097c9c_R | 0 | 1 |
+| 268bbbd1932753cedf8846fe716c669b_L | 0 | 1 |
+| 29bfec1e3b5a67751abc3dbf46df3e62_L | 0 | 1 |
+| 31fa226bc9f87e0a2cb2de6dddbc2270_L | 0 | 1 |
+| 5864ac95d2f1bcf325d36cbe8609297c_L | 0 | 1 |
+| 66235fe8968ef266cf15b08cfaa4a40e_L | 1 | 0 |
+| 6691601fba2d3233547361585c21fdde_L | 1 | 0 |
+| 6e79c21e0593c8c459ef609b99dbfb70_L | 0 | 1 |
+| 6e79c21e0593c8c459ef609b99dbfb70_R | 0 | 1 |
+| 75b2eef816fe608734977d1ffb16eae9_R | 1 | 0 |
+| 792610d6c4044d3a4e2cfdbc5b494768_R | 1 | 0 |
+| 7b17b1d061b038ceee40c3811341b2fc_R | 0 | 1 |
+| 805d72b89d7f73058bf420ef26caaff4_L | 0 | 1 |
+| 8138169c67834e4e979fa17f38a826ad_R | 0 | 1 |
+| 891ff1343a54c212f973f1b83ec4952c_L | 0 | 1 |
+| 8e1fe4584f868271dce3e84e59b65388_L | 0 | 1 |
+| 91489fc5a74d1452737d06d7113837f4_L | 1 | 0 |
+| 968f72a200354163e45343aeeead090d_R | 0 | 1 |
+| a1f8c1d32ac2da1967b3c6b3ee34616e_L | 0 | 1 |
+| ad721e26365b1555dd539aed6123a851_R | 0 | 1 |
+| ae38a60e17f0f0c0f48db63680d0f619_L | 0 | 1 |
+| d0389f18021cd6e9294eef7d553039b3_R | 1 | 0 |
+| d1808200af6ccda3be8abce5c9b4980f_L | 0 | 1 |
+| ee117236523dbd94ef212e6b12eaca61_L | 0 | 1 |
+| fc45fd8203dadd8899344e52935ff069_L | 1 | 0 |
+
+## 每个乳房的框明细 (仅列有框的视角)
+
+| id | GT BI-RADS | view | 框 (x0,y0,x1,y1) | 框内 finding_birads | classes |
+|---|---|---|---|---|---|
+| 014d843f13a9d86fec945664e2541fe6_R | 4 | CC | (770,1124,911,1231) | 3 | mass |
+| 014d843f13a9d86fec945664e2541fe6_R | 4 | MLO | (731,855,840,924) | 4 | mass |
+| 014d843f13a9d86fec945664e2541fe6_R | 4 | MLO | (765,995,905,1070) | 3 | mass |
+| 02c9621d5af7d0485e20c071f605678c_R | 3 | CC | (654,1001,771,1093) | 3 | mass |
+| 02c9621d5af7d0485e20c071f605678c_R | 3 | MLO | (599,1084,707,1140) | 3 | mass |
+| 02dba952e4ef2cf35613761a64bbc751_R | 3 | MLO | (337,563,641,762) | 3 | asymmetry |
+| 043febde473009753d404fe89a41c395_R | 3 | CC | (714,1050,870,1170) | 3 | asymmetry |
+| 07889ee9b57d18e83cfd940b160965b6_R | 3 | MLO | (615,737,803,829) | 3 | asymmetry |
+| 07a0dbae70b94afb01313eeeeaaef9ac_R | 4 | CC | (406,664,626,753) | 4 | mass |
+| 07a0dbae70b94afb01313eeeeaaef9ac_R | 4 | MLO | (461,1077,639,1146) | 4 | mass |
+| 0910d9262da2398810b2f2bc32b77088_L | 3 | CC | (359,533,568,731) | 3 | mass |
+| 0910d9262da2398810b2f2bc32b77088_L | 3 | MLO | (309,941,608,1172) | 3 | mass |
+| 0928a31ce88182b08f89a6aa72354037_L | 3 | CC | (554,645,675,746) | 3 | mass |
+| 0928a31ce88182b08f89a6aa72354037_L | 3 | MLO | (290,901,410,1004) | 3 | mass |
+| 0baef459a10e51c65302ddb63012c147_R | 4 | CC | (294,676,652,773) | 4 | suspicious_calcification |
+| 0baef459a10e51c65302ddb63012c147_R | 4 | MLO | (466,560,625,622) | 3 | mass |
+| 0baef459a10e51c65302ddb63012c147_R | 4 | MLO | (191,719,459,928) | 4 | suspicious_calcification |
+| 0d8fc33c55f2f6af87ee3bd16614e208_R | 4 | CC | (279,544,434,657) | 4 | mass |
+| 0d8fc33c55f2f6af87ee3bd16614e208_R | 4 | MLO | (103,877,210,970) | 4 | mass |
+| 0f19f51df3ae39481f0a88d5b17b8499_R | 3 | CC | (480,662,700,835) | 3 | mass |
+| 0f19f51df3ae39481f0a88d5b17b8499_R | 3 | MLO | (261,822,676,1159) | 3 | asymmetry |
+| 0fab8097f55f21d4bfa7667250122312_L | 5 | CC | (92,708,434,927) | 5 | mass |
+| 0fab8097f55f21d4bfa7667250122312_L | 5 | CC | (197,784,380,863) | 4 | suspicious_calcification |
+| 100d1197bd368737356f1da7fc270ae4_R | 3 | CC | (495,595,610,655) | 3 | mass |
+| 100d1197bd368737356f1da7fc270ae4_R | 3 | MLO | (537,712,654,769) | 3 | mass |
+| 115666dcca5a3ecb52368efc61da2578_L | 3 | CC | (384,562,693,855) | 3 | asymmetry |
+| 115666dcca5a3ecb52368efc61da2578_L | 3 | MLO | (166,914,607,1203) | 3 | asymmetry |
+| 1289de4c6d2a9439311af675dd610158_L | 4 | CC | (78,515,547,939) | 4 | mass |
+| 1289de4c6d2a9439311af675dd610158_L | 4 | MLO | (138,622,672,923) | 4 | mass |
+| 145927026debdaedb04126ab0f182f4e_R | 5 | CC | (126,237,905,1089) | 5 | suspicious_calcification |
+| 145927026debdaedb04126ab0f182f4e_R | 5 | MLO | (477,729,658,854) | 4 | mass |
+| 145927026debdaedb04126ab0f182f4e_R | 5 | MLO | (100,741,810,1291) | 5 | suspicious_calcification |
+| 14a63118d94643a3d65b32039a20b351_L | 4 | CC | (53,216,177,290) | 4 | suspicious_calcification |
+| 14a63118d94643a3d65b32039a20b351_L | 4 | MLO | (184,660,378,723) | 4 | suspicious_calcification |
+| 1661e2bdcd39e86c666fec4bdf182791_L | 3 | CC | (384,908,491,1008) | 3 | mass |
+| 1661e2bdcd39e86c666fec4bdf182791_L | 3 | MLO | (355,955,480,1047) | 3 | mass |
+| 1734a10c08f2565315493df00a2fd134_L | 4 | CC | (158,923,308,1047) | 3 | mass |
+| 1734a10c08f2565315493df00a2fd134_L | 4 | MLO | (111,1224,271,1319) | 4 | mass,suspicious_calcification |
+| 18249f2f393ec3a4e59d4f3e9e7c6d1d_R | 3 | CC | (557,977,907,1303) | 3 | mass |
+| 18249f2f393ec3a4e59d4f3e9e7c6d1d_R | 3 | MLO | (652,904,912,1155) | 3 | mass |
+| 1860e56f068c2e2ccb2017de6e6f8eb8_L | 4 | CC | (350,787,584,986) | 4 | mass |
+| 1860e56f068c2e2ccb2017de6e6f8eb8_L | 4 | MLO | (307,657,548,837) | 4 | mass |
+| 1a6eb4bb66e7e5a47d9191e0aa13930e_L | 4 | CC | (275,496,344,540) | 4 | suspicious_calcification |
+| 1a6eb4bb66e7e5a47d9191e0aa13930e_L | 4 | MLO | (226,897,287,973) | 4 | suspicious_calcification |
+| 1c41d5f075f0291af7f33545704df750_R | 3 | MLO | (723,377,858,443) | 3 | mass |
+| 1e23350a1da64abd78dc27a56f966186_R | 3 | CC | (147,916,300,1059) | 3 | asymmetry |
+| 1e23350a1da64abd78dc27a56f966186_R | 3 | MLO | (279,1217,491,1335) | 3 | asymmetry |
+| 1e2b0ce2c5a93c643834c98803e6ac2d_L | 3 | CC | (303,330,443,435) | 3 | mass |
+| 1e2b0ce2c5a93c643834c98803e6ac2d_L | 3 | CC | (112,546,254,660) | 3 | mass |
+| 1e2b0ce2c5a93c643834c98803e6ac2d_L | 3 | MLO | (591,701,702,784) | 3 | mass |
+| 1e2b0ce2c5a93c643834c98803e6ac2d_L | 3 | MLO | (76,1083,227,1086) | 3 | mass |
+| 1fe77db1e47d9133c2bc799fc2e3c4ba_L | 4 | CC | (196,824,435,984) | 4 | mass |
+| 1fe77db1e47d9133c2bc799fc2e3c4ba_L | 4 | MLO | (119,1055,400,1164) | 4 | mass |
+| 2035c27f797e5b80a104640985636167_R | 5 | CC | (17,250,830,1109) | 5 | suspicious_calcification |
+| 2035c27f797e5b80a104640985636167_R | 5 | MLO | (10,569,742,1140) | 5 | suspicious_calcification |
+| 2035c27f797e5b80a104640985636167_R | 5 | MLO | (105,798,431,1110) | 4 | asymmetry |
+| 20457a9245229489ee5c67af773d4240_L | 4 | CC | (357,641,663,884) | 4 | mass |
+| 20457a9245229489ee5c67af773d4240_L | 4 | CC | (342,668,635,842) | 4 | suspicious_calcification |
+| 20457a9245229489ee5c67af773d4240_L | 4 | MLO | (457,678,755,909) | 4 | mass |
+| 20457a9245229489ee5c67af773d4240_L | 4 | MLO | (467,765,744,888) | 4 | suspicious_calcification |
+| 20bd4110f46e0a2579a554743f51f173_R | 3 | CC | (810,562,910,693) | 3 | suspicious_calcification |
+| 20bd4110f46e0a2579a554743f51f173_R | 3 | MLO | (357,565,605,631) | 3 | suspicious_calcification |
+| 215b14f6ff626394a625de6158e928c0_L | 4 | CC | (543,818,707,1005) | 4 | asymmetry |
+| 215b14f6ff626394a625de6158e928c0_L | 4 | MLO | (578,915,719,1067) | 4 | asymmetry |
+| 21fddc967eb5a31695a60d4bb075df7a_R | 4 | CC | (462,687,555,752) | 4 | mass |
+| 21fddc967eb5a31695a60d4bb075df7a_R | 4 | CC | (589,733,611,753) | 3 | suspicious_calcification |
+| 21fddc967eb5a31695a60d4bb075df7a_R | 4 | MLO | (338,844,392,858) | 3 | suspicious_calcification |
+| 21fddc967eb5a31695a60d4bb075df7a_R | 4 | MLO | (394,848,521,902) | 4 | mass |
+| 24f98ac8cc135d3c62c5415b235534de_L | 4 | CC | (460,714,498,751) | 4 | suspicious_calcification |
+| 24f98ac8cc135d3c62c5415b235534de_L | 4 | MLO | (551,962,585,995) | 4 | suspicious_calcification |
+| 25f7d988de28237bbf10273129097c9c_R | 3 | MLO | (142,817,603,1034) | 3 | asymmetry |
+| 26571f2d2c8cc89e30059d05b4cabb1a_L | 3 | CC | (341,863,678,1131) | 3 | mass |
+| 26571f2d2c8cc89e30059d05b4cabb1a_L | 3 | MLO | (89,1173,438,1244) | 3 | mass |
+| 268bbbd1932753cedf8846fe716c669b_L | 4 | MLO | (49,579,414,770) | 4 | mass |
+| 27d4dc70d6f73554e4ead70f01867167_R | 4 | CC | (422,586,637,750) | 4 | mass |
+| 27d4dc70d6f73554e4ead70f01867167_R | 4 | MLO | (181,804,469,919) | 4 | mass |
+| 27de4919323355abc9dc92603fdb5df2_L | 3 | CC | (9,760,77,843) | 3 | mass |
+| 27de4919323355abc9dc92603fdb5df2_L | 3 | MLO | (139,778,233,849) | 3 | mass |
+| 28605b2b2337d1a4aae65900df2a36ae_R | 4 | CC | (224,127,909,495) | 4 | mass |
+| 28605b2b2337d1a4aae65900df2a36ae_R | 4 | MLO | (85,503,685,892) | 4 | mass |
+| 29bfec1e3b5a67751abc3dbf46df3e62_L | 3 | MLO | (23,484,505,708) | 3 | asymmetry |
+| 2b48f13688211af161ca5880d9fcaec3_R | 3 | CC | (135,273,468,567) | 3 | mass |
+| 2b48f13688211af161ca5880d9fcaec3_R | 3 | MLO | (142,942,483,1163) | 3 | mass |
+| 2c90542f6f10926cde501ebd8de7c3c3_R | 4 | CC | (555,1052,660,1135) | 4 | mass |
+| 2c90542f6f10926cde501ebd8de7c3c3_R | 4 | MLO | (539,1269,658,1338) | 4 | mass |
+| 2cae5c9d4a922766fd01dd69a004ea5c_L | 3 | CC | (79,673,306,958) | 3 | mass |
+| 2cae5c9d4a922766fd01dd69a004ea5c_L | 3 | MLO | (34,1203,284,1413) | 3 | mass |
+| 2df4404b9c286ec49851d4261faec924_R | 3 | CC | (124,882,197,968) | 3 | mass |
+| 2df4404b9c286ec49851d4261faec924_R | 3 | MLO | (192,1121,324,1212) | 3 | mass |
+| 2e1f57baf6e3e742404c401b0999cadb_R | 3 | CC | (215,857,556,1142) | 3 | mass |
+| 2e1f57baf6e3e742404c401b0999cadb_R | 3 | MLO | (207,929,630,1183) | 3 | mass |
+| 2fe156e5ce59814559b0a9f01de006df_L | 4 | CC | (67,408,471,749) | 4 | mass |
+| 2fe156e5ce59814559b0a9f01de006df_L | 4 | CC | (183,434,432,651) | 4 | suspicious_calcification |
+| 2fe156e5ce59814559b0a9f01de006df_L | 4 | MLO | (232,812,747,1053) | 4 | mass |
+| 2fe156e5ce59814559b0a9f01de006df_L | 4 | MLO | (493,850,674,1002) | 4 | suspicious_calcification |
+| 30531093985dd9b3d909c3866c46e443_L | 3 | CC | (16,931,424,1267) | 3 | mass |
+| 30531093985dd9b3d909c3866c46e443_L | 3 | MLO | (0,906,327,1184) | 3 | mass |
+| 31937d26eec6ebdceb4c4d676fd06018_R | 5 | CC | (455,671,849,1136) | 5 | mass |
+| 31937d26eec6ebdceb4c4d676fd06018_R | 5 | MLO | (342,428,783,769) | 5 | mass |
+| 31fa226bc9f87e0a2cb2de6dddbc2270_L | 4 | MLO | (194,1335,383,1402) | 4 | mass |
+| 3b9d3e9aa2fcdefd74d4cbfb496694b4_R | 5 | CC | (669,740,912,1014) | 5 | mass,suspicious_calcification |
+| 3b9d3e9aa2fcdefd74d4cbfb496694b4_R | 5 | MLO | (531,509,858,685) | 5 | mass,suspicious_calcification |
+| 3f77a67d63af8d57a4119efa6fe298c6_R | 3 | CC | (409,294,905,848) | 3 | asymmetry |
+| 3f77a67d63af8d57a4119efa6fe298c6_R | 3 | MLO | (560,540,779,796) | 3 | mass |
+| 3f77a67d63af8d57a4119efa6fe298c6_R | 3 | MLO | (162,661,547,1031) | 3 | asymmetry |
+| 4141898a609bbcdf7fa4e9b49188514e_R | 4 | CC | (457,779,700,946) | 4 | mass,suspicious_calcification |
+| 4141898a609bbcdf7fa4e9b49188514e_R | 4 | MLO | (344,591,504,716) | 4 | mass,suspicious_calcification |
+| 4199129f94749397e0d71d2bd5a01d19_L | 4 | CC | (97,491,842,1346) | 4 | asymmetry |
+| 4199129f94749397e0d71d2bd5a01d19_L | 4 | CC | (136,642,297,1092) | 4 | architectural_distortion |
+| 4199129f94749397e0d71d2bd5a01d19_L | 4 | MLO | (174,622,865,1183) | 4 | asymmetry |
+| 4199129f94749397e0d71d2bd5a01d19_L | 4 | MLO | (220,745,459,932) | 4 | architectural_distortion |
+| 439e1f994fe010feb04b891db651ae55_R | 3 | CC | (462,854,582,973) | 3 | asymmetry |
+| 439e1f994fe010feb04b891db651ae55_R | 3 | MLO | (530,1229,698,1298) | 3 | asymmetry |
+| 443af8de1a0d47fe93e88ee1e4dfac8e_R | 3 | CC | (361,1142,556,1264) | 3 | mass |
+| 443af8de1a0d47fe93e88ee1e4dfac8e_R | 3 | MLO | (444,1243,703,1327) | 3 | mass |
+| 4598a7b538afcbf6d6f0d71fb654dacd_L | 4 | CC | (29,545,137,606) | 4 | suspicious_calcification |
+| 4598a7b538afcbf6d6f0d71fb654dacd_L | 4 | MLO | (542,571,625,621) | 4 | suspicious_calcification |
+| 46ab23ec866810a4212c33db471153a2_R | 3 | CC | (714,535,906,690) | 3 | mass |
+| 46ab23ec866810a4212c33db471153a2_R | 3 | MLO | (540,449,895,699) | 3 | asymmetry |
+| 46ab23ec866810a4212c33db471153a2_R | 3 | MLO | (419,831,626,939) | 3 | mass |
+| 48975fff28d21f8a852624749fcc7411_R | 4 | CC | (307,1046,427,1154) | 4 | architectural_distortion |
+| 48975fff28d21f8a852624749fcc7411_R | 4 | MLO | (236,1150,340,1228) | 4 | architectural_distortion |
+| 4ccad6b7e7b7a4e492b0fd56b5bef883_L | 4 | CC | (89,484,654,983) | 4 | asymmetry |
+| 4ccad6b7e7b7a4e492b0fd56b5bef883_L | 4 | MLO | (263,663,745,1134) | 4 | asymmetry |
+| 4dab957b2babcf264a088bc7802261c4_R | 3 | CC | (462,919,826,1173) | 3 | asymmetry |
+| 4dab957b2babcf264a088bc7802261c4_R | 3 | MLO | (396,779,719,1106) | 3 | asymmetry |
+| 4e6f6c5e70433a176643f635747a328d_L | 4 | CC | (314,1036,442,1089) | 4 | mass |
+| 4e6f6c5e70433a176643f635747a328d_L | 4 | MLO | (478,675,549,721) | 4 | mass |
+| 4fc011ee4b49040648fdd2d3dcf883c3_R | 4 | CC | (51,940,117,1024) | 4 | mass |
+| 4fc011ee4b49040648fdd2d3dcf883c3_R | 4 | CC | (90,948,168,1036) | 4 | mass,suspicious_calcification |
+| 4fc011ee4b49040648fdd2d3dcf883c3_R | 4 | MLO | (45,1246,89,1305) | 4 | mass |
+| 4fc011ee4b49040648fdd2d3dcf883c3_R | 4 | MLO | (87,1255,154,1328) | 4 | mass,suspicious_calcification |
+| 5214f4386efcea56014510f1068da2a0_R | 4 | CC | (138,717,307,876) | 4 | mass |
+| 5214f4386efcea56014510f1068da2a0_R | 4 | MLO | (120,896,253,973) | 4 | mass |
+| 540ab71b28752c3e279be9bad638df79_L | 4 | CC | (278,844,502,1029) | 4 | mass |
+| 540ab71b28752c3e279be9bad638df79_L | 4 | MLO | (298,960,591,1138) | 4 | mass |
+| 543d36c1e4f0957fddd46c3078f21c93_R | 3 | CC | (319,1151,514,1324) | 3 | mass |
+| 543d36c1e4f0957fddd46c3078f21c93_R | 3 | MLO | (514,1310,718,1449) | 3 | mass |
+| 55d4e23fef777c307e27b9661c0da578_L | 3 | CC | (0,294,314,545) | 3 | mass |
+| 55d4e23fef777c307e27b9661c0da578_L | 3 | MLO | (317,910,587,1065) | 3 | mass |
+| 5683854eafabc34f6d854000d2ac6c2d_L | 3 | CC | (131,1192,414,1341) | 3 | mass |
+| 5683854eafabc34f6d854000d2ac6c2d_L | 3 | MLO | (123,1126,368,1247) | 3 | mass |
+| 5864ac95d2f1bcf325d36cbe8609297c_L | 3 | MLO | (223,755,399,853) | 3 | asymmetry |
+| 5988446083ab88daccc8fc5c6c679474_R | 4 | CC | (422,933,509,1005) | 4 | suspicious_calcification |
+| 5988446083ab88daccc8fc5c6c679474_R | 4 | MLO | (389,1020,475,1085) | 4 | suspicious_calcification |
+| 5babce4b963ba18124477ce11d284ac6_L | 5 | CC | (555,564,748,712) | 4 | mass |
+| 5babce4b963ba18124477ce11d284ac6_L | 5 | CC | (75,820,593,1269) | 5 | mass |
+| 5babce4b963ba18124477ce11d284ac6_L | 5 | CC | (568,942,714,1058) | 5 | mass |
+| 5babce4b963ba18124477ce11d284ac6_L | 5 | MLO | (15,846,664,1187) | 5 | mass |
+| 5bf7f3c05f93f02085789af720be64d6_R | 4 | CC | (175,535,386,746) | 4 | architectural_distortion |
+| 5bf7f3c05f93f02085789af720be64d6_R | 4 | MLO | (113,927,243,1044) | 4 | architectural_distortion |
+| 5c9d7863e0c50cdb8e8f7bf5cf1c91b3_L | 4 | CC | (233,395,315,437) | 4 | suspicious_calcification |
+| 5c9d7863e0c50cdb8e8f7bf5cf1c91b3_L | 4 | MLO | (196,1011,288,1047) | 4 | suspicious_calcification |
+| 5f97a8ee0bc7b1ffb941035bc5291db8_L | 5 | CC | (117,558,695,1013) | 5 | mass |
+| 5f97a8ee0bc7b1ffb941035bc5291db8_L | 5 | CC | (315,665,494,778) | 5 | suspicious_calcification |
+| 5f97a8ee0bc7b1ffb941035bc5291db8_L | 5 | MLO | (252,821,723,1117) | 5 | mass |
+| 5f97a8ee0bc7b1ffb941035bc5291db8_L | 5 | MLO | (521,912,688,987) | 5 | suspicious_calcification |
+| 5fb086552ff0566a7ba0fba65d5c4823_L | 4 | CC | (134,196,385,384) | 4 | mass |
+| 5fb086552ff0566a7ba0fba65d5c4823_L | 4 | CC | (348,604,532,736) | 4 | mass |
+| 5fb086552ff0566a7ba0fba65d5c4823_L | 4 | MLO | (7,756,273,953) | 4 | mass |
+| 5fb086552ff0566a7ba0fba65d5c4823_L | 4 | MLO | (295,1121,461,1238) | 3 | mass |
+| 64072568aca98d15b344eddde9ddf8be_L | 3 | CC | (633,814,759,907) | 3 | mass |
+| 64072568aca98d15b344eddde9ddf8be_L | 3 | MLO | (535,1143,621,1197) | 3 | mass |
+| 658602d790b802fb079fe5d2eba494dd_R | 3 | CC | (341,1148,567,1288) | 3 | mass |
+| 658602d790b802fb079fe5d2eba494dd_R | 3 | MLO | (415,884,601,947) | 3 | mass |
+| 65b8c8d3af382a51b3c8465be1f6f06e_L | 3 | CC | (375,824,571,989) | 3 | mass |
+| 65b8c8d3af382a51b3c8465be1f6f06e_L | 3 | MLO | (508,912,697,1048) | 3 | mass |
+| 66235fe8968ef266cf15b08cfaa4a40e_L | 4 | CC | (384,1216,470,1282) | 4 | mass |
+| 6691601fba2d3233547361585c21fdde_L | 4 | CC | (690,801,849,1076) | 4 | asymmetry |
+| 68107a7fd1e370b88e161f37cff1c2d7_R | 4 | CC | (533,326,899,669) | 4 | mass |
+| 68107a7fd1e370b88e161f37cff1c2d7_R | 4 | MLO | (123,790,596,980) | 4 | mass |
+| 6adbb464cba25c728e2d6c29ee9ee1bc_L | 3 | CC | (519,943,702,1102) | 3 | mass |
+| 6adbb464cba25c728e2d6c29ee9ee1bc_L | 3 | MLO | (395,1281,562,1356) | 3 | mass |
+| 6d75446a6406fc669f3464543b8f7893_L | 4 | CC | (83,835,425,1023) | 4 | mass |
+| 6d75446a6406fc669f3464543b8f7893_L | 4 | MLO | (75,684,396,827) | 4 | mass |
+| 6db648c3e684230add2cb3189b3e7f82_R | 4 | CC | (779,1135,892,1216) | 4 | architectural_distortion |
+| 6db648c3e684230add2cb3189b3e7f82_R | 4 | MLO | (686,1077,789,1140) | 4 | architectural_distortion |
+| 6e79c21e0593c8c459ef609b99dbfb70_L | 3 | MLO | (105,994,237,1095) | 3 | mass |
+| 6e79c21e0593c8c459ef609b99dbfb70_R | 3 | MLO | (766,917,884,1019) | 3 | mass |
+| 73ddabe812dadcc6ece2c48a246f72f5_L | 4 | CC | (38,406,351,588) | 4 | asymmetry |
+| 73ddabe812dadcc6ece2c48a246f72f5_L | 4 | MLO | (16,1144,219,1236) | 4 | asymmetry |
+| 751ef8517c9221362d71e6326f622904_R | 3 | CC | (433,511,610,734) | 3 | asymmetry,suspicious_calcification |
+| 751ef8517c9221362d71e6326f622904_R | 3 | MLO | (503,1150,675,1244) | 3 | asymmetry,suspicious_calcification |
+| 75b2eef816fe608734977d1ffb16eae9_R | 3 | CC | (650,1134,751,1195) | 3 | asymmetry |
+| 775b952222e22629c94c0fa606118ab6_L | 3 | CC | (79,872,546,1295) | 3 | mass |
+| 775b952222e22629c94c0fa606118ab6_L | 3 | MLO | (66,913,535,1206) | 3 | mass |
+| 77d2b897870fd48aacdc9b2bbad1ef52_L | 3 | CC | (241,660,805,1209) | 3 | asymmetry |
+| 77d2b897870fd48aacdc9b2bbad1ef52_L | 3 | MLO | (278,864,817,1209) | 3 | asymmetry |
+| 7923de65390f4cfe6fb047515f9474f0_R | 3 | CC | (652,835,772,906) | 3 | mass |
+| 7923de65390f4cfe6fb047515f9474f0_R | 3 | MLO | (375,1084,462,1126) | 3 | mass |
+| 792610d6c4044d3a4e2cfdbc5b494768_R | 4 | CC | (479,736,645,883) | 4 | mass |
+| 7b17b1d061b038ceee40c3811341b2fc_R | 4 | MLO | (367,526,473,648) | 4 | suspicious_calcification |
+| 7bb82359496060cc5af7fd939e760ff5_L | 3 | CC | (57,518,131,573) | 3 | mass |
+| 7bb82359496060cc5af7fd939e760ff5_L | 3 | CC | (23,714,93,795) | 3 | suspicious_calcification |
+| 7bb82359496060cc5af7fd939e760ff5_L | 3 | MLO | (121,1052,224,1132) | 3 | mass |
+| 7c49a0d284532fa3e537ac87991c9608_L | 3 | CC | (361,762,481,830) | 3 | mass |
+| 7c49a0d284532fa3e537ac87991c9608_L | 3 | MLO | (485,1097,597,1151) | 3 | mass |
+| 7e2b960ea67fee7c4e487c331179b47e_L | 3 | CC | (93,922,452,1064) | 3 | asymmetry |
+| 7e2b960ea67fee7c4e487c331179b47e_L | 3 | MLO | (375,504,607,690) | 3 | asymmetry |
+| 7eab495d8ae42610e89e53788db3e019_R | 4 | CC | (381,148,895,1113) | 4 | suspicious_calcification |
+| 7eab495d8ae42610e89e53788db3e019_R | 4 | MLO | (260,177,712,448) | 4 | suspicious_calcification |
+| 7eab495d8ae42610e89e53788db3e019_R | 4 | MLO | (340,641,723,799) | 4 | suspicious_calcification |
+| 7eab495d8ae42610e89e53788db3e019_R | 4 | MLO | (482,725,873,898) | 4 | mass |
+| 7f0eb50793a773fb4bddaeff7e3c7c14_L | 3 | CC | (566,760,733,954) | 3 | mass |
+| 7f0eb50793a773fb4bddaeff7e3c7c14_L | 3 | MLO | (501,1109,729,1288) | 3 | mass |
+| 805d72b89d7f73058bf420ef26caaff4_L | 3 | MLO | (327,547,491,635) | 3 | asymmetry |
+| 8138169c67834e4e979fa17f38a826ad_R | 3 | MLO | (377,748,566,852) | 3 | asymmetry |
+| 81885e37a9a42bd351516b83bc3f6d66_L | 5 | CC | (0,300,524,643) | 5 | mass |
+| 81885e37a9a42bd351516b83bc3f6d66_L | 5 | MLO | (216,469,670,736) | 5 | mass |
+| 833dc428ac55ef017ea9d238cc9a841b_L | 3 | CC | (22,313,369,518) | 3 | mass |
+| 833dc428ac55ef017ea9d238cc9a841b_L | 3 | MLO | (279,785,567,921) | 3 | mass |
+| 840a2797a18347d1917cfa2872be1460_L | 3 | CC | (266,1009,513,1216) | 3 | asymmetry,suspicious_calcification |
+| 840a2797a18347d1917cfa2872be1460_L | 3 | MLO | (221,1058,411,1173) | 3 | asymmetry,suspicious_calcification |
+| 866f5f71f7cecc04d6353c3758c292e3_L | 3 | CC | (95,979,260,1149) | 3 | mass |
+| 866f5f71f7cecc04d6353c3758c292e3_L | 3 | MLO | (180,849,342,1028) | 3 | mass |
+| 891ff1343a54c212f973f1b83ec4952c_L | 3 | MLO | (141,795,230,868) | 3 | mass |
+| 8caa9e54b30e54edbdcbc771e7386fd7_R | 5 | CC | (348,724,907,1236) | 5 | asymmetry,suspicious_calcification |
+| 8caa9e54b30e54edbdcbc771e7386fd7_R | 5 | CC | (354,725,612,1042) | 4 | asymmetry |
+| 8caa9e54b30e54edbdcbc771e7386fd7_R | 5 | MLO | (267,570,886,1039) | 4 | suspicious_calcification |
+| 8caa9e54b30e54edbdcbc771e7386fd7_R | 5 | MLO | (183,652,561,1042) | 5 | asymmetry,suspicious_calcification |
+| 8dd986e8174fc84c2a984e66a416ff9f_R | 5 | CC | (312,344,899,803) | 5 | suspicious_calcification |
+| 8dd986e8174fc84c2a984e66a416ff9f_R | 5 | CC | (209,451,657,808) | 5 | mass |
+| 8dd986e8174fc84c2a984e66a416ff9f_R | 5 | MLO | (217,445,830,739) | 5 | suspicious_calcification |
+| 8dd986e8174fc84c2a984e66a416ff9f_R | 5 | MLO | (177,531,551,759) | 5 | mass |
+| 8e1fe4584f868271dce3e84e59b65388_L | 4 | MLO | (172,521,470,682) | 4 | mass |
+| 8e30fe5fbe424206c9f57ce26f80f6c2_R | 3 | CC | (260,604,460,766) | 3 | mass |
+| 8e30fe5fbe424206c9f57ce26f80f6c2_R | 3 | MLO | (132,721,300,828) | 3 | mass |
+| 8f447c29a7aa0c5aa2b8e8a852b01560_L | 3 | CC | (6,241,122,351) | 3 | mass |
+| 8f447c29a7aa0c5aa2b8e8a852b01560_L | 3 | MLO | (433,720,530,794) | 3 | mass |
+| 90bdb495b39d53271b2ccf97cde90bac_R | 4 | CC | (836,1123,912,1223) | 4 | asymmetry |
+| 90bdb495b39d53271b2ccf97cde90bac_R | 4 | MLO | (545,934,713,1056) | 4 | asymmetry |
+| 91489fc5a74d1452737d06d7113837f4_L | 3 | CC | (462,1023,625,1193) | 3 | mass |
+| 91489fc5a74d1452737d06d7113837f4_R | 3 | CC | (295,802,410,888) | 3 | mass |
+| 91489fc5a74d1452737d06d7113837f4_R | 3 | MLO | (326,1051,414,1121) | 3 | mass |
+| 917a4de3b1f921f1c9fa98b7a61d749d_L | 3 | CC | (177,996,528,1274) | 3 | mass |
+| 917a4de3b1f921f1c9fa98b7a61d749d_L | 3 | MLO | (155,733,484,867) | 3 | mass |
+| 93514476602890f55d1758d1f3e1a9b5_L | 4 | CC | (247,877,509,1073) | 4 | mass |
+| 93514476602890f55d1758d1f3e1a9b5_L | 4 | MLO | (261,773,463,906) | 4 | mass |
+| 93514476602890f55d1758d1f3e1a9b5_R | 4 | CC | (192,360,794,760) | 4 | mass |
+| 93514476602890f55d1758d1f3e1a9b5_R | 4 | CC | (230,470,911,802) | 4 | suspicious_calcification |
+| 93514476602890f55d1758d1f3e1a9b5_R | 4 | MLO | (266,624,912,1164) | 4 | suspicious_calcification |
+| 93514476602890f55d1758d1f3e1a9b5_R | 4 | MLO | (145,717,681,1145) | 4 | mass |
+| 937f8b7c688c373cff168ea6529a4731_R | 5 | CC | (358,278,602,473) | 5 | mass |
+| 937f8b7c688c373cff168ea6529a4731_R | 5 | CC | (429,347,524,410) | 4 | suspicious_calcification |
+| 937f8b7c688c373cff168ea6529a4731_R | 5 | MLO | (260,515,550,764) | 5 | mass |
+| 937f8b7c688c373cff168ea6529a4731_R | 5 | MLO | (357,615,439,698) | 4 | suspicious_calcification |
+| 944072b1af80b5038a0434d689012b12_R | 3 | CC | (600,808,898,1050) | 3 | mass |
+| 944072b1af80b5038a0434d689012b12_R | 3 | MLO | (616,1346,912,1482) | 3 | mass |
+| 94522717c9827bb41fe0814a514ae68b_R | 3 | CC | (699,1163,905,1306) | 3 | mass |
+| 94522717c9827bb41fe0814a514ae68b_R | 3 | MLO | (709,1189,906,1289) | 3 | mass |
+| 948bf68244fa6c00dc9963dcd62cd14c_L | 4 | CC | (324,631,407,662) | 4 | suspicious_calcification |
+| 948bf68244fa6c00dc9963dcd62cd14c_L | 4 | MLO | (613,929,678,966) | 4 | suspicious_calcification |
+| 968f72a200354163e45343aeeead090d_R | 3 | MLO | (452,817,728,912) | 3 | asymmetry |
+| 9a6f70ccba8034a3d658f88677e4b553_L | 4 | CC | (478,1004,661,1110) | 4 | mass,suspicious_calcification |
+| 9a6f70ccba8034a3d658f88677e4b553_L | 4 | MLO | (215,1052,448,1150) | 4 | mass,suspicious_calcification |
+| 9bb21300e3a92937024437cacc180158_R | 5 | CC | (512,739,890,1090) | 5 | architectural_distortion,mass |
+| 9bb21300e3a92937024437cacc180158_R | 5 | MLO | (278,495,811,748) | 5 | architectural_distortion,mass |
+| 9d70df5a83f33ec2d4c1f9eed8151f6e_R | 4 | CC | (571,203,795,297) | 4 | architectural_distortion |
+| 9d70df5a83f33ec2d4c1f9eed8151f6e_R | 4 | CC | (613,217,719,261) | 4 | suspicious_calcification |
+| 9d70df5a83f33ec2d4c1f9eed8151f6e_R | 4 | MLO | (241,803,548,888) | 4 | architectural_distortion |
+| 9d70df5a83f33ec2d4c1f9eed8151f6e_R | 4 | MLO | (381,821,490,882) | 4 | suspicious_calcification |
+| 9e0ecb745ae8218f6a30fe4c0bf441e2_L | 5 | CC | (87,723,386,930) | 5 | architectural_distortion |
+| 9e0ecb745ae8218f6a30fe4c0bf441e2_L | 5 | MLO | (334,772,525,920) | 5 | architectural_distortion |
+| 9fe8e9aef78ad365197d8f6ee0fdb932_R | 3 | CC | (375,585,627,755) | 3 | mass |
+| 9fe8e9aef78ad365197d8f6ee0fdb932_R | 3 | MLO | (133,864,384,989) | 3 | mass |
+| a1f8c1d32ac2da1967b3c6b3ee34616e_L | 3 | MLO | (477,476,658,553) | 3 | asymmetry |
+| a3efa110e27ffa4d5b2636e388a5c700_L | 4 | CC | (2,196,653,834) | 4 | suspicious_calcification |
+| a3efa110e27ffa4d5b2636e388a5c700_L | 4 | MLO | (114,567,795,1087) | 4 | suspicious_calcification |
+| a3efa110e27ffa4d5b2636e388a5c700_L | 4 | MLO | (511,621,752,825) | 4 | architectural_distortion |
+| a4046f021f9de4265a5c01ae953b9f09_L | 3 | CC | (278,758,469,982) | 3 | mass |
+| a4046f021f9de4265a5c01ae953b9f09_L | 3 | MLO | (424,829,686,988) | 3 | mass |
+| a4e90efc3a2dc8260b51e7f0121ccde3_R | 3 | CC | (747,339,912,514) | 3 | mass |
+| a4e90efc3a2dc8260b51e7f0121ccde3_R | 3 | MLO | (735,889,912,1045) | 3 | mass |
+| a532d84e9df16bef3a9b4f86acfe722a_R | 3 | CC | (552,705,659,772) | 3 | architectural_distortion |
+| a532d84e9df16bef3a9b4f86acfe722a_R | 3 | MLO | (445,799,567,911) | 3 | architectural_distortion |
+| a739f537d66fb48c49eca89a0991088f_R | 4 | CC | (712,379,806,432) | 4 | suspicious_calcification |
+| a739f537d66fb48c49eca89a0991088f_R | 4 | MLO | (600,810,690,860) | 4 | suspicious_calcification |
+| a7dddf85e78c65bac3143d86d3d2d977_L | 5 | CC | (26,314,618,702) | 5 | suspicious_calcification |
+| a7dddf85e78c65bac3143d86d3d2d977_L | 5 | MLO | (235,691,819,1275) | 5 | suspicious_calcification |
+| a9e5db3e9452823f5753c401087c9544_L | 5 | CC | (65,561,422,735) | 4 | mass |
+| a9e5db3e9452823f5753c401087c9544_L | 5 | CC | (133,588,519,759) | 5 | suspicious_calcification |
+| a9e5db3e9452823f5753c401087c9544_L | 5 | MLO | (55,485,367,660) | 4 | mass |
+| a9e5db3e9452823f5753c401087c9544_L | 5 | MLO | (98,535,366,792) | 5 | suspicious_calcification |
+| aa8149ec929a0194c2b8871de84e8dc8_L | 3 | CC | (424,691,597,807) | 3 | mass |
+| aa8149ec929a0194c2b8871de84e8dc8_L | 3 | MLO | (410,1038,659,1103) | 3 | mass |
+| ad721e26365b1555dd539aed6123a851_R | 3 | MLO | (243,385,426,554) | 3 | mass |
+| adc826bd02d1fb01f0d0dc6f9bc1ed52_L | 3 | CC | (221,1076,357,1188) | 3 | architectural_distortion |
+| adc826bd02d1fb01f0d0dc6f9bc1ed52_L | 3 | MLO | (54,953,198,1063) | 3 | architectural_distortion |
+| ae38a60e17f0f0c0f48db63680d0f619_L | 3 | MLO | (155,1207,358,1345) | 3 | mass |
+| afa8d58b60cf82ce642d5c917fb6c8af_R | 4 | CC | (675,241,824,343) | 4 | mass |
+| afa8d58b60cf82ce642d5c917fb6c8af_R | 4 | MLO | (559,559,699,625) | 4 | mass |
+| b0edd960e3f8b68ebf6debae183a7caf_L | 3 | CC | (337,910,529,1034) | 3 | mass |
+| b0edd960e3f8b68ebf6debae183a7caf_L | 3 | MLO | (368,1094,503,1193) | 3 | mass |
+| b2979c0f7fa4edae4a174b0747e0ab37_L | 4 | CC | (119,706,438,870) | 4 | asymmetry,suspicious_calcification |
+| b2979c0f7fa4edae4a174b0747e0ab37_L | 4 | MLO | (147,795,550,987) | 4 | asymmetry,suspicious_calcification |
+| b365dbf9c6878c12650cac3bf8095e59_L | 3 | CC | (446,685,661,883) | 3 | mass |
+| b365dbf9c6878c12650cac3bf8095e59_L | 3 | MLO | (499,928,694,1104) | 3 | mass |
+| b4ed83d02fa675475155a5551f92fd1f_L | 4 | CC | (61,262,401,529) | 4 | mass |
+| b4ed83d02fa675475155a5551f92fd1f_L | 4 | MLO | (238,729,653,970) | 4 | mass |
+| b4ed83d02fa675475155a5551f92fd1f_R | 4 | CC | (375,188,872,548) | 3 | asymmetry |
+| b4ed83d02fa675475155a5551f92fd1f_R | 4 | CC | (480,965,603,1040) | 4 | mass |
+| b4ed83d02fa675475155a5551f92fd1f_R | 4 | MLO | (120,543,479,823) | 3 | asymmetry |
+| b57b97020df361371ae1877080433275_L | 5 | CC | (98,319,363,458) | 4 | suspicious_calcification |
+| b57b97020df361371ae1877080433275_L | 5 | CC | (298,518,562,721) | 4 | architectural_distortion,suspicious_calcification |
+| b57b97020df361371ae1877080433275_L | 5 | CC | (20,801,867,1125) | 5 | suspicious_calcification |
+| b57b97020df361371ae1877080433275_L | 5 | MLO | (172,695,435,832) | 4 | suspicious_calcification |
+| b57b97020df361371ae1877080433275_L | 5 | MLO | (292,855,894,1192) | 5 | suspicious_calcification |
+| b8acac150be7f949f78dc631a3851f8b_R | 4 | CC | (625,167,821,276) | 4 | mass |
+| b8acac150be7f949f78dc631a3851f8b_R | 4 | CC | (82,313,397,544) | 4 | mass |
+| b8acac150be7f949f78dc631a3851f8b_R | 4 | CC | (451,319,622,426) | 4 | mass |
+| b8acac150be7f949f78dc631a3851f8b_R | 4 | CC | (290,457,476,576) | 4 | mass |
+| b8acac150be7f949f78dc631a3851f8b_R | 4 | MLO | (279,792,408,881) | 4 | mass |
+| b8acac150be7f949f78dc631a3851f8b_R | 4 | MLO | (87,1060,366,1251) | 4 | mass |
+| b8acac150be7f949f78dc631a3851f8b_R | 4 | MLO | (308,1182,485,1262) | 4 | mass |
+| baaa3be716640961a62abcf61bed245e_L | 4 | CC | (293,287,668,517) | 4 | mass |
+| baaa3be716640961a62abcf61bed245e_L | 4 | MLO | (418,777,739,892) | 4 | mass |
+| bcab78ee9a90e5cfd4c5fb59771bbfca_R | 4 | CC | (738,715,912,836) | 4 | suspicious_calcification |
+| bcab78ee9a90e5cfd4c5fb59771bbfca_R | 4 | MLO | (794,1069,912,1190) | 4 | suspicious_calcification |
+| beb4eb26bfa74853d4b49172855eefe9_L | 3 | CC | (16,817,301,1003) | 3 | mass |
+| beb4eb26bfa74853d4b49172855eefe9_L | 3 | MLO | (216,788,465,924) | 3 | mass |
+| c58988888abc33489a6c845a77d7793e_L | 3 | CC | (198,826,292,895) | 3 | mass |
+| c58988888abc33489a6c845a77d7793e_L | 3 | MLO | (196,1187,349,1263) | 3 | mass |
+| c659e0e01ed8e0ba6dc0adf5418eeaa9_R | 5 | CC | (34,340,658,979) | 5 | suspicious_calcification |
+| c659e0e01ed8e0ba6dc0adf5418eeaa9_R | 5 | MLO | (34,667,502,1118) | 5 | suspicious_calcification |
+| c79e16f69c355bad0291d281d674f53b_R | 3 | CC | (276,401,769,738) | 3 | mass |
+| c79e16f69c355bad0291d281d674f53b_R | 3 | MLO | (196,615,558,852) | 3 | mass |
+| c7d2c1b81ca7fd149b1590a6e29394a9_L | 4 | CC | (325,887,466,1016) | 4 | asymmetry |
+| c7d2c1b81ca7fd149b1590a6e29394a9_L | 4 | MLO | (370,569,557,660) | 4 | asymmetry |
+| cbefbe019b185313c639fe5f8fac024a_L | 4 | CC | (243,657,462,983) | 4 | asymmetry |
+| cbefbe019b185313c639fe5f8fac024a_L | 4 | CC | (124,1037,371,1174) | 4 | mass |
+| cbefbe019b185313c639fe5f8fac024a_L | 4 | MLO | (392,747,690,863) | 4 | asymmetry |
+| cbefbe019b185313c639fe5f8fac024a_L | 4 | MLO | (122,893,323,1037) | 4 | mass |
+| cc608bc4a299b3346c04379958797c1e_L | 5 | CC | (325,1078,591,1310) | 5 | mass,suspicious_calcification |
+| cc608bc4a299b3346c04379958797c1e_L | 5 | MLO | (159,1117,426,1262) | 5 | mass,suspicious_calcification |
+| cf399797f9211774fdb1470bf4ba5600_R | 4 | CC | (593,1062,912,1221) | 4 | mass |
+| cf399797f9211774fdb1470bf4ba5600_R | 4 | MLO | (705,1158,912,1186) | 4 | mass |
+| d0389f18021cd6e9294eef7d553039b3_R | 3 | CC | (576,423,752,553) | 3 | asymmetry |
+| d101ecbe883dcfadae08720d3742ee34_L | 3 | CC | (33,930,128,1019) | 3 | mass |
+| d101ecbe883dcfadae08720d3742ee34_L | 3 | MLO | (323,560,410,630) | 3 | mass |
+| d1808200af6ccda3be8abce5c9b4980f_L | 5 | MLO | (355,846,496,963) | 5 | mass |
+| d35b1a4107f0d52e18acdd7a9360ca85_R | 3 | CC | (583,248,912,480) | 3 | asymmetry |
+| d35b1a4107f0d52e18acdd7a9360ca85_R | 3 | MLO | (362,413,630,617) | 3 | asymmetry |
+| d51872cb860414480dbedb3733e70724_R | 3 | CC | (338,958,552,1100) | 3 | mass |
+| d51872cb860414480dbedb3733e70724_R | 3 | MLO | (375,1151,557,1247) | 3 | mass |
+| d540a38fcac9ff0136535fb45fa45dda_L | 3 | CC | (131,880,417,1042) | 3 | mass |
+| d540a38fcac9ff0136535fb45fa45dda_L | 3 | MLO | (227,948,482,1091) | 3 | mass |
+| d90bbc67c79e9aac98f848e33d61f10a_L | 3 | CC | (24,216,778,1216) | 3 | asymmetry |
+| d90bbc67c79e9aac98f848e33d61f10a_L | 3 | MLO | (213,690,828,1337) | 3 | asymmetry |
+| d9d54d68fc1c66ad5ee8481bafcd55da_R | 3 | CC | (424,440,847,817) | 3 | asymmetry |
+| d9d54d68fc1c66ad5ee8481bafcd55da_R | 3 | MLO | (276,796,558,1025) | 3 | asymmetry |
+| db3c5cf7336cc061ad5679d2209c2386_R | 4 | CC | (725,473,903,566) | 3 | mass |
+| db3c5cf7336cc061ad5679d2209c2386_R | 4 | MLO | (317,696,626,860) | 4 | asymmetry |
+| db3c5cf7336cc061ad5679d2209c2386_R | 4 | MLO | (599,817,766,920) | 3 | mass |
+| dd1959e485eccb3a17f29d7020fe3b23_L | 3 | CC | (107,462,249,605) | 3 | mass |
+| dd1959e485eccb3a17f29d7020fe3b23_L | 3 | MLO | (276,833,385,922) | 3 | mass |
+| de585e55834681c650d1f34ff21c2139_R | 5 | CC | (259,648,763,1155) | 5 | suspicious_calcification |
+| de585e55834681c650d1f34ff21c2139_R | 5 | MLO | (127,810,502,1103) | 4 | asymmetry |
+| de585e55834681c650d1f34ff21c2139_R | 5 | MLO | (123,829,908,1088) | 5 | suspicious_calcification |
+| de627023c9a8f2ca7b998d4f1380fad1_L | 3 | CC | (0,271,378,558) | 3 | mass |
+| de627023c9a8f2ca7b998d4f1380fad1_L | 3 | MLO | (470,633,810,876) | 3 | mass |
+| dec442c750151a175272b8ef0007cf09_R | 3 | CC | (457,387,731,555) | 3 | asymmetry |
+| dec442c750151a175272b8ef0007cf09_R | 3 | MLO | (190,912,333,999) | 3 | asymmetry |
+| e22442ff5a7632d5fc91d2715319b448_L | 4 | CC | (132,884,237,990) | 4 | mass |
+| e22442ff5a7632d5fc91d2715319b448_L | 4 | MLO | (331,820,436,912) | 4 | mass |
+| e3ea477f6b1f7347c184f55cb7c336b4_R | 3 | CC | (462,495,575,547) | 3 | suspicious_calcification |
+| e3ea477f6b1f7347c184f55cb7c336b4_R | 3 | MLO | (392,834,438,852) | 3 | suspicious_calcification |
+| e49d8e95ce75cfec372ac63495490225_L | 4 | CC | (41,788,455,1127) | 4 | asymmetry |
+| e49d8e95ce75cfec372ac63495490225_L | 4 | MLO | (119,705,506,1040) | 4 | asymmetry |
+| e668b1bed3d1501af1c88ef1ecd85a8c_R | 3 | CC | (637,994,875,1129) | 3 | mass |
+| e668b1bed3d1501af1c88ef1ecd85a8c_R | 3 | MLO | (550,929,837,1075) | 3 | mass |
+| e6f4f71e543f75cb1dd94388467a1ce2_L | 4 | CC | (167,771,224,802) | 4 | suspicious_calcification |
+| e6f4f71e543f75cb1dd94388467a1ce2_L | 4 | MLO | (0,1225,110,1249) | 4 | suspicious_calcification |
+| e9be27a62325bea2255d3327274567cc_L | 4 | CC | (425,824,691,968) | 4 | mass |
+| e9be27a62325bea2255d3327274567cc_L | 4 | MLO | (465,1075,679,1179) | 4 | mass |
+| ea75b79a86ae33661802cc9f2ee5d938_R | 4 | CC | (338,468,537,601) | 3 | mass |
+| ea75b79a86ae33661802cc9f2ee5d938_R | 4 | MLO | (258,605,439,705) | 4 | mass |
+| eb6f53ebf42ab3aa19d5e7cc362195c4_R | 3 | CC | (254,816,547,1018) | 3 | asymmetry |
+| eb6f53ebf42ab3aa19d5e7cc362195c4_R | 3 | MLO | (173,942,432,1088) | 3 | asymmetry |
+| ec755916f14c0855c7c0a9a5e5c5cf4a_L | 4 | CC | (0,294,173,452) | 4 | suspicious_calcification |
+| ec755916f14c0855c7c0a9a5e5c5cf4a_L | 4 | MLO | (153,683,403,833) | 4 | suspicious_calcification |
+| ec755916f14c0855c7c0a9a5e5c5cf4a_L | 4 | MLO | (348,868,516,939) | 4 | mass |
+| ec755916f14c0855c7c0a9a5e5c5cf4a_L | 4 | MLO | (377,898,467,927) | 4 | suspicious_calcification |
+| ee117236523dbd94ef212e6b12eaca61_L | 3 | MLO | (87,762,291,880) | 3 | asymmetry |
+| eff31eb110bc0a5d76f2db4c240dfd14_L | 4 | CC | (418,1027,516,1053) | 4 | suspicious_calcification |
+| eff31eb110bc0a5d76f2db4c240dfd14_L | 4 | MLO | (447,1076,512,1114) | 4 | suspicious_calcification |
+| f0677aad26731481bcc723bd3222c035_L | 4 | CC | (244,354,794,712) | 4 | suspicious_calcification |
+| f0677aad26731481bcc723bd3222c035_L | 4 | MLO | (348,664,858,1050) | 4 | suspicious_calcification |
+| f16980e8b518373d4748c94ad31207ce_R | 4 | CC | (285,900,759,1132) | 4 | architectural_distortion |
+| f16980e8b518373d4748c94ad31207ce_R | 4 | MLO | (274,601,829,803) | 4 | architectural_distortion |
+| f5c548e47e4ac764243e9b068b2d6e5e_R | 4 | CC | (533,806,891,1101) | 4 | architectural_distortion |
+| f5c548e47e4ac764243e9b068b2d6e5e_R | 4 | MLO | (445,780,659,947) | 4 | architectural_distortion |
+| f6648f91c1486446d8ad32cdd928d977_L | 5 | CC | (209,496,730,891) | 4 | asymmetry |
+| f6648f91c1486446d8ad32cdd928d977_L | 5 | CC | (567,546,717,711) | 5 | suspicious_calcification |
+| f6648f91c1486446d8ad32cdd928d977_L | 5 | MLO | (268,1100,681,1369) | 4 | asymmetry |
+| f6648f91c1486446d8ad32cdd928d977_L | 5 | MLO | (535,1129,685,1255) | 5 | suspicious_calcification |
+| f6648f91c1486446d8ad32cdd928d977_R | 4 | CC | (495,1122,660,1262) | 4 | mass |
+| f6648f91c1486446d8ad32cdd928d977_R | 4 | MLO | (528,1297,672,1399) | 4 | mass |
+| f6bb2ab2292bd155fcbc905a6e208b26_L | 4 | CC | (212,486,532,829) | 4 | asymmetry |
+| f6bb2ab2292bd155fcbc905a6e208b26_L | 4 | CC | (271,550,344,597) | 4 | suspicious_calcification |
+| f6bb2ab2292bd155fcbc905a6e208b26_L | 4 | CC | (549,558,730,733) | 4 | suspicious_calcification |
+| f6bb2ab2292bd155fcbc905a6e208b26_L | 4 | CC | (569,730,652,792) | 4 | suspicious_calcification |
+| f6bb2ab2292bd155fcbc905a6e208b26_L | 4 | MLO | (320,1163,572,1369) | 4 | asymmetry |
+| f6bb2ab2292bd155fcbc905a6e208b26_L | 4 | MLO | (526,1167,683,1263) | 4 | suspicious_calcification |
+| f6bb2ab2292bd155fcbc905a6e208b26_L | 4 | MLO | (597,1275,623,1289) | 4 | suspicious_calcification |
+| f7189d58dd1053d7603348360f013070_L | 5 | CC | (110,286,174,341) | 3 | mass |
+| f7189d58dd1053d7603348360f013070_L | 5 | CC | (113,351,368,534) | 5 | mass,suspicious_calcification |
+| f7189d58dd1053d7603348360f013070_L | 5 | MLO | (480,713,540,762) | 3 | mass |
+| f7189d58dd1053d7603348360f013070_L | 5 | MLO | (354,846,529,973) | 5 | mass,suspicious_calcification |
+| f7189d58dd1053d7603348360f013070_L | 5 | MLO | (338,1257,414,1306) | 3 | asymmetry |
+| f773364cb25ff6d46f85fcdbb0984ee7_R | 3 | CC | (432,491,505,544) | 3 | suspicious_calcification |
+| f773364cb25ff6d46f85fcdbb0984ee7_R | 3 | MLO | (234,792,283,835) | 3 | suspicious_calcification |
+| f835161458fa1ff5535b925a26eaad55_L | 3 | CC | (190,956,276,1012) | 3 | suspicious_calcification |
+| f835161458fa1ff5535b925a26eaad55_L | 3 | MLO | (282,950,414,1005) | 3 | suspicious_calcification |
+| f9b9d3c214c10fa252823cd4aaab269e_R | 4 | CC | (298,755,912,1277) | 4 | suspicious_calcification |
+| f9b9d3c214c10fa252823cd4aaab269e_R | 4 | MLO | (296,1177,912,1383) | 4 | suspicious_calcification |
+| fbfb4853334d90ff774ef326b8ac107b_L | 5 | CC | (239,797,670,1074) | 5 | mass,suspicious_calcification |
+| fbfb4853334d90ff774ef326b8ac107b_L | 5 | CC | (80,844,238,969) | 4 | mass |
+| fbfb4853334d90ff774ef326b8ac107b_L | 5 | MLO | (408,717,778,982) | 5 | mass,suspicious_calcification |
+| fbfb4853334d90ff774ef326b8ac107b_L | 5 | MLO | (250,813,366,911) | 4 | mass |
+| fc45fd8203dadd8899344e52935ff069_L | 3 | CC | (224,728,428,877) | 3 | asymmetry |
+| fe97163790007e5539f8da8181f4374b_R | 4 | CC | (178,360,870,894) | 3 | asymmetry |
+| fe97163790007e5539f8da8181f4374b_R | 4 | CC | (192,787,282,852) | 4 | suspicious_calcification |
+| fe97163790007e5539f8da8181f4374b_R | 4 | MLO | (134,673,582,976) | 3 | asymmetry |
+| fe97163790007e5539f8da8181f4374b_R | 4 | MLO | (145,878,205,907) | 4 | suspicious_calcification |
