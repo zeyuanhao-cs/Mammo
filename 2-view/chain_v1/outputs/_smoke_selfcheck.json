@@ -1,0 +1,7 @@
+{
+ "split": "smoke",
+ "n": 8,
+ "argmax_agree": 1.0,
+ "mean_abs_diff": 0.004000286994144005,
+ "max_sample_abs_diff": 0.007760924516204061
+}

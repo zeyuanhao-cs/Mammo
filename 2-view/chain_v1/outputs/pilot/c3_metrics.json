@@ -1,0 +1,117 @@
+{
+ "B0（对照）": {
+  "n": 2000,
+  "bi_auc": 0.8121825460806477,
+  "ge3": 0.7871540260877581,
+  "f1": 0.443831015409813,
+  "bacc": 0.40997059646294015,
+  "acc": 0.772,
+  "dens": 0.9362012363112402,
+  "find_auc": 0.7890863933518645,
+  "sens90": 0.546875,
+  "f": {
+   "auc": {
+    "mass": 0.834622206139234,
+    "suspicious_calcification": 0.9516577214418941,
+    "asymmetry": 0.6990501992698669,
+    "architectural_distortion": 0.6710154465564632
+   },
+   "f1": {
+    "mass": 0.4251207729468599,
+    "suspicious_calcification": 0.5555555555555555,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "precision": {
+    "mass": 0.5,
+    "suspicious_calcification": 0.6944444444444444,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "recall": {
+    "mass": 0.3697478991596639,
+    "suspicious_calcification": 0.46296296296296297,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   }
+  }
+ },
+ "C3full(soft)": {
+  "n": 2000,
+  "bi_auc": 0.8393271260214641,
+  "ge3": 0.8133915813974927,
+  "f1": 0.450728384993815,
+  "bacc": 0.441802582307003,
+  "acc": 0.7785,
+  "dens": 0.9231418827437605,
+  "find_auc": 0.8077652146883298,
+  "sens90": 0.5729166666666666,
+  "f": {
+   "auc": {
+    "mass": 0.83174737199505,
+    "suspicious_calcification": 0.9516529633436108,
+    "asymmetry": 0.7049289218506469,
+    "architectural_distortion": 0.7427316015640122
+   },
+   "f1": {
+    "mass": 0.3803680981595093,
+    "suspicious_calcification": 0.5057471264367817,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "precision": {
+    "mass": 0.7045454545454546,
+    "suspicious_calcification": 0.6666666666666666,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "recall": {
+    "mass": 0.2605042016806723,
+    "suspicious_calcification": 0.4074074074074074,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   }
+  }
+ },
+ "C3full(hard)": {
+  "n": 2000,
+  "bi_auc": 0.8309066492126952,
+  "ge3": 0.8123862117441003,
+  "f1": 0.44763370209229764,
+  "bacc": 0.44214369120022345,
+  "acc": 0.776,
+  "dens": 0.9231941685187555,
+  "find_auc": 0.7992121845069317,
+  "sens90": 0.5729166666666666,
+  "f": {
+   "auc": {
+    "mass": 0.8328731811703948,
+    "suspicious_calcification": 0.9513865098397473,
+    "asymmetry": 0.6636052678375297,
+    "architectural_distortion": 0.748983779180055
+   },
+   "f1": {
+    "mass": 0.39024390243902435,
+    "suspicious_calcification": 0.5333333333333333,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "precision": {
+    "mass": 0.7111111111111111,
+    "suspicious_calcification": 0.6666666666666666,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "recall": {
+    "mass": 0.2689075630252101,
+    "suspicious_calcification": 0.4444444444444444,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   }
+  }
+ },
+ "C3m(soft)": null,
+ "C3m(hard)": null,
+ "C3m+T(soft)": null,
+ "C3m+T(hard)": null
+}

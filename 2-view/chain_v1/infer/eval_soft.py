@@ -104,7 +104,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--adapter", required=True)
     ap.add_argument("--mixer", default="", help="soft_mixer.pt（soft/swap 模式 logit_mlp 需要）")
-    ap.add_argument("--soft-mode", choices=["linear", "logit_mlp"], default="logit_mlp")
+    ap.add_argument("--soft-mode", choices=["linear", "logit_mlp", "axis"], default="logit_mlp")
     ap.add_argument("--data", default=str(PROJ / "data/splits/val_raw_local.json"))
     ap.add_argument("--ids-file", default="", help="json 列表文件：只跑这些 id（保持给定顺序）")
     ap.add_argument("--limit", type=int, default=0)
@@ -150,9 +150,9 @@ def main():
         force_hard = False
     if args.mode == "scan" and args.hard_inject:
         force_hard = True          # scan + 硬注入：token 跟随 --scan-values（0→"0", 1→"1"）
-    if args.mode in ("soft", "scan", "teacher") and args.soft_mode == "logit_mlp" \
+    if args.mode in ("soft", "scan", "teacher") and args.soft_mode in ("logit_mlp", "axis") \
             and not (args.mode == "scan" and args.hard_inject):
-        assert args.mixer, "--mode soft/scan/teacher + logit_mlp 需要 --mixer"
+        assert args.mixer, "--mode soft/scan/teacher + logit_mlp/axis 需要 --mixer"
         mixer = load_soft_mixer(args.mixer, device=model_device, dtype=torch.float32)
         print(f"[mixer] gate={getattr(mixer, 'gate', 'none')}（随 soft_mixer.pt 自动加载）", flush=True)
         print(f"[mixer] {args.mixer} loaded", flush=True)
@@ -214,7 +214,8 @@ def main():
                                 max_new_tokens=args.max_new_tokens, stop_ids=stops,
                                 soft=True, soft_mode=args.soft_mode, mixer=mixer,
                                 force_p={args.force_field: sv}, prefill=prefill,
-                                force_hard=force_hard, return_rows=True)
+                                force_hard=force_hard, force_base_token=scan,
+                                return_rows=True)
                 probs, probs_norm, _ = field_probs_from_scores(
                     tokenizer, r["tokens"],
                     [tokenizer.decode([t], skip_special_tokens=True) for t in r["tokens"]],

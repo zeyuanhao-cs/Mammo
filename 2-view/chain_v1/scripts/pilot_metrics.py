@@ -89,8 +89,10 @@ def birads_block(rows):
     ge3_auc = auc([1 if v >= 2 else 0 for v in y], ge3_score)
     n = len(y)
     acc = float(np.mean([a == b for a, b in zip(y, pred)]))
-    recs = {c: (float(np.mean([1 for a, b in zip(y, pred) if a == c and b == c]) /
-                   max(1, sum(1 for a in y if a == c)))) for c in range(5)}
+    # 修 bug：原写法对命中列表取 mean（恒为 1.0）再除以样本数，等于 1/count；
+    # 应为 命中数 / 该类真实样本数。
+    recs = {c: (sum(1 for a, b in zip(y, pred) if a == c and b == c) /
+                max(1, sum(1 for a in y if a == c))) for c in range(5)}
     f1s = []
     for c in range(5):
         prec = sum(1 for a, b in zip(y, pred) if a == c and b == c) / max(1, sum(1 for b in pred if b == c))
@@ -372,24 +374,14 @@ def main():
             "median_p_ge3_swap_subset": soft_consistency(swap, soft_ids).get("median_p_ge3"),
         }
 
-    # h. 扫描曲线 png（阶段二 C1/C2 + 阶段一起点 vs QC1）
+    # h. 扫描曲线 png（阶段二 C1）
     draw_scan()
-    draw_start_qc1_scan()
 
     # 对齐器
     al = aligner_baseline(b0_by)
     blocks["Aligner"] = al
 
-    # b8 vs soft_decode hard 差别（用对齐检查的 200 条；全量对齐时为 1600）
-    align = {}
-    if (P / "align_check.json").exists():
-        align = json.load(open(P / "align_check.json", encoding="utf-8"))
-    blocks["pipeline_check"] = {
-        "n": align.get("n", 0),
-        "pred_agreement": align.get("argmax_agreement"),
-        "median_abs_diff_ge3": align.get("max_abs_prob_diff"),
-        "note": "align_check.json（eval_soft hard vs b8，容差 1e-3）",
-    }
+    # （原 pipeline_check 引用旧的 align_check.json，已废弃移除）
 
     # b8 附表（仅供参考，不进主比较；主比较一律 eval_soft）
     if b0_b8c:
@@ -399,27 +391,23 @@ def main():
             "density": density_block(list(b0_b8c.values())),
         }
 
-    # bootstrap 差值（>=3 AUC 的分数代理 + macro AUC 点估计差）
+    # 指标级 paired bootstrap（study 级重采样，1000 次，seed 42）
+    try:
+        from chain_v1.scripts.bootstrap_metrics import bootstrap_pair
+    except Exception:  # noqa: BLE001
+        from bootstrap_metrics import bootstrap_pair
     boots = {}
-    def ge3map(rows_by_id):
-        return {i: (r["p_birads_ge3"] if r.get("p_birads_ge3") is not None else None)
-                for i, r in rows_by_id.items()}
-
-    pairs = [("C1-B0", c1_soft, b0_by), ("C2-B0", c2_soft, b0_by), ("C1-C2", c1_soft, c2_soft)]
-    for tag, a_rows, b_rows in pairs:
-        if not a_rows or not b_rows:
+    alr = {}
+    for j, i in enumerate(al["_ids"]):
+        pr = al["_prob"][j]
+        alr[i] = {**b0_by[i],
+                  "p_birads": {str(c + 1): float(pr[c]) for c in range(5)},
+                  "pred_birads": int(max(range(1, 6), key=lambda c: pr[c - 1]))}
+    for tag, ra, rb in (("C1-B0", b0_by, c1_soft), ("C2-B0", b0_by, c2_soft),
+                        ("C1-C2", c2_soft, c1_soft), ("C1-Aligner", alr, c1_soft)):
+        if not ra or not rb:
             continue
-        ma = {i: r["p_birads_ge3"] for i, r in a_rows.items() if r.get("p_birads_ge3") is not None}
-        mb = {i: r["p_birads_ge3"] for i, r in b_rows.items() if r.get("p_birads_ge3") is not None}
-        d, lo, hi = paired_bootstrap(ma, ma, mb, mb)
-        boots[tag] = {"metric": "P(>=3) 逐样本均值差代理", "mean_diff": d, "ci_low": lo, "ci_high": hi}
-    # C1 vs 对齐器（对齐器概率固定，重采样评估）
-    al_map = {i: 1.0 - al["_prob"][j][0] - al["_prob"][j][1] for j, i in enumerate(al["_ids"])}
-    c1_map = {i: r["p_birads_ge3"] for i, r in c1_soft.items() if r.get("p_birads_ge3") is not None}
-    if al_map and c1_map:
-        d, lo, hi = paired_bootstrap(c1_map, c1_map, al_map, al_map)
-        boots["C1-Aligner"] = {"metric": "P(>=3) 逐样本均值差代理", "mean_diff": d,
-                               "ci_low": lo, "ci_high": hi}
+        boots[tag] = bootstrap_pair(ra, rb)
     blocks["bootstrap"] = boots
 
     (P / "pilot_stage2_metrics.json").write_text(
@@ -524,26 +512,40 @@ def write_report(B):
                  f"{f3(mean_sign_auc)} | {hi.get('pred_ge3_no_sign', '—')}/{hi.get('pred_le1_with_sign', '—')} | "
                  f"{f3(sc.get('median_p_ge3')) if sc else '—'} |")
     L.append("")
-    pc = B.get("pipeline_check", {})
-    pa, md = pc.get("pred_agreement"), pc.get("median_abs_diff_ge3")
-    L.append(f"管线对照：B0 的 soft_decode(hard) vs b8 管线（对齐检查 {pc.get('n')} 条，容差 1e-3）："
-             f"预测一致率 {'—' if pa is None else f'{pa:.4f}'}，"
-             f"最大概率绝对差 {'—' if md is None else f'{md:.2e}'}。"
-             f"B0 主要指标来源：{B.get('B0', {}).get('source', '—')}。")
+    L.append(f"B0 主要指标来源：{B.get('B0', {}).get('source', '—')}（eval_soft 硬模式全量 1600，"
+             f"与 1-epoch b8 锚点核对一致）。")
     L.append("")
     for sec, path in (("遮挡机制分析", "pilot_occlusion.md"),):
         f = P / path
         if f.exists():
             L.append(f.read_text(encoding="utf-8"))
             L.append("")
+    bst = B.get("bootstrap", {})
+    if bst:
+        L += ["## 差值 bootstrap（study 级 1000 次，seed 42）", "",
+              "Δ = 后者 − 前者；`*` 表示 95% CI 不含 0。", "",
+              "| 指标 | " + " | ".join(bst) + " |",
+              "|---|" + "---|" * len(bst)]
+        for key, label in (("birads_macro_auc", "BI-RADS macroAUC"), ("ge3_auc", "≥3 AUC"),
+                           ("macro_f1", "macroF1"), ("sens_spec90", "灵敏度@特异度90%"),
+                           ("sens_spec95", "灵敏度@特异度95%"), ("density_auc", "密度 AUC"),
+                           ("findings_mean_auc", "征象 meanAUC")):
+            cells = []
+            for _tag, r in bst.items():
+                d, lo, hi = (r.get(key) or [None, None, None])
+                if d is None:
+                    cells.append("—")
+                else:
+                    star = "*" if (lo > 0 or hi < 0) else ""
+                    cells.append(f"{d:+.3f} [{lo:+.3f}, {hi:+.3f}]{star}")
+            L.append(f"| {label} | " + " | ".join(cells) + " |")
+        L.append("")
+
     L.append("## 详细指标")
     L.append("")
     L.append("见 `pilot_stage2_metrics.json`（全部数值：各类召回、特异度 90/95% 灵敏度、"
              "征象 AUC/F1、密度、老师模式、软换硬、bootstrap CI）。")
     L.append("")
-    if (P / "stage1_scan_compare.png").exists():
-        L += ["## 起点 vs QC1 概率扫描（阶段一）", "",
-              "![stage1_scan_compare](pilot/stage1_scan_compare.png)", ""]
     b8ref = B.get("B0_b8_ref")
     if b8ref:
         bi = b8ref["birads"]

@@ -1,0 +1,7 @@
+{
+ "split": "test",
+ "n": 2000,
+ "argmax_agree": 0.9885,
+ "mean_abs_diff": 0.007058957883858732,
+ "max_sample_abs_diff": 0.08064718360139578
+}

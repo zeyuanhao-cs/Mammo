@@ -89,6 +89,7 @@ def soft_decode(
     names: Sequence[str] = FIND,
     force_p: Optional[Dict[str, float]] = None,
     force_hard: bool = False,
+    force_base_token: bool = False,   # 强制 p 时 base token 也跟随 p（扫描路径用）
     prefill: Optional[Dict] = None,
     return_rows: bool = False,
 ):
@@ -155,8 +156,11 @@ def soft_decode(
                 tid = (id1 if p > 0.5 else id0) if field in force_p else tok
                 vec = model.get_input_embeddings().weight[tid].to(dt)
             else:
+                # 强制 p 的路径（扫描/teacher）：base token 也跟随强制 p
+                # （p>0.5 → "1"），避免"强制 p=1 但仍以模型自己判的 E["0"] 作基座"的错配
+                base_tok = (id1 if p > 0.5 else id0) if (force_base_token and field in force_p) else tok
                 vec = soft_vector(mixer, model.get_input_embeddings().weight, p,
-                                  TYPE_IDX.get(field, 0), tok, id0, id1, dt, soft_mode,
+                                  TYPE_IDX.get(field, 0), base_tok, id0, id1, dt, soft_mode,
                                   gate=getattr(mixer, "gate", "none"))
             emb = vec.to(dt).view(1, 1, -1)  # 修 bug: logit_mlp 路径 soft_vector 返回 fp32(mixer 权重)，须转模型 dtype
             seq_len += 1
@@ -203,7 +207,7 @@ def _merge_mm(mm_list):
 @torch.inference_mode()
 def decode_batch(model, tokenizer, cases, names: Sequence[str] = FIND,
                  stop_ids=None, max_new_tokens: int = 256, soft: bool = False,
-                 force_hard: bool = False, mixer=None,
+                 force_hard: bool = False, force_base_token: bool = False, mixer=None,
                  soft_mode: str = SoftMode.LOGIT_MLP, text_of=None,
                  return_rows: bool = False):
     """批内并行软解码（等长 prompt；b8 管线两视角图分辨率固定 → 天然等长）。
@@ -292,8 +296,9 @@ def decode_batch(model, tokenizer, cases, names: Sequence[str] = FIND,
                     tid = (id1 if p > 0.5 else id0) if field in fps[j] else t
                     embs[j] = emb_w[tid].to(dt).view(-1)
                 else:
+                    base_t = (id1 if p > 0.5 else id0) if (force_base_token and field in fps[j]) else t
                     embs[j] = soft_vector(mixer, emb_w, p, TYPE_IDX.get(field, 0),
-                                          t, id0, id1, dt, soft_mode,
+                                          base_t, id0, id1, dt, soft_mode,
                                           gate=getattr(mixer, "gate", "none")).to(dt).view(-1)
             else:
                 embs[j] = emb_w[t].to(dt).view(-1)

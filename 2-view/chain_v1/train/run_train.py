@@ -107,9 +107,13 @@ def main():
     ap.add_argument("--lam", type=float, default=1.0)
     ap.add_argument("--rho-max", type=float, default=0.5)
     ap.add_argument("--rho-warmup-frac", type=float, default=0.2)
-    ap.add_argument("--soft-mode", choices=["linear", "logit_mlp"], default="logit_mlp",
+    ap.add_argument("--soft-mode", choices=["linear", "logit_mlp", "axis"], default="logit_mlp",
                     help="软证据注入方式：logit_mlp(主方案) / linear(对照)")
     ap.add_argument("--soft-mixer-init", default="", help="可选：从 soft_mixer.pt 恢复 mixer 权重")
+    ap.add_argument("--mutual", action="store_true",
+                    help="双视角互相验证：视角 A=axis 软证据，视角 M=可学习未知向量；按 GT 概率差选老师")
+    ap.add_argument("--keep-gt-teacher", action="store_true",
+                    help="配合 --mutual：损失额外保留 GT 老师项 kl_T（C3m+T）")
     ap.add_argument("--soft-gate", choices=["none", "uncert"], default="none",
                     help="软注入门控：none=现有行为；uncert=delta×4p(1-p)（随 mixer 保存，推理自动生效）")
     ap.add_argument("--init-adapter", default="",
@@ -196,7 +200,7 @@ def main():
         data_seed=args.seed,
     )
     mixer = None
-    if args.soft_mode == "logit_mlp" and not args.no_soft:
+    if args.soft_mode in ("logit_mlp", "axis") and not args.no_soft:
         hidden = getattr(model.config, "hidden_size", None)
         if hidden is None:
             tc = getattr(model.config, "text_config", None)
@@ -209,7 +213,8 @@ def main():
         if args.soft_mixer_init:
             mixer.load_state_dict(load_soft_mixer(args.soft_mixer_init).state_dict())
         mixer.gate = args.soft_gate     # 随 mixer 保存；推理端自动读取
-        print(f"[mixer] logit_mlp: hidden={hidden}, d_hidden=64, n_types=4, init={args.mixer_init}, "
+        mixer.soft_mode = args.soft_mode
+        print(f"[mixer] {args.soft_mode}: hidden={hidden}, d_hidden=64, n_types=4, init={args.mixer_init}, "
               f"gate={mixer.gate}, params={sum(p.numel() for p in mixer.parameters())}")
         # 前置检查：软向量偏移范数 / 对应 token 嵌入范数（计划 ≈1%）。
         # 修 bug：N(0,1e-3) 的 small init 实测偏移 ≈21%（远超计划的 1%）——初始化未按计划实现。
@@ -237,14 +242,23 @@ def main():
               f"{['%.4f' % r for r in rs1]} median={rs1[2]:.4f}", flush=True)
 
     soft_cfg = SoftKDConfig(alpha=args.alpha, lam=args.lam, rho_max=args.rho_max,
+                            mutual=args.mutual, keep_gt_teacher=args.keep_gt_teacher,
                             rho_warmup_frac=args.rho_warmup_frac, detach_p=args.detach_p,
                             no_kd=args.no_kd, no_soft=args.no_soft, soft_mode=args.soft_mode,
                             soft_gate=args.soft_gate)
+    unknown = None
+    if args.mutual:
+        emb = model.get_input_embeddings().weight
+        init = (emb[15].detach().float() + emb[16].detach().float()) / 2.0
+        unknown = torch.nn.Parameter(init.unsqueeze(0).repeat(4, 1).contiguous())
+        print(f"[mutual] 未知向量 {tuple(unknown.shape)} 初始化=E0/E1 均值（fp32），"
+              f"与 mixer 同优化器组", flush=True)
     trainer = SoftKDTrainer(model=model, args=targs, train_dataset=ds, data_collator=collator,
-                            soft_cfg=soft_cfg, soft_mixer=mixer,
+                            soft_cfg=soft_cfg, soft_mixer=mixer, unknown=unknown,
                             reuse_embeds=not args.no_reuse_embeds, processing_class=tokenizer)
     print(f"[cfg] data={args.data} n={len(ds)} alpha={args.alpha} lam={args.lam} "
-          f"rho_max={args.rho_max} detach_p={args.detach_p} no_kd={args.no_kd} no_soft={args.no_soft}")
+          f"rho_max={args.rho_max} detach_p={args.detach_p} no_kd={args.no_kd} no_soft={args.no_soft} "
+          f"mutual={args.mutual} keep_gt_teacher={args.keep_gt_teacher}")
     if args.grad_parity or args.grad_parity_terms or args.grad_parity_short:
         import math
         from chain_v1.train.core import soft_kd_loss as _loss

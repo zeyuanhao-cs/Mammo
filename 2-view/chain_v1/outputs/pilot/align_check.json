@@ -1,0 +1,29 @@
+{
+ "n": 200,
+ "argmax_agreement": 0.98,
+ "max_abs_prob_diff": 0.7544737369280021,
+ "tol": 0.001,
+ "consistent": false,
+ "disagreements": [
+  {
+   "id": "07307a4c40b7cd296037005f3457063c_L",
+   "soft": 2,
+   "b8": 1
+  },
+  {
+   "id": "103044d3771269946a3e144a63412667_L",
+   "soft": 2,
+   "b8": 1
+  },
+  {
+   "id": "112accee625e15fe60e48dd52afdbbcb_R",
+   "soft": 1,
+   "b8": 2
+  },
+  {
+   "id": "11ca8bb6dafea0b92bdb73b4e115cac5_R",
+   "soft": 1,
+   "b8": 4
+  }
+ ]
+}

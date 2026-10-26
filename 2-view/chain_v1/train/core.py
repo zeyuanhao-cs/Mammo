@@ -40,6 +40,8 @@ class SoftKDConfig:
     no_soft: bool = False     # 关闭第 2 次前向（纯 SFT 基线）
     soft_mode: str = "logit_mlp"   # linear | logit_mlp
     soft_gate: str = "none"    # none | uncert（delta *= 4p(1-p)）
+    mutual: bool = False       # 双视角互相验证（视角 A=axis 软证据；视角 M=可学习"未知"向量）
+    keep_gt_teacher: bool = False  # mutual 时是否额外保留 GT 老师项 kl_T（C3m+T）
     id0: int = ID0
     id1: int = ID1
     birads_ids: Sequence[int] = field(default_factory=lambda: tuple(BIRADS_IDS))
@@ -170,6 +172,7 @@ def soft_kd_loss(
     mixer=None,
     reuse_embeds: bool = True,
     extra_metrics: Optional[Dict[str, float]] = None,
+    unknown=None,
 ) -> Tuple[torch.Tensor, Dict[str, torch.Tensor]]:
     """返回 (loss, parts)。
 
@@ -273,15 +276,86 @@ def soft_kd_loss(
     ce2 = F.cross_entropy(logits2[torch.arange(B), birads_pos].float(), gt_birads_tok, reduction="mean")
     kl = torch.sum(qT * (torch.log(qT + 1e-8) - torch.log(qS + 1e-8)), dim=-1).mean()
 
-    loss = ce1 + cfg.alpha * ce2 + cfg.lam * kl
-    parts = {"ce1": ce1.detach(), "ce2": ce2.detach(), "kl": kl.detach(), "p": p, "qT": qT, "qS": qS,
+    ce_m = zero
+    kl_mutual = zero
+    n_am = n_ma = n_none = 0
+    if cfg.mutual and unknown is not None:
+        # 视角 M：4 个征象位置替换为可学习"未知"向量（每个征象一个，fp32）
+        vec_m = [unknown[j].to(emb_w.dtype)
+                 for _b in range(B) for j in range(finding_pos.shape[1])]
+        handle_m = make_vec_hook(layer0, seq_positions, vec_m)
+        try:
+            logits3 = _forward(model, common, K)
+        finally:
+            handle_m.remove()
+        q_m = birads_dist(logits3, birads_pos, cfg.birads_ids)
+        ce_m = F.cross_entropy(logits3[torch.arange(B), birads_pos].float(),
+                               gt_birads_tok, reduction="mean")
+        ids = list(cfg.birads_ids)
+        lut = torch.full((max(ids) + 1,), -1, dtype=torch.long, device=gt_birads_tok.device)
+        for k, t in enumerate(ids):
+            lut[int(t)] = k
+        gt_idx = lut[gt_birads_tok]
+        kl_mutual, n_am, n_ma, n_none = choose_teacher_kl(qS, q_m, gt_idx)
+        if not cfg.keep_gt_teacher:
+            # C3m：kl_T 只是诊断量（不进损失）→ no_grad 重算，避免无谓的图
+            with torch.no_grad():
+                kl = torch.sum(qT * (torch.log(qT + 1e-8) - torch.log(qS.detach() + 1e-8)),
+                               dim=-1).mean()
+        loss = compose_loss(ce1, ce2, ce_m, kl, kl_mutual, cfg)   # mutual: 不含 kl_gt
+    else:
+        loss = compose_loss(ce1, ce2, zero, kl, zero, cfg)
+    parts = {"ce1": ce1.detach(), "ce2": ce2.detach(), "kl": kl.detach(),
+             "ce_m": ce_m.detach(), "kl_mutual": kl_mutual.detach(),
+             "n_am": n_am, "n_ma": n_ma, "n_none": n_none, "p": p, "qT": qT, "qS": qS,
              "ce1_raw": ce1, "ce2_raw": ce2, "kl_raw": kl,
              "birads_logits": logits2[0, birads_pos[0]][list(cfg.birads_ids)].detach(),
              "reuse": used_reuse}
     if extra_metrics is not None:
         extra_metrics.update({"ce1": float(ce1.detach()), "ce2": float(ce2.detach()),
-                              "kl": float(kl.detach()), "mean_p": float(p.detach().mean())})
+                              "kl": float(kl.detach()), "kl_T": float(kl.detach()),
+                              "ce_m": float(ce_m.detach()),
+                              "kl_mutual": float(kl_mutual.detach()),
+                              "mean_p": float(p.detach().mean())})
     return loss, parts
+
+
+def compose_loss(ce1, ce2, ce_m, kl_gt, kl_mutual, cfg):
+    """损失合成。
+
+    mutual=False: ce1 + α·ce2 + λ·kl_gt
+    mutual=True : ce1 + α·(ce2 + ce_m) + λ·kl_mutual   ← 不含 GT 老师项 kl_gt
+    """
+    if cfg.mutual:
+        loss = ce1 + cfg.alpha * (ce2 + ce_m) + cfg.lam * kl_mutual
+        if cfg.keep_gt_teacher:      # C3m+T：再叠加 GT 老师项
+            loss = loss + cfg.lam * kl_gt
+        return loss
+    return ce1 + cfg.alpha * ce2 + cfg.lam * kl_gt
+
+
+def choose_teacher_kl(q_a, q_m, gt_idx, thr: float = 0.05, eps: float = 1e-8):
+    """比较两视角在 GT 类上的概率，返回 (kl, n_am, n_ma, n_none)。
+
+    q_a / q_m: [B,5] 概率；gt_idx: [B] 在 5 类里的下标。
+    A 高 ≥thr → 老师 A、学生 M；M 高 ≥thr → 老师 M、学生 A；否则不蒸馏。
+    """
+    pa = q_a.gather(1, gt_idx.view(-1, 1)).squeeze(1)
+    pm = q_m.gather(1, gt_idx.view(-1, 1)).squeeze(1)
+    d = pa - pm
+    mask_am = d >= thr          # 老师 A → 学生 M
+    mask_ma = d <= -thr         # 老师 M → 学生 A
+    kl_am = torch.sum(q_a.detach() * (torch.log(q_a.detach() + eps) - torch.log(q_m + eps)),
+                      dim=-1)
+    kl_ma = torch.sum(q_m.detach() * (torch.log(q_m.detach() + eps) - torch.log(q_a + eps)),
+                      dim=-1)
+    sel = (mask_am | mask_ma)
+    n = int(sel.sum().item())
+    if n == 0:
+        kl = q_a.sum() * 0.0
+    else:
+        kl = (kl_am * mask_am.float() + kl_ma * mask_ma.float()).sum() / n
+    return kl, int(mask_am.sum().item()), int(mask_ma.sum().item()), int(q_a.shape[0] - n)
 
 
 def _forward(model, common, K):

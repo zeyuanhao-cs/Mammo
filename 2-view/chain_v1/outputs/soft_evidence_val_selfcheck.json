@@ -1,0 +1,7 @@
+{
+ "split": "val",
+ "n": 1600,
+ "argmax_agree": 0.983125,
+ "mean_abs_diff": 0.007440373290130194,
+ "max_sample_abs_diff": 0.08948037048654969
+}
