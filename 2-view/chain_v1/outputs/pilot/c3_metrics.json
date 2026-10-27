@@ -110,8 +110,80 @@
    }
   }
  },
- "C3m(soft)": null,
- "C3m(hard)": null,
+ "C3m(soft)": {
+  "n": 2000,
+  "bi_auc": 0.8480556521152334,
+  "ge3": 0.819527505070059,
+  "f1": 0.45228688146193174,
+  "bacc": 0.4422718145159523,
+  "acc": 0.7785,
+  "dens": 0.9185746378287213,
+  "find_auc": 0.803950002511439,
+  "sens90": 0.5885416666666666,
+  "f": {
+   "auc": {
+    "mass": 0.83688946072847,
+    "suspicious_calcification": 0.9456910661946634,
+    "asymmetry": 0.7048504691471668,
+    "architectural_distortion": 0.7283690139754558
+   },
+   "f1": {
+    "mass": 0.4545454545454546,
+    "suspicious_calcification": 0.4888888888888889,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "precision": {
+    "mass": 0.569620253164557,
+    "suspicious_calcification": 0.6111111111111112,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "recall": {
+    "mass": 0.37815126050420167,
+    "suspicious_calcification": 0.4074074074074074,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   }
+  }
+ },
+ "C3m(hard)": {
+  "n": 2000,
+  "bi_auc": 0.8466110113630062,
+  "ge3": 0.817315115689528,
+  "f1": 0.4513010016058125,
+  "bacc": 0.4412661410356802,
+  "acc": 0.777,
+  "dens": 0.9185746378287213,
+  "find_auc": 0.8027774833619994,
+  "sens90": 0.5885416666666666,
+  "f": {
+   "auc": {
+    "mass": 0.83688946072847,
+    "suspicious_calcification": 0.944197023333714,
+    "asymmetry": 0.7032029623740834,
+    "architectural_distortion": 0.7268204870117301
+   },
+   "f1": {
+    "mass": 0.4545454545454546,
+    "suspicious_calcification": 0.5,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "precision": {
+    "mass": 0.569620253164557,
+    "suspicious_calcification": 0.6052631578947368,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   },
+   "recall": {
+    "mass": 0.37815126050420167,
+    "suspicious_calcification": 0.42592592592592593,
+    "asymmetry": 0.0,
+    "architectural_distortion": 0.0
+   }
+  }
+ },
  "C3m+T(soft)": null,
  "C3m+T(hard)": null
 }
